@@ -34,7 +34,7 @@ import BaseLayout from "layouts/pages/account/components/BaseLayout";
 
 // Images
 import logoCT from "assets/images/logo-ct.png";
-import logoCTDark from "assets/images/logo-ct-dark.png";
+import logoCTDark from "assets/images/svgviewer-output.svg";
 
 // Argon Dashboard 2 PRO MUI contexts
 import { useArgonController } from "context";

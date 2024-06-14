@@ -45,7 +45,7 @@ import {
 
 // Images
 import brand from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
+import brandDark from "assets/images/svgviewer-output.svg";
 
 function BaseLayout({ children }) {
   const [controller, dispatch] = useArgonController();

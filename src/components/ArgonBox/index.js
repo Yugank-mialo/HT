@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { forwardRef } from "react";
 
 // prop-types is a library for typechecking of props
@@ -44,7 +29,7 @@ ArgonBox.defaultProps = {
 // Typechecking props for the ArgonBox
 ArgonBox.propTypes = {
   variant: PropTypes.oneOf(["contained", "gradient"]),
-  bgColor: PropTypes.string,
+  bgColor: "PropTypes.string",
   color: PropTypes.string,
   opacity: PropTypes.number,
   borderRadius: PropTypes.string,

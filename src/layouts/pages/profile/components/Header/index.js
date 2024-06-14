@@ -22,10 +22,13 @@ import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
+import Button from "@mui/material/Button";
+
 // Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonAvatar from "components/ArgonAvatar";
+import ArgonDatePicker from "components/ArgonDatePicker";
 
 // Argon Dashboard 2 PRO MUI example components
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -64,17 +67,18 @@ function Header() {
 
   return (
     <ArgonBox position="relative">
-      <DashboardNavbar absolute light />
-      <ArgonBox height="220px" />
+      {/* <DashboardNavbar absolute light /> */}
+      {/* <ArgonBox height="220px" /> */}
       <Card
         sx={{
           py: 2,
           px: 2,
           boxShadow: ({ boxShadows: { md } }) => md,
         }}
+        style={{ backgroundColor: "#9d2136" }}
       >
         <Grid container spacing={3} alignItems="center">
-          <Grid item>
+          {/* <Grid item>
             <ArgonAvatar
               src={burceMars}
               alt="profile-image"
@@ -82,18 +86,32 @@ function Header() {
               size="xl"
               shadow="sm"
             />
-          </Grid>
-          <Grid item>
+          </Grid> */}
+          <Grid item xs={12}>
             <ArgonBox height="100%" mt={0.5} lineHeight={1}>
-              <ArgonTypography variant="h5" fontWeight="medium">
-                Alex Thompson
-              </ArgonTypography>
-              <ArgonTypography variant="button" color="text" fontWeight="medium">
-                CEO / Co-Founder
-              </ArgonTypography>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} md={3}>
+                  <ArgonDatePicker input={{ placeholder: "To Date" }} />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <ArgonDatePicker input={{ placeholder: "From Date" }} />
+                </Grid>
+                <Grid item container xs={12} md={6} justifyContent="flex-end" spacing={2}>
+                  <Grid item>
+                    <Button variant="contained" color="white">
+                      Clear
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button variant="contained" color="white">
+                      Submit
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
             </ArgonBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+          {/* <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
             <AppBar position="static">
               <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
                 <Tab
@@ -122,7 +140,7 @@ function Header() {
                 />
               </Tabs>
             </AppBar>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Card>
     </ArgonBox>

@@ -37,7 +37,7 @@ import routes from "routes";
 
 // Images
 import brand from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
+import brandDark from "assets/images/svgviewer-output.svg";
 import defaultDashboard from "assets/images/default.png";
 import automotiveDashboard from "assets/images/automotive.png";
 import crmDashboard from "assets/images/crm.png";

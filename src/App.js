@@ -49,7 +49,7 @@ import { useArgonController, setMiniSidenav, setOpenConfigurator } from "context
 
 // Images
 import brand from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
+import brandDark from "assets/images/svgviewer-output.svg";
 
 // Icon Fonts
 import "assets/css/nucleo-icons.css";
@@ -116,29 +116,29 @@ export default function App() {
       return null;
     });
 
-  const configsButton = (
-    <ArgonBox
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      width="3.5rem"
-      height="3.5rem"
-      bgColor="white"
-      shadow="sm"
-      borderRadius="50%"
-      position="fixed"
-      right="2rem"
-      bottom="2rem"
-      zIndex={99}
-      color="dark"
-      sx={{ cursor: "pointer" }}
-      onClick={handleConfiguratorOpen}
-    >
-      <Icon fontSize="default" color="inherit">
-        settings
-      </Icon>
-    </ArgonBox>
-  );
+  // const configsButton = (
+  //   <ArgonBox
+  //     display="flex"
+  //     justifyContent="center"
+  //     alignItems="center"
+  //     width="3.5rem"
+  //     height="3.5rem"
+  //     bgColor="white"
+  //     shadow="sm"
+  //     borderRadius="50%"
+  //     position="fixed"
+  //     right="2rem"
+  //     bottom="2rem"
+  //     zIndex={99}
+  //     color="dark"
+  //     sx={{ cursor: "pointer" }}
+  //     onClick={handleConfiguratorOpen}
+  //   >
+  //     <Icon fontSize="default" color="inherit">
+  //       settings
+  //     </Icon>
+  //   </ArgonBox>
+  // );
 
   return direction === "rtl" ? (
     <CacheProvider value={rtlCache}>
@@ -155,7 +155,7 @@ export default function App() {
               onMouseLeave={handleOnMouseLeave}
             />
             <Configurator />
-            {configsButton}
+            {/* {configsButton} */}
           </>
         )}
         {layout === "vr" && <Configurator />}
@@ -179,7 +179,7 @@ export default function App() {
             onMouseLeave={handleOnMouseLeave}
           />
           <Configurator />
-          {configsButton}
+          {/* {configsButton} */}
         </>
       )}
       {layout === "vr" && <Configurator />}

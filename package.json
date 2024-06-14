@@ -24,6 +24,7 @@
     "@mui/icons-material": "5.11.16",
     "@mui/material": "5.13.1",
     "@mui/styled-engine": "5.12.3",
+    "@mui/x-charts": "^7.6.2",
     "@pathofdev/react-tag-input": "1.0.7",
     "@react-leaflet/core": "2.1.0",
     "@testing-library/jest-dom": "5.16.5",

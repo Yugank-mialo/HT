@@ -36,6 +36,7 @@ import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
 import SidenavList from "examples/Sidenav/SidenavList";
 import SidenavItem from "examples/Sidenav/SidenavItem";
 import SidenavFooter from "examples/Sidenav/SidenavFooter";
+import userProfile from "assets/images/Avatar-Profile-PNG-Photos.png";
 
 // Custom styles for the Sidenav
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
@@ -53,6 +54,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const { pathname } = location;
   const collapseName = pathname.split("/").slice(1)[0];
   const itemName = pathname.split("/").slice(1)[1];
+  const userInfo =
+    localStorage.getItem("user_info") != null
+      ? JSON.parse(localStorage.getItem("user_info"))
+      : null;
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
@@ -213,10 +218,8 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           </ArgonTypography>
         </ArgonBox>
         <ArgonBox component={NavLink} to="/" display="flex" alignItems="center">
-          {brand && (
-            <ArgonBox component="img" src={brand} alt="Argon Logo" width="2rem" mr={0.25} />
-          )}
-          <ArgonBox
+          {brand && <ArgonBox component="img" src={brand} alt="HT Logo" width="100%" mr={0.25} />}
+          {/* <ArgonBox
             width={!brandName && "100%"}
             sx={(theme) => sidenavLogoLabel(theme, { miniSidenav })}
           >
@@ -228,8 +231,35 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             >
               {brandName}
             </ArgonTypography>
-          </ArgonBox>
+          </ArgonBox> */}
         </ArgonBox>
+      </ArgonBox>
+      <Divider light={darkSidenav} />
+      {/* profile */}
+      <ArgonBox pt={3} pb={1} px={4} textAlign="center">
+        <ArgonBox
+          component="img"
+          src={
+            userInfo != null && userInfo.data.img_path != null
+              ? API_Url + "/img/" + userInfo.data.img_path
+              : userProfile
+          }
+          alt="toggle-icon"
+          style={{
+            width: "180px",
+            height: "180px",
+            padding: " 4px",
+            borderRadius: " 50%",
+            border: "2px solid #9d2136",
+          }}
+        />
+        <ArgonTypography mb={0} sx={{ color: "#155da9" }} fontWeight="bold" variant="h6">
+          {userInfo != null ? userInfo.data.first_name : ""}{" "}
+          {userInfo != null ? userInfo.data.last_name : ""}
+        </ArgonTypography>
+        {/* <ArgonTypography fontSize="small" fontWeight="bold" component={NavLink} to="mailto:test@gmail.com"  color="secondary">
+            paulfroster@gmail.com
+          </ArgonTypography> */}
       </ArgonBox>
       <Divider light={darkSidenav} />
       <List>{renderRoutes}</List>
