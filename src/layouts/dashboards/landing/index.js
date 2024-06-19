@@ -66,7 +66,7 @@ function Default() {
 
   // Change the document layout to landing for the landing view
   useEffect(() => {
-    setLayout(dispatch, "landing");
+    setLayout(dispatch, "home");
     setDarkSidenav(dispatch, true);
 
     return () => setDarkSidenav(dispatch, darkMode);

@@ -16,11 +16,13 @@ import Header from "layouts/pages/profile/components/Header";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import { Card } from "@mui/material";
 import DataTable from "examples/Tables/DataTable";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 function Teams() {
   return (
     <>
       <DashboardLayout>
+      <DashboardNavbar />
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Header />

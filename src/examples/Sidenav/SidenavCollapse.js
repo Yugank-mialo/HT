@@ -64,11 +64,11 @@ function SidenavCollapse({ icon, name, children, active, noCollapse, open, ...re
             sx={(theme) => collapseText(theme, { miniSidenav, darkSidenav, active })}
           />
 
-          <Icon
+          {/* <Icon
             sx={(theme) => collapseArrow(theme, { noCollapse, darkSidenav, miniSidenav, open })}
           >
             expand_less
-          </Icon>
+          </Icon> */}
         </ArgonBox>
       </ListItem>
       {children && (

@@ -48,7 +48,7 @@ import routes from "routes";
 import { useArgonController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
-import brand from "assets/images/logo-ct.png";
+import brand from "assets/images/svgviewer-output.svg";
 import brandDark from "assets/images/svgviewer-output.svg";
 
 // Icon Fonts
@@ -149,7 +149,7 @@ export default function App() {
             <Sidenav
               color={sidenavColor}
               brand={darkSidenav || darkMode ? brand : brandDark}
-              brandName="Argon Dashboard 2 PRO"
+              brandName="Harris Teeter"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
@@ -161,7 +161,7 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboards/default" />} />
+          <Route path="*" element={<Navigate to="/dashboard/home" />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -173,7 +173,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={darkSidenav || darkMode ? brand : brandDark}
-            brandName="Argon Dashboard 2 PRO"
+            brandName="Harris Teeter"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
@@ -185,7 +185,7 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboards/landing" />} />
+        <Route path="*" element={<Navigate to="/dashboard/home" />} />
       </Routes>
     </ThemeProvider>
   );

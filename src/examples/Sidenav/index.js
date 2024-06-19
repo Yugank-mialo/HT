@@ -52,8 +52,8 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const { miniSidenav, darkSidenav, layout } = controller;
   const location = useLocation();
   const { pathname } = location;
-  const collapseName = pathname.split("/").slice(1)[0];
-  const itemName = pathname.split("/").slice(1)[1];
+  const collapseName =  (pathname.split("/")[1] ==="dashboard" && pathname.split("/")[2]==="home") ?  pathname.split("/")[1] :  pathname.split("/")[2]; 
+  const itemName =(pathname.split("/")[1] ==="dashboard" && pathname.split("/")[2]==="home")? pathname.split("/")[2] :pathname.split("/")[3]; 
   const userInfo =
     localStorage.getItem("user_info") != null
       ? JSON.parse(localStorage.getItem("user_info"))
@@ -136,7 +136,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     ({ type, name, icon, title, collapse, noCollapse, key, href, route }) => {
       let returnValue;
 
-      if (type === "collapse") {
+      if (type === "collapse" ) {
         if (href) {
           returnValue = (
             <Link href={href} key={key} target="_blank" rel="noreferrer">
@@ -237,30 +237,31 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       <Divider light={darkSidenav} />
       {/* profile */}
       <ArgonBox pt={3} pb={1} px={4} textAlign="center">
-        <ArgonBox
-          component="img"
-          src={
-            userInfo != null && userInfo.data.img_path != null
-              ? API_Url + "/img/" + userInfo.data.img_path
-              : userProfile
-          }
-          alt="toggle-icon"
-          style={{
-            width: "180px",
-            height: "180px",
-            padding: " 4px",
-            borderRadius: " 50%",
-            border: "2px solid #9d2136",
-          }}
-        />
-        <ArgonTypography mb={0} sx={{ color: "#155da9" }} fontWeight="bold" variant="h6">
-          {userInfo != null ? userInfo.data.first_name : ""}{" "}
-          {userInfo != null ? userInfo.data.last_name : ""}
-        </ArgonTypography>
-        {/* <ArgonTypography fontSize="small" fontWeight="bold" component={NavLink} to="mailto:test@gmail.com"  color="secondary">
-            paulfroster@gmail.com
-          </ArgonTypography> */}
-      </ArgonBox>
+  <ArgonBox
+    component="img"
+    src={
+      userInfo != null && userInfo.data.img_path != null
+        ? API_Url + "/img/" + userInfo.data.img_path
+        : userProfile
+    }
+    alt="toggle-icon"
+    style={{
+      maxWidth: "100%",
+      height: "auto",
+      padding: "4px",
+      borderRadius: "50%",
+      border: "2px solid #9d2136",
+    }}
+  />
+  <ArgonTypography mb={0} sx={{ color: "#155da9" }} fontWeight="bold" variant="h6">
+    {userInfo != null ? userInfo.data.first_name : ""}{" "}
+    {userInfo != null ? userInfo.data.last_name : ""}
+  </ArgonTypography>
+  {/* <ArgonTypography fontSize="small" fontWeight="bold" component={NavLink} to="mailto:test@gmail.com"  color="secondary">
+      paulfroster@gmail.com
+    </ArgonTypography> */}
+</ArgonBox>
+
       <Divider light={darkSidenav} />
       <List>{renderRoutes}</List>
 

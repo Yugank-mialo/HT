@@ -1,109 +1,102 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
-
-// @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-
 import Button from "@mui/material/Button";
-
-// Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
-import ArgonTypography from "components/ArgonTypography";
-import ArgonAvatar from "components/ArgonAvatar";
 import ArgonDatePicker from "components/ArgonDatePicker";
+import { makeStyles } from '@mui/styles';
 
-// Argon Dashboard 2 PRO MUI example components
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-
-// Argon Dashboard 2 PRO MUI base styles
-import breakpoints from "assets/theme/base/breakpoints";
-
-// Images
-import burceMars from "assets/images/bruce-mars.jpg";
+const useStyles = makeStyles({
+  removeButton: {
+    '&:hover': {
+      backgroundColor: 'rgb(17, 205, 239) !important',
+      color: '#fff',
+    },
+  },
+});
 
 function Header() {
-  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
-  const [tabValue, setTabValue] = useState(0);
+  const classes = useStyles();
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
 
-  useEffect(() => {
-    // A function that sets the orientation state of the tabs.
-    function handleTabsOrientation() {
-      return window.innerWidth < breakpoints.values.sm
-        ? setTabsOrientation("vertical")
-        : setTabsOrientation("horizontal");
+  const handleFromDateChange = (date) => {
+    setFromDate(formatDate(date));
+    if (toDate && date && date > toDate) {
+      setToDate(null); // Reset toDate if it's before fromDate
     }
+  };
 
-    /** 
-     The event listener that's calling the handleTabsOrientation function when resizing the window.
-    */
-    window.addEventListener("resize", handleTabsOrientation);
+  const handleToDateChange = (date) => {
+    setToDate(formatDate(date));
 
-    // Call the handleTabsOrientation function to set the state with the initial value.
-    handleTabsOrientation();
+  };
 
-    // Remove event listener on cleanup
-    return () => window.removeEventListener("resize", handleTabsOrientation);
-  }, [tabsOrientation]);
+  const handleClear = () => {
+    setFromDate(null);
+    setToDate(null);
+  };
 
-  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+  const handleSubmit = () => {
+    if (fromDate && toDate) {
+      const formattedFromDate = formatDate(fromDate);
+      const formattedToDate = formatDate(toDate);
+      console.log("From Date:", formattedFromDate);
+      console.log("To Date:", formattedToDate);
+      // Add your submit logic here
+    }
+  };
+
+  const formatDate = (date1) => {
+   const date= new Date(date1);
+   const year = date.getFullYear();
+   const month = ('0' + (date.getMonth() + 1)).slice(-2); // Month is zero-indexed, hence +1
+   const day = ('0' + date.getDate()).slice(-2);
+   
+   // Form the yyyy-mm-dd format
+   const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate;
+  };
 
   return (
     <ArgonBox position="relative">
-      {/* <DashboardNavbar absolute light /> */}
-      {/* <ArgonBox height="220px" /> */}
       <Card
         sx={{
           py: 2,
           px: 2,
           boxShadow: ({ boxShadows: { md } }) => md,
         }}
-        style={{ backgroundColor: "#9d2136" }}
+        style={{ backgroundColor: "#ffffff" }}
       >
         <Grid container spacing={3} alignItems="center">
-          {/* <Grid item>
-            <ArgonAvatar
-              src={burceMars}
-              alt="profile-image"
-              variant="rounded"
-              size="xl"
-              shadow="sm"
-            />
-          </Grid> */}
           <Grid item xs={12}>
             <ArgonBox height="100%" mt={0.5} lineHeight={1}>
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12} md={3}>
-                  <ArgonDatePicker input={{ placeholder: "To Date" }} />
+                  <ArgonDatePicker
+                    input={{ placeholder: "From Date" }}
+                    value={fromDate}
+                    onChange={handleFromDateChange}
+                    options={{ maxDate:toDate }}
+                  />
                 </Grid>
                 <Grid item xs={12} md={3}>
-                  <ArgonDatePicker input={{ placeholder: "From Date" }} />
+                  <ArgonDatePicker
+                    input={{ placeholder: "To Date" }}
+                    value={toDate}
+                    onChange={handleToDateChange}
+                    options={{ minDate:fromDate }}
+
+                  />
                 </Grid>
                 <Grid item container xs={12} md={6} justifyContent="flex-end" spacing={2}>
                   <Grid item>
-                    <Button variant="contained" color="white">
+                    <Button variant="contained" color="white" className={classes.removeButton} onClick={handleClear}>
                       Clear
                     </Button>
                   </Grid>
                   <Grid item>
-                    <Button variant="contained" color="white">
+                    <Button variant="contained" color="white" className={classes.removeButton} onClick={handleSubmit}>
                       Submit
                     </Button>
                   </Grid>
@@ -111,36 +104,6 @@ function Header() {
               </Grid>
             </ArgonBox>
           </Grid>
-          {/* <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
-            <AppBar position="static">
-              <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
-                <Tab
-                  label="App"
-                  icon={
-                    <i className="ni ni-app" style={{ marginTop: "6px", marginRight: "8px" }} />
-                  }
-                />
-                <Tab
-                  label="Message"
-                  icon={
-                    <i
-                      className="ni ni-email-83"
-                      style={{ marginTop: "6px", marginRight: "8px" }}
-                    />
-                  }
-                />
-                <Tab
-                  label="Settings"
-                  icon={
-                    <i
-                      className="ni ni-settings-gear-65"
-                      style={{ marginTop: "6px", marginRight: "8px" }}
-                    />
-                  }
-                />
-              </Tabs>
-            </AppBar>
-          </Grid> */}
         </Grid>
       </Card>
     </ArgonBox>

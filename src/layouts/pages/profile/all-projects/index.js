@@ -35,11 +35,13 @@ import PlaceholderCard from "examples/Cards/PlaceholderCard";
 
 // Project page components
 import Header from "layouts/pages/profile/components/Header";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 function AllProjects() {
   return (
     <>
       <DashboardLayout>
+        <DashboardNavbar />
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Header />

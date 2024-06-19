@@ -53,8 +53,8 @@ function DashboardLayout({ bgColor, children, ...rest }) {
       })}
     >
       <ArgonBox
-        bgColor={background || "transparent"}
-        height="300px"
+        bgColor={"rgb(17, 205, 239)"}
+        height= {pathname.includes('/dashboard/home') ? "150px": "300px"}
         width="100vw"
         position="absolute"
         top={0}

@@ -28,7 +28,7 @@ export default styled(Drawer)(({ theme, ownerState }) => {
 
   let bgColor;
 
-  if ((darkSidenav && layout === "landing") || (!darkSidenav && layout === "landing")) {
+  if ((darkSidenav && layout === "home") || (!darkSidenav && layout === "home")) {
     bgColor = transparent.main;
   } else if (darkSidenav) {
     bgColor = background.dark;
@@ -85,7 +85,7 @@ export default styled(Drawer)(({ theme, ownerState }) => {
     "& .MuiDrawer-paper": {
       boxShadow: xxl,
       border: "none",
-      backgroundColor: transparent.main,
+      backgroundColor: `#fffff`,
 
       ...(miniSidenav ? drawerCloseStyles() : drawerOpenStyles()),
     },

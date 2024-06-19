@@ -50,8 +50,8 @@ const pageRoutes = [
         icon: <ArgonBox component="i" color="info" className="ni ni-spaceship" />,
         collapse: [
           {
-            name: "landing",
-            route: "/dashboards/landing",
+            name: "home",
+            route: "/dashboards/home",
           },
           {
             name: "default",

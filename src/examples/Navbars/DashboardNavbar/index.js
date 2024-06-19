@@ -160,7 +160,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </ArgonBox>
         {isMini ? null : (
           <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <ArgonBox pr={1}>
+            {/* <ArgonBox pr={1}>
               <ArgonInput
                 placeholder="Type here..."
                 startAdornment={
@@ -169,7 +169,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   </Icon>
                 }
               />
-            </ArgonBox>
+            </ArgonBox> */}
             <ArgonBox color={light ? "white" : "inherit"}>
               <Link to="/authentication/sign-in/basic">
                 <IconButton sx={navbarIconButton} size="small">
@@ -197,15 +197,15 @@ function DashboardNavbar({ absolute, light, isMini }) {
               >
                 <Icon>{miniSidenav ? "menu_open" : "menu"}</Icon>
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 size="small"
                 color={light && transparentNavbar ? "white" : "dark"}
                 sx={navbarIconButton}
                 onClick={handleConfiguratorOpen}
               >
                 <Icon>settings</Icon>
-              </IconButton>
-              <IconButton
+              </IconButton> */}
+              {/* <IconButton
                 size="small"
                 color={light && transparentNavbar ? "white" : "dark"}
                 sx={navbarIconButton}
@@ -215,8 +215,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 onClick={handleOpenMenu}
               >
                 <Icon>notifications</Icon>
-              </IconButton>
-              {renderMenu()}
+              </IconButton> */}
+              {/* {renderMenu()} */}
             </ArgonBox>
           </ArgonBox>
         )}
