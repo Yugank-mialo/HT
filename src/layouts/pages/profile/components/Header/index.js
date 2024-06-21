@@ -4,18 +4,25 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import ArgonBox from "components/ArgonBox";
 import ArgonDatePicker from "components/ArgonDatePicker";
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   removeButton: {
-    '&:hover': {
-      backgroundColor: 'rgb(17, 205, 239) !important',
-      color: '#fff',
+    "&:hover": {
+      backgroundColor: "rgb(17, 205, 239) !important",
+      color: "#fff",
     },
   },
 });
 
-function Header() {
+function Header({
+  fromDate,
+  toDate,
+  handleFromDateChange,
+  handleToDateChange,
+  handleClear,
+  handleSubmit,
+}) {
   const classes = useStyles();
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
@@ -29,7 +36,6 @@ function Header() {
 
   const handleToDateChange = (date) => {
     setToDate(formatDate(date));
-
   };
 
   const handleClear = () => {
@@ -48,13 +54,13 @@ function Header() {
   };
 
   const formatDate = (date1) => {
-   const date= new Date(date1);
-   const year = date.getFullYear();
-   const month = ('0' + (date.getMonth() + 1)).slice(-2); // Month is zero-indexed, hence +1
-   const day = ('0' + date.getDate()).slice(-2);
-   
-   // Form the yyyy-mm-dd format
-   const formattedDate = `${year}-${month}-${day}`;
+    const date = new Date(date1);
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2); // Month is zero-indexed, hence +1
+    const day = ("0" + date.getDate()).slice(-2);
+
+    // Form the yyyy-mm-dd format
+    const formattedDate = `${year}-${month}-${day}`;
     return formattedDate;
   };
 
@@ -77,7 +83,7 @@ function Header() {
                     input={{ placeholder: "From Date" }}
                     value={fromDate}
                     onChange={handleFromDateChange}
-                    options={{ maxDate:toDate }}
+                    options={{ maxDate: toDate }}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -85,18 +91,27 @@ function Header() {
                     input={{ placeholder: "To Date" }}
                     value={toDate}
                     onChange={handleToDateChange}
-                    options={{ minDate:fromDate }}
-
+                    options={{ minDate: fromDate }}
                   />
                 </Grid>
                 <Grid item container xs={12} md={6} justifyContent="flex-end" spacing={2}>
                   <Grid item>
-                    <Button variant="contained" color="white" className={classes.removeButton} onClick={handleClear}>
+                    <Button
+                      variant="contained"
+                      color="white"
+                      className={classes.removeButton}
+                      onClick={handleClear}
+                    >
                       Clear
                     </Button>
                   </Grid>
                   <Grid item>
-                    <Button variant="contained" color="white" className={classes.removeButton} onClick={handleSubmit}>
+                    <Button
+                      variant="contained"
+                      color="white"
+                      className={classes.removeButton}
+                      onClick={handleSubmit}
+                    >
                       Submit
                     </Button>
                   </Grid>
@@ -109,5 +124,14 @@ function Header() {
     </ArgonBox>
   );
 }
+
+Header.propTypes = {
+  fromDate: PropTypes.string,
+  toDate: PropTypes.string,
+  handleFromDateChange: PropTypes.func.isRequired,
+  handleToDateChange: PropTypes.func.isRequired,
+  handleClear: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
 
 export default Header;

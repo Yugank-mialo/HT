@@ -250,7 +250,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       height: "auto",
       padding: "4px",
       borderRadius: "50%",
-      border: "2px solid #9d2136",
+      border: "2px solid #11cdef",
     }}
   />
   <ArgonTypography mb={0} sx={{ color: "#155da9" }} fontWeight="bold" variant="h6">
