@@ -404,10 +404,17 @@ function Teams() {
             <ArgonBox mb={4}>
               <Card style={{ minHeight: "400px" }}>
                 <CardContent>
-                  <Typography variant="h5" component="h2">
+                  <Typography variant="h4" component="h2">
                     Top Three Fastest and Slowest Zones
                   </Typography>
-                  <Typography variant="h6" component="h3" color="textSecondary" gutterBottom>
+                  <Typography
+                    variant="h6"
+                    component="h3"
+                    color="black"
+                    fontWeight="bold"
+                    gutterBottom
+                    style={{ marginTop: "10px" }}
+                  >
                     Fastest Zones:
                   </Typography>
                   {topZones.fastest.map(([zone, avgDwellTime]) => (
@@ -415,7 +422,13 @@ function Teams() {
                       {zone}: {avgDwellTime} minutes
                     </Typography>
                   ))}
-                  <Typography variant="h6" component="h3" color="textSecondary" gutterBottom>
+                  <Typography
+                    variant="h6"
+                    component="h3"
+                    color="black"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
                     Slowest Zones:
                   </Typography>
                   {topZones.slowest.map(([zone, avgDwellTime]) => (
@@ -431,10 +444,16 @@ function Teams() {
             <ArgonBox mb={4}>
               <Card style={{ minHeight: "400px" }}>
                 <CardContent>
-                  <Typography variant="h5" component="h2">
+                  <Typography variant="h4" component="h2">
                     Least Busy Zone (in terms of time / no of customers)
                   </Typography>
-                  <Typography variant="h6" component="h3" color="textSecondary" gutterBottom>
+                  <Typography
+                    variant="h6"
+                    component="h3"
+                    color="black"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
                     Least Customer Count Zone:
                   </Typography>
                   {Object.entries(leastBusyZone.leastCustomerCount).map(([zone, count]) => (
@@ -442,7 +461,13 @@ function Teams() {
                       {zone}: {count} customers
                     </Typography>
                   ))}
-                  <Typography variant="h6" component="h3" color="textSecondary" gutterBottom>
+                  <Typography
+                    variant="h6"
+                    component="h3"
+                    color="black"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
                     Least Working Minute Zone:
                   </Typography>
                   {Object.entries(leastBusyZone.leastWorkingMinute).map(([zone, minutes]) => (
@@ -457,25 +482,39 @@ function Teams() {
           <Grid item xs={12} md={4}>
             <ArgonBox mb={4}>
               <Card style={{ minHeight: "400px" }}>
-                <Typography variant="h5" component="h2">
-                  Busy Zone (in terms of time / no of customers)
-                </Typography>
-                <Typography variant="h6" component="h3" color="textSecondary" gutterBottom>
-                  Most Customer Count Zone:
-                </Typography>
-                {Object.entries(busyZone.mostCustomerCount).map(([zone, count]) => (
-                  <Typography key={zone} color="textSecondary" gutterBottom>
-                    {zone}: {count} customers
+                <CardContent>
+                  <Typography variant="h4" component="h2">
+                    Busy Zone (in terms of time / no of customers)
                   </Typography>
-                ))}
-                <Typography variant="h6" component="h3" color="textSecondary" gutterBottom>
-                  Most Working Minute Zone:
-                </Typography>
-                {Object.entries(busyZone.mostWorkingMinute).map(([zone, minutes]) => (
-                  <Typography key={zone} color="textSecondary" gutterBottom>
-                    {zone}: {minutes} minutes
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    color="black"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
+                    Most Customer Count Zone:
                   </Typography>
-                ))}
+                  {Object.entries(busyZone.mostCustomerCount).map(([zone, count]) => (
+                    <Typography key={zone} color="textSecondary" gutterBottom>
+                      {zone}: {count} customers
+                    </Typography>
+                  ))}
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    color="black"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
+                    Most Working Minute Zone:
+                  </Typography>
+                  {Object.entries(busyZone.mostWorkingMinute).map(([zone, minutes]) => (
+                    <Typography key={zone} color="textSecondary" gutterBottom>
+                      {zone}: {minutes} minutes
+                    </Typography>
+                  ))}
+                </CardContent>
               </Card>
             </ArgonBox>
           </Grid>

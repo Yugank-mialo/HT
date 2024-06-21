@@ -15,14 +15,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Header({
-  fromDate,
-  toDate,
-  handleFromDateChange,
-  handleToDateChange,
-  handleClear,
-  handleSubmit,
-}) {
+function Header() {
   const classes = useStyles();
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
@@ -124,14 +117,5 @@ function Header({
     </ArgonBox>
   );
 }
-
-Header.propTypes = {
-  fromDate: PropTypes.string,
-  toDate: PropTypes.string,
-  handleFromDateChange: PropTypes.func.isRequired,
-  handleToDateChange: PropTypes.func.isRequired,
-  handleClear: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-};
 
 export default Header;
