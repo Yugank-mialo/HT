@@ -27,10 +27,12 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 // react-perfect-scrollbar styles
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "./style.css"
+import { StoreProvider } from "globalContext/GlobalContext";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
+  <StoreProvider>
   <BrowserRouter>
     <ArgonControllerProvider>
       <PerfectScrollbar>
@@ -38,4 +40,5 @@ root.render(
       </PerfectScrollbar>
     </ArgonControllerProvider>
   </BrowserRouter>
-);
+  </StoreProvider>
+)

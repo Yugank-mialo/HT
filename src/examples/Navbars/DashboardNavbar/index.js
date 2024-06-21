@@ -58,13 +58,19 @@ import {
 // Images
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
+import { useStore } from "globalContext/GlobalContext";
+import axios from "axios";
+import { API_Url } from "utils/API";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
+  const [data, setData] = useState([]);
   const route = useLocation().pathname.split("/").slice(1);
+  const { selectedStore, setSelectedStore } = useStore();
+
 
   useEffect(() => {
     // Setting the navbar type
@@ -96,6 +102,28 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_Url}/Store`); // Replace with your API endpoint
+        setData(response.data.data);
+        setSelectedStore(response.data.data[0].store_id);
+      } catch (error) {
+        console.log(error); // Log any errors that occur during the API request
+      }
+    };
+
+    fetchData(); // Call fetchData function when the component mounts (empty dependency array [])
+  }, []);
+
+
+
+
+  const handleStoreChange = (event) => {
+    setSelectedStore(event.target.value);
+  };
 
   // Render the notifications menu
   const renderMenu = () => (
@@ -160,16 +188,30 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </ArgonBox>
         {isMini ? null : (
           <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
-            {/* <ArgonBox pr={1}>
-              <ArgonInput
-                placeholder="Type here..."
-                startAdornment={
-                  <Icon fontSize="small" style={{ marginRight: "6px" }}>
-                    search
-                  </Icon>
-                }
-              />
-            </ArgonBox> */}
+            <ArgonBox pr={1}>
+              <select
+                value={selectedStore}
+                onChange={handleStoreChange}
+                className="form-control bg-white w-100 p-2"
+                style={{
+                  borderRadius: '0.375rem',
+                  border: '1px solid #ced4da',
+                  height: 'auto',
+                  padding: '0.625rem 1.75rem 0.625rem 0.75rem',
+                }}
+              >
+                {data.length > 0 ? (
+                  data.map((val) => (
+                    <option key={val.store_id} value={val.store_id}>
+                      {val.store_name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">Select Store</option>
+                )}
+              </select>
+
+            </ArgonBox>
             <ArgonBox color={light ? "white" : "inherit"}>
               <Link to="/authentication/sign-in/basic">
                 <IconButton sx={navbarIconButton} size="small">

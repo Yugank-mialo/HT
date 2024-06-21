@@ -56,6 +56,7 @@ function Teams() {
     setFromDate(null);
     setToDate(null);
     setSubmittedDates({ fromDate: null, toDate: null }); // Reset submitted dates
+    fetchData();
   };
 
   const handleSubmit = () => {

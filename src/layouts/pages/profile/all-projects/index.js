@@ -69,6 +69,7 @@ function AllProjects() {
   const handleClear = () => {
     setFromDate(null);
     setToDate(null);
+    fetchData()
   };
 
   const handleSubmit = () => {

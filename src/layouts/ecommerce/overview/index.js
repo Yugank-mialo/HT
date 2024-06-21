@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Modal from 'react-modal';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -20,6 +20,7 @@ import salesTableData from 'layouts/ecommerce/overview/data/salesTableData';
 import dataTableData from 'layouts/ecommerce/overview/data/dataTableData';
 
 import { makeStyles } from '@mui/styles';
+import { useStore } from 'globalContext/GlobalContext';
 
 const useStyles = makeStyles({
   removeButton: {
@@ -55,6 +56,8 @@ const customModalStyles = {
 
 function Overview() {
   const classes = useStyles();
+  const {selectedStore}=useStore();
+  useMemo(()=>{console.log("hello sai",selectedStore)},[selectedStore])
   const [dashboardCards, setDashboardCards] = useState([]);
   const [modalCards, setModalCards] = useState([
     { id: 1, title: 'Channels Chart', component: <ChannelsChart /> },
