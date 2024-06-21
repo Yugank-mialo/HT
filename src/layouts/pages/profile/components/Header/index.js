@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";  // Import prop-types
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -15,48 +16,8 @@ const useStyles = makeStyles({
   },
 });
 
-function Header() {
+function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, handleClear, handleSubmit }) {
   const classes = useStyles();
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
-
-  const handleFromDateChange = (date) => {
-    setFromDate(formatDate(date));
-    if (toDate && date && date > toDate) {
-      setToDate(null); // Reset toDate if it's before fromDate
-    }
-  };
-
-  const handleToDateChange = (date) => {
-    setToDate(formatDate(date));
-
-  };
-
-  const handleClear = () => {
-    setFromDate(null);
-    setToDate(null);
-  };
-
-  const handleSubmit = () => {
-    if (fromDate && toDate) {
-      const formattedFromDate = formatDate(fromDate);
-      const formattedToDate = formatDate(toDate);
-      console.log("From Date:", formattedFromDate);
-      console.log("To Date:", formattedToDate);
-      // Add your submit logic here
-    }
-  };
-
-  const formatDate = (date1) => {
-   const date= new Date(date1);
-   const year = date.getFullYear();
-   const month = ('0' + (date.getMonth() + 1)).slice(-2); // Month is zero-indexed, hence +1
-   const day = ('0' + date.getDate()).slice(-2);
-   
-   // Form the yyyy-mm-dd format
-   const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
-  };
 
   return (
     <ArgonBox position="relative">
@@ -77,7 +38,7 @@ function Header() {
                     input={{ placeholder: "From Date" }}
                     value={fromDate}
                     onChange={handleFromDateChange}
-                    options={{ maxDate:toDate }}
+                    options={{ maxDate: toDate }}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -85,8 +46,7 @@ function Header() {
                     input={{ placeholder: "To Date" }}
                     value={toDate}
                     onChange={handleToDateChange}
-                    options={{ minDate:fromDate }}
-
+                    options={{ minDate: fromDate }}
                   />
                 </Grid>
                 <Grid item container xs={12} md={6} justifyContent="flex-end" spacing={2}>
@@ -109,5 +69,15 @@ function Header() {
     </ArgonBox>
   );
 }
+
+// Define prop types for validation
+Header.propTypes = {
+  fromDate: PropTypes.string,
+  toDate: PropTypes.string,
+  handleFromDateChange: PropTypes.func.isRequired,
+  handleToDateChange: PropTypes.func.isRequired,
+  handleClear: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
 
 export default Header;

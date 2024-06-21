@@ -5,36 +5,11 @@ import Card from '@mui/material/Card';
 import ArgonBox from 'components/ArgonBox';
 import ArgonTypography from 'components/ArgonTypography';
 import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
 import ArgonButton from 'components/ArgonButton';
 
 import DefaultLineChart from 'examples/Charts/LineCharts/DefaultLineChart';
 import SalesTable from 'examples/Tables/SalesTable';
 import DataTable from 'examples/Tables/DataTable';
-
-const customModalStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    width: '100%',
-    maxWidth: '700px', 
-       maxHeight: '80%',
-    overflowY: 'auto',
-    padding: '20px',
-    position: 'relative'
-    },
-  closeButton: {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    cursor: 'pointer',
-  },
-};
-
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 import HorizontalBarChart from 'examples/Charts/BarCharts/HorizontalBarChart';
@@ -55,9 +30,30 @@ const useStyles = makeStyles({
   },
 });
 
+const customModalStyles = {
+  content: {
+    top: '50%',
+    left: 'calc(50% + 128px)', // Adjusted to account for the sidebar
+    right: 'auto',
+    bottom: 'auto',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    maxWidth: 'calc(100% - 320px)', // Adjusted to account for the sidebar
+    maxHeight: '80%',
+    overflowY: 'auto',
+    padding: '20px',
+    position: 'relative',
+    zIndex: 1000, // Ensuring the modal is above other elements
+  },
+  closeButton: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    cursor: 'pointer',
+  },
+};
 
 function Overview() {
-  
   const classes = useStyles();
   const [dashboardCards, setDashboardCards] = useState([]);
   const [modalCards, setModalCards] = useState([
@@ -70,6 +66,7 @@ function Overview() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -78,6 +75,7 @@ function Overview() {
     setIsModalOpen(false);
     setSelectedCards([]);
   };
+
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -85,6 +83,7 @@ function Overview() {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+
   const toggleCardSelection = (card) => {
     const isSelected = selectedCards.some(selected => selected.id === card.id);
     setSelectedCards(prevSelected =>
@@ -134,41 +133,38 @@ function Overview() {
           </Grid>
         ))}
         {modalCards.length > 0 && (
-    <Grid item xs={12} sm={6}>
-    <Card
-      style={{
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-        border: '2px dotted #ccc',
-        backgroundImage: 'url(https://cdn.pixabay.com/photo/2021/07/25/08/07/add-6491203_1280.png)',
-        backgroundRepeat: 'no-repeat', // Avoid background repeat
-        backgroundSize: '20%', // Adjust to cover the container
-        backgroundPosition: 'center',
-        transition: 'background-color 0.3s, box-shadow 0.3s', // Smooth transition
-        backgroundColor: isHovered ? '#f0f0f0' : '#ffffff', // Background color on hover
-        boxShadow: isHovered ? '0 0 10px rgba(0, 0, 0, 0.2)' : 'none',
-        
-      }}
-      onClick={openModal}
-      onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-    >
-      <ArgonBox display="flex" justifyContent="center" alignItems="center" height="100%" minHeight="300px">
-        
-      </ArgonBox>
-    </Card>
-  </Grid>
+          <Grid item xs={12} sm={6}>
+            <Card
+              style={{
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                cursor: 'pointer',
+                border: '2px dotted #ccc',
+                backgroundImage: 'url(https://cdn.pixabay.com/photo/2021/07/25/08/07/add-6491203_1280.png)',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '20%',
+                backgroundPosition: 'center',
+                transition: 'background-color 0.3s, box-shadow 0.3s',
+                backgroundColor: isHovered ? '#f0f0f0' : '#ffffff',
+                boxShadow: isHovered ? '0 0 10px rgba(0, 0, 0, 0.2)' : 'none',
+              }}
+              onClick={openModal}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <ArgonBox display="flex" justifyContent="center" alignItems="center" height="100%" minHeight="300px"></ArgonBox>
+            </Card>
+          </Grid>
         )}
       </Grid>
-      <Grid container spacing={3} style={{ marginTop: 'auto' }} > 
+      <Grid container spacing={3} style={{ marginTop: 'auto' }}>
         <Modal
           isOpen={isModalOpen}
           onRequestClose={closeModal}
           contentLabel="Select Chart Cards"
-          style={customModalStyles}
+          style={customModalStyles} // Correctly passing the style object
         >
           <div style={customModalStyles.closeButton} onClick={closeModal}>
             <CloseIcon />
@@ -204,7 +200,7 @@ function Overview() {
             <ArgonTypography>No cards available</ArgonTypography>
           )}
           {selectedCards.length > 0 && (
-            <ArgonBox pt={2} px={3} style={{ textAlign: "end" }}>
+            <ArgonBox pt={2} px={3} style={{ textAlign: 'end' }}>
               <ArgonButton onClick={addCardsToDashboard} color="primary">
                 Add Selected Cards ({selectedCards.length})
               </ArgonButton>
