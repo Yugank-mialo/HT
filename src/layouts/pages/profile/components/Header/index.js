@@ -38,7 +38,7 @@ function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, ha
                     input={{ placeholder: "From Date" }}
                     value={fromDate}
                     onChange={handleFromDateChange}
-                    options={{ maxDate: toDate }}
+                    options={{ maxDate: new Date() }}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -46,7 +46,7 @@ function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, ha
                     input={{ placeholder: "To Date" }}
                     value={toDate}
                     onChange={handleToDateChange}
-                    options={{ minDate: fromDate }}
+                    options={{ minDate: fromDate,maxDate:new Date() }}
                   />
                 </Grid>
                 <Grid item container xs={12} md={6} justifyContent="flex-end" spacing={2}>

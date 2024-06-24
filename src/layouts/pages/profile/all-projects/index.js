@@ -1,60 +1,46 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState,useMemo } from "react";
+
+// @mui material components
 import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
+import { Card } from "@mui/material";
+
+// Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
-import Header from "layouts/pages/profile/components/Header";
+
+// Example components for charts
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import VerticalBarChart from "examples/Charts/BarCharts/VerticalBarChart";
 import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
+import VerticalBarChart from "examples/Charts/BarCharts/VerticalBarChart";
 import PieChart from "examples/Charts/PieChart";
 
+// Project-specific components
+import Header from "layouts/pages/profile/components/Header";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import { API_Url } from "utils/API";
+import { useStore } from 'globalContext/GlobalContext';
+
+
 function AllProjects() {
+  const [visitorData, setVisitorData] = useState(null);
+  const [hourlyData, setHourlyData] = useState(null);
+  const [demographicsData, setDemographicsData] = useState(null);
+  const [firstEntryTime, setFirstEntryTime] = useState("");
+  const [lastExitTime, setLastExitTime] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
+  const [entryCount, setEntryCount] = useState(0);
+  const [exitCount, setExitCount] = useState(0);
+  const [totalOccupied, setTotalOccupied] = useState(0);
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [submittedDates, setSubmittedDates] = useState({ fromDate: null, toDate: null });
-  const [chartData, setChartData] = useState({
-    verticalBar: {
-      labels: ["16-20", "21-25", "26-30", "31-36", "36-42", "42+"],
-      datasets: [
-        {
-          label: "Sales by age",
-          color: "dark",
-          data: [15, 20, 12, 60, 20, 15],
-        },
-      ],
-    },
-    lineChart: {
-      labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      datasets: [
-        {
-          label: "Organic Search",
-          color: "info",
-          data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-        },
-        {
-          label: "Referral",
-          color: "dark",
-          data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
-        },
-        {
-          label: "Direct",
-          color: "primary",
-          data: [40, 80, 70, 90, 30, 90, 140, 130, 200],
-        },
-      ],
-    },
-    pieChart: {
-      labels: ["Facebook", "Direct", "Organic", "Referral"],
-      datasets: {
-        label: "Projects",
-        backgroundColors: ["info", "primary", "dark", "secondary", "primary"],
-        data: [15, 20, 12, 60],
-      },
-    },
-  });
+  const { selectedStore, token } = useStore();
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10)); // Initial selected date
 
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
   const handleFromDateChange = (date) => {
     setFromDate(formatDate(date));
     if (toDate && date && date > toDate) {
@@ -69,115 +55,207 @@ function AllProjects() {
   const handleClear = () => {
     setFromDate(null);
     setToDate(null);
-    fetchData()
+    setSubmittedDates({ fromDate: null, toDate: null }); 
   };
 
   const handleSubmit = () => {
     if (fromDate && toDate) {
-      setSubmittedDates({ fromDate, toDate });
+      setSubmittedDates({ fromDate, toDate }); 
     }
   };
 
   const formatDate = (date1) => {
     const date = new Date(date1);
     const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Month is zero-indexed, hence +1
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); 
     const day = ('0' + date.getDate()).slice(-2);
-    
-    // Form the yyyy-mm-dd format
     const formattedDate = `${year}-${month}-${day}`;
     return formattedDate;
   };
 
+
   useEffect(() => {
-    // Call the API only when both dates are set
-    if (submittedDates.fromDate && submittedDates.toDate) {
-      fetchData(submittedDates.fromDate, submittedDates.toDate);
-    }else{
-      fetchData(fromDate,toDate)
-    }
-  }, [submittedDates]);
+    const fetchData = async () => {
+      try {
 
-  const fetchData = async (fromDate, toDate) => {
-    try {
-      // Construct the URL based on whether dates are provided
-      let url = 'https://api.example.com/data';
-      if (fromDate && toDate) {
-        url += `?from=${fromDate}&to=${toDate}`;
+        let url =`${API_Url}/count_per_zone?store_id=${selectedStore}`;
+        if (submittedDates.fromDate && submittedDates.toDate) {
+          const formattedFromDate = formatDate(submittedDates.fromDate);
+          const formattedToDate = formatDate(submittedDates.toDate);
+          url += `&from_date=${formattedFromDate}&to_date=${formattedToDate}`;
+        }
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setVisitorData(data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
+    };
 
-      const response = await fetch(url);
-      const data = await response.json();
+    fetchData();
+  }, [selectedStore,submittedDates]);
 
-      // Update chart data based on the response
-      setChartData({
-        verticalBar: {
-          labels: data.verticalBar.labels,
-          datasets: [
-            {
-              label: `Sales by age (${fromDate} to ${toDate})`,
-              color: "dark",
-              data: data.verticalBar.data,
-            },
-          ],
-        },
-        lineChart: {
-          labels: data.lineChart.labels,
-          datasets: data.lineChart.datasets,
-        },
-        pieChart: {
-          labels: data.pieChart.labels,
-          datasets: data.pieChart.datasets,
-        },
-      });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let url=`${API_Url}/hourly_footfall?store_id=${selectedStore}&date=${selectedDate}`
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setHourlyData(data.Data);
+        setFirstEntryTime(data.first_entry_time);
+        setLastExitTime(data.last_exit_time);
+        setTotalCount(data.total_count);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, [selectedStore,selectedDate]);
+
+  useEffect(() => {
+    const fetchDemographics = async () => {
+      try {
+          let url =`${API_Url}/demographics?store_id=${selectedStore}`;
+        if (submittedDates.fromDate && submittedDates.toDate) {
+          const formattedFromDate = formatDate(submittedDates.fromDate);
+          const formattedToDate = formatDate(submittedDates.toDate);
+          url += `&from_date=${formattedFromDate}&to_date=${formattedToDate}`;
+        }
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setDemographicsData(data.Data);
+      } catch (error) {
+        console.error("Error fetching demographics data:", error);
+      }
+    };
+
+    fetchDemographics();
+  }, [selectedStore,submittedDates]);
+
+  useEffect(() => {
+    const fetchTotalFootfall = async () => {
+      try {
+        let url =`${API_Url}/total_footfall?store_id=${selectedStore}`;
+      if (submittedDates.fromDate && submittedDates.toDate) {
+          const formattedFromDate = formatDate(submittedDates.fromDate);
+          const formattedToDate = formatDate(submittedDates.toDate);
+          url += `&from_date=${formattedFromDate}&to_date=${formattedToDate}`;
+        }
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setEntryCount(data.entry_count);
+        setExitCount(data.exit_count);
+        setTotalOccupied(data.total_occupied);
+      } catch (error) {
+        console.error("Error fetching total footfall data:", error);
+      }
+    };
+
+    fetchTotalFootfall();
+  }, [selectedStore,submittedDates]);
+
+  useMemo(() => {
+    console.log("Selected Store:", selectedStore);
+  }, [selectedStore]);
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Header
+        <Header
             fromDate={fromDate}
             toDate={toDate}
             handleFromDateChange={handleFromDateChange}
             handleToDateChange={handleToDateChange}
             handleClear={handleClear}
             handleSubmit={handleSubmit}
-          />
+          />          
+                  </Grid>
+        <Grid item xs={12} md={6}>
+          <ArgonBox mb={6}>
+            <VerticalBarChart
+              title="Visitor Count per zone"
+              chart={{
+                labels: Object.keys(visitorData || {}).map((key) => key),
+                datasets: [
+                  {
+                    label: "Entry",
+                    color: "info",
+                    data: Object.values(visitorData || {}).map((item) => item.entry),
+                  },
+                  {
+                    label: "Exit",
+                    color: "dark",
+                    data: Object.values(visitorData || {}).map((item) => item.exit),
+                  },
+                ],
+              }}
+            />
+          </ArgonBox>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <ArgonBox mb={6}>
+            {hourlyData && (
+              <DefaultLineChart
+              selectedDate={selectedDate}
+        onDateChange={handleDateChange}
+                title="Hourly distribution of visitors across different zones"
+                chart={{
+                  labels: Array.from(Array(24).keys()).map((hour) => `${hour}:00`),
+                  datasets: Object.keys(hourlyData).map((zone, index) => ({
+                    label: zone,
+                    // color: generateUniqueColors(Object.keys(hourlyData).length)[index],
+                    data: Object.values(hourlyData[zone]),
+                  })),
+                }}
+              />
+            )}
+          </ArgonBox>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <ArgonBox mb={6}>
+            {demographicsData && (
+              <PieChart
+                title="Distribution of visitors by age group"
+                chart={{
+                  labels: Object.keys(demographicsData.age).map((ageGroup) => ageGroup),
+                  datasets: {
+                    label: "Age Groups",
+                    backgroundColors: ["info", "primary", "dark", "secondary", "warning", "success", "info", "dark"],
+                    data: Object.values(demographicsData.age).map((item) => item.total),
+                  }}
+                }
+              />
+            )}
+          </ArgonBox>
         </Grid>
         <Grid item xs={12} md={6}>
           <ArgonBox mb={6}>
             <VerticalBarChart
               title="Vertical Bar Chart"
-              chart={chartData.verticalBar}
-            />
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <ArgonBox mb={6}>
-            <DefaultLineChart
-              title="Multi Line Chart"
-              chart={chartData.lineChart}
-            />
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <ArgonBox mb={6}>
-            <PieChart
-              title="Pie Chart"
-              chart={chartData.pieChart}
-            />
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <ArgonBox mb={6}>
-            <VerticalBarChart
-              title="Vertical Bar Chart"
-              chart={chartData.verticalBar}
+              chart={{
+                labels: ["16-20", "21-25", "26-30", "31-36", "36-42", "42+"],
+                datasets: [
+                  {
+                    label: "Sales by age",
+                    color: "dark",
+                    data: [15, 20, 12, 60, 20, 15],
+                  },
+                ],
+              }}
             />
           </ArgonBox>
         </Grid>
@@ -186,6 +264,15 @@ function AllProjects() {
             <Card style={{ minHeight: "300px" }}>
               <ArgonTypography variant="h2" color="black" px={5} py={9}>
                 Total Footfall
+              </ArgonTypography>
+              <ArgonTypography variant="h3" color="black" px={5} py={3}>
+                Entry Count: {entryCount}
+              </ArgonTypography>
+              <ArgonTypography variant="h3" color="black" px={5} py={3}>
+                Exit Count: {exitCount}
+              </ArgonTypography>
+              <ArgonTypography variant="h3" color="black" px={5} py={3}>
+                Total Occupied: {totalOccupied}
               </ArgonTypography>
             </Card>
           </ArgonBox>
