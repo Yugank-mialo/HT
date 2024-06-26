@@ -62,7 +62,7 @@ function BasicLayout({ button, image, children }) {
           </Grid>
         </ArgonBox>
       </ArgonBox>
-      <Footer />
+      {/* <Footer /> */}
     </PageLayout>
   );
 }
