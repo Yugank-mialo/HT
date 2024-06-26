@@ -1,4 +1,4 @@
-import { useState, useEffect ,useMemo} from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 // @mui material components
@@ -13,6 +13,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
+import { useNavigate } from "react-router-dom";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
@@ -27,9 +28,8 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import { Card } from "@mui/material";
 import DataTable from "examples/Tables/DataTable";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import { useStore } from 'globalContext/GlobalContext';
+import { useStore } from "globalContext/GlobalContext";
 import { API_Url } from "utils/API";
-
 
 function Teams() {
   const [fromDate, setFromDate] = useState(null);
@@ -37,6 +37,13 @@ function Teams() {
   const [submittedDates, setSubmittedDates] = useState({ fromDate: null, toDate: null });
   const { selectedStore, token } = useStore();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10)); // Initial selected date
+  const navigate = useNavigate();
+
+  const authenticateTokenUI = localStorage.getItem("token") ? localStorage.getItem("token") : "";
+
+  if (authenticateTokenUI === "") {
+    navigate("/authentication/sign-in");
+  }
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -61,20 +68,18 @@ function Teams() {
 
   const handleSubmit = () => {
     if (fromDate && toDate) {
-      setSubmittedDates({ fromDate, toDate }); 
+      setSubmittedDates({ fromDate, toDate });
     }
   };
 
   const formatDate = (date1) => {
     const date = new Date(date1);
     const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); 
-    const day = ('0' + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
     const formattedDate = `${year}-${month}-${day}`;
     return formattedDate;
   };
-
-
 
   const [chartData, setChartData] = useState({
     labels: [],
@@ -221,7 +226,7 @@ function Teams() {
         // });
         const response = await axios.get(url);
         const { Data } = response.data;
-        if (Data &&  Object.keys(Data).length>0) {
+        if (Data && Object.keys(Data).length > 0) {
           // Extract labels (hours of the day)
           const labels = Object.keys(Data[Object.keys(Data)[0]]).map(Number); // Assuming hours are numeric strings
 
@@ -279,7 +284,6 @@ function Teams() {
 
     fetchTopZonesData();
   }, [selectedStore, submittedDates]);
-
 
   useEffect(() => {
     const fetchLeastBusyZoneData = async () => {
@@ -368,20 +372,39 @@ function Teams() {
     fetchDwellZoneTableData();
   }, [selectedStore, submittedDates]);
 
+  const date = new Date(2024, 5, 26); // Year, month (0-indexed), day
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const formattedDate = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+
   return (
     <>
       <DashboardLayout>
         <DashboardNavbar />
         <Grid container spacing={3}>
           <Grid item xs={12}>
-          <Header
-            fromDate={fromDate}
-            toDate={toDate}
-            handleFromDateChange={handleFromDateChange}
-            handleToDateChange={handleToDateChange}
-            handleClear={handleClear}
-            handleSubmit={handleSubmit}
-          />          </Grid>
+            <Header
+              fromDate={fromDate}
+              toDate={toDate}
+              handleFromDateChange={handleFromDateChange}
+              handleToDateChange={handleToDateChange}
+              handleClear={handleClear}
+              handleSubmit={handleSubmit}
+            />{" "}
+          </Grid>
           <Grid item xs={12} md={6}>
             <ArgonBox mb={6}>
               <VerticalBarChart title="Average Dwell time per zone" chart={chartData} />
@@ -411,8 +434,12 @@ function Teams() {
           </Grid>
           <Grid item xs={12} md={6}>
             <ArgonBox mb={6}>
-              <DefaultLineChart title=" Peak hours analysis" selectedDate={selectedDate}
-        onDateChange={handleDateChange} chart={peakHoursData} />
+              <DefaultLineChart
+                title=" Peak hours analysis"
+                selectedDate={selectedDate}
+                onDateChange={handleDateChange}
+                chart={peakHoursData}
+              />
             </ArgonBox>
           </Grid>
           <Grid item xs={12} md={12}>
@@ -469,121 +496,172 @@ function Teams() {
               </Card>
             </ArgonBox>
           </Grid>
-
           <Grid item xs={12} md={4}>
             <ArgonBox mb={4}>
-              <Card style={{ minHeight: "400px" }}>
+              <Card
+                style={{
+                  minHeight: "400px",
+                  padding: "1rem",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)",
+                }}
+              >
                 <CardContent>
-                  <Typography variant="h4" component="h2">
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    gutterBottom
+                    style={{ marginBottom: "0.3rem", textAlign: "left", color: "black" }}
+                  >
                     Top Three Fastest and Slowest Zones
                   </Typography>
                   <Typography
                     variant="h6"
-                    component="h3"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                    style={{ marginTop: "10px" }}
+                    style={{ marginBottom: "1rem", textAlign: "left", color: "black" }}
                   >
-                    Fastest Zones:
+                    Date: {formattedDate}
                   </Typography>
-                  {topZones.fastest.map(([zone, avgDwellTime]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {avgDwellTime} minutes
-                    </Typography>
-                  ))}
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Slowest Zones:
-                  </Typography>
-                  {topZones.slowest.map(([zone, avgDwellTime]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {avgDwellTime} minutes
-                    </Typography>
-                  ))}
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div style={{ width: "48%" }}>
+                      <Typography
+                        variant="h5"
+                        component="h3"
+                        color="black"
+                        gutterBottom
+                        style={{ fontWeight: "bold", color: "black" }}
+                      >
+                        Fastest Zones:
+                      </Typography>
+                      {topZones.fastest.map(([zone, avgDwellTime]) => (
+                        <Typography key={zone} color="black" gutterBottom>
+                          <span style={{ fontWeight: "bold" }}>{zone}</span>: {avgDwellTime} minutes
+                        </Typography>
+                      ))}
+                    </div>
+                    <div style={{ width: "48%" }}>
+                      <Typography
+                        variant="h5"
+                        component="h3"
+                        color="black"
+                        gutterBottom
+                        style={{ fontWeight: "bold", color: "black" }}
+                      >
+                        Slowest Zones:
+                      </Typography>
+                      {topZones.slowest.map(([zone, avgDwellTime]) => (
+                        <Typography key={zone} color="black" gutterBottom>
+                          <span style={{ fontWeight: "bold" }}>{zone}</span>: {avgDwellTime} minutes
+                        </Typography>
+                      ))}
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </ArgonBox>
           </Grid>
           <Grid item xs={12} md={4}>
-            <ArgonBox mb={4}>
-              <Card style={{ minHeight: "400px" }}>
-                <CardContent>
-                  <Typography variant="h4" component="h2">
-                    Least Busy Zone (in terms of time / no of customers)
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Least Customer Count Zone:
+            <Card
+              style={{
+                minHeight: "400px",
+                padding: "1rem",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <CardContent>
+                <Typography
+                  variant="h3"
+                  component="h2"
+                  gutterBottom
+                  style={{ marginBottom: "0.3rem", textAlign: "left", color: "black" }}
+                >
+                  Least Busy Zones
+                </Typography>
+                <Typography
+                  variant="h6"
+                  style={{ marginBottom: "1rem", textAlign: "left", color: "black" }}
+                >
+                  Date: {formattedDate}
+                </Typography>
+                <div style={{ marginBottom: "1rem" }}>
+                  <Typography variant="" component="h4" color="black" gutterBottom>
+                    Least Customer Count Zones
                   </Typography>
                   {Object.entries(leastBusyZone.leastCustomerCount).map(([zone, count]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {count} customers
+                    <Typography key={zone} color="black" gutterBottom>
+                      <span style={{ fontWeight: "bold" }}>{zone}</span>: {count} customers
                     </Typography>
                   ))}
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Least Working Minute Zone:
+                </div>
+
+                <div>
+                  <Typography variant="" component="h3" color="black" gutterBottom>
+                    Least Working Minute Zones
                   </Typography>
                   {Object.entries(leastBusyZone.leastWorkingMinute).map(([zone, minutes]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {minutes} minutes
+                    <Typography key={zone} color="black" gutterBottom>
+                      <span style={{ fontWeight: "bold" }}>{zone}</span>: {minutes} minutes
                     </Typography>
                   ))}
-                </CardContent>
-              </Card>
-            </ArgonBox>
+                </div>
+              </CardContent>
+            </Card>
           </Grid>
+
           <Grid item xs={12} md={4}>
             <ArgonBox mb={4}>
-              <Card style={{ minHeight: "400px" }}>
+              <Card
+                style={{
+                  minHeight: "400px",
+                  padding: "1rem",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)",
+                }}
+              >
                 <CardContent>
-                  <Typography variant="h4" component="h2">
-                    Busy Zone (in terms of time / no of customers)
+                  <Typography
+                    variant="h3"
+                    component="h2"
+                    gutterBottom
+                    style={{ marginBottom: "0.3rem", textAlign: "left", color: "black" }}
+                  >
+                    Most Busy Zone
                   </Typography>
                   <Typography
                     variant="h6"
-                    component="h2"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
+                    style={{ marginBottom: "1rem", textAlign: "left", color: "black" }}
                   >
-                    Most Customer Count Zone:
+                    Date: {formattedDate}
                   </Typography>
-                  {Object.entries(busyZone.mostCustomerCount).map(([zone, count]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {count} customers
+                  <div style={{ marginBottom: "1rem" }}>
+                    <Typography
+                      variant=""
+                      component="h3"
+                      color="black"
+                      fontWeight="bold"
+                      gutterBottom
+                    >
+                      Most Customer Count Zone:
                     </Typography>
-                  ))}
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Most Working Minute Zone:
-                  </Typography>
-                  {Object.entries(busyZone.mostWorkingMinute).map(([zone, minutes]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {minutes} minutes
+                    {Object.entries(busyZone.mostCustomerCount).map(([zone, count]) => (
+                      <Typography key={zone} color="black" gutterBottom>
+                        <span style={{ fontWeight: "bold" }}>{zone}</span>: {count} customers
+                      </Typography>
+                    ))}
+                  </div>
+                  <div>
+                    <Typography
+                      variant=""
+                      component="h3"
+                      color="black"
+                      fontWeight="bold"
+                      gutterBottom
+                    >
+                      Most Working Minute Zone:
                     </Typography>
-                  ))}
+                    {Object.entries(busyZone.mostWorkingMinute).map(([zone, minutes]) => (
+                      <Typography key={zone} color="black" gutterBottom>
+                        <span style={{ fontWeight: "bold" }}>{zone}</span>: {minutes} minutes
+                      </Typography>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             </ArgonBox>

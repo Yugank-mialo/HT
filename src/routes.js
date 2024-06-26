@@ -123,6 +123,15 @@ const routes = [
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
     noCollapse: true,
   },
+  {
+    type: "collapse",
+    name: "Logout",
+    key: "logout",
+    route: "/authentication/login",
+    component: <SignInBasic />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
+    noCollapse: true,
+  },
   // collapse: [
   //   {
   //     name: "Landing",

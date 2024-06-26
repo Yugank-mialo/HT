@@ -8,54 +8,55 @@ import configs from "examples/Charts/LineCharts/DefaultLineChart/configs";
 import colors from "assets/theme/base/colors";
 
 function DefaultLineChart({ title, description, height, chart, selectedDate, onDateChange }) {
-  const chartDatasets = chart.datasets
-    ? chart.datasets.map((dataset) => ({
-      ...dataset,
-      tension: 0.4,
-      borderWidth: 3,
-      pointRadius: 2,
-      pointBackgroundColor: colors[dataset.color]
-        ? colors[dataset.color || "dark"].main
-        : colors.dark.main,
-      borderColor: colors[dataset.color]
-        ? colors[dataset.color || "dark"].main
-        : colors.dark.main,
-      maxBarThickness: 6,
-    }))
-    : [];
+  const chartDatasets =
+    chart && chart.datasets
+      ? chart?.datasets.map((dataset) => ({
+          ...dataset,
+          tension: 0.4,
+          borderWidth: 3,
+          pointRadius: 2,
+          pointBackgroundColor: colors[dataset.color]
+            ? colors[dataset.color || "dark"].main
+            : colors.dark.main,
+          borderColor: colors[dataset.color]
+            ? colors[dataset.color || "dark"].main
+            : colors.dark.main,
+          maxBarThickness: 6,
+        }))
+      : [];
 
-  const { data, options } = configs(chart.labels || [], chartDatasets);
+  const { data, options } = configs(chart?.labels || [], chartDatasets);
 
   const renderChart = (
     <ArgonBox p={2}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-<div>
-        {title && (
-          <ArgonBox mb={1}>
-            <ArgonTypography variant="h6">{title}</ArgonTypography>
-          </ArgonBox>
-        )}
-        </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
-        {onDateChange && (
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => onDateChange(e.target.value)}
-            style={{ marginRight: '10px' }}
-          />
-        )}
-        </div>
-                </div>
-
-        <div>
-          {description && (
-            <ArgonBox mb={2}>
-              <ArgonTypography component="div" variant="button" fontWeight="regular" color="text">
-                {description}
-              </ArgonTypography>
+          {title && (
+            <ArgonBox mb={1}>
+              <ArgonTypography variant="h6">{title}</ArgonTypography>
             </ArgonBox>
           )}
+        </div>
+        <div>
+          {onDateChange && (
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => onDateChange(e.target.value)}
+              style={{ marginRight: "10px" }}
+            />
+          )}
+        </div>
+      </div>
+
+      <div>
+        {description && (
+          <ArgonBox mb={2}>
+            <ArgonTypography component="div" variant="button" fontWeight="regular" color="text">
+              {description}
+            </ArgonTypography>
+          </ArgonBox>
+        )}
       </div>
       {/* Chart */}
       {useMemo(

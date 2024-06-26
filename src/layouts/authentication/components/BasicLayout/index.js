@@ -36,15 +36,6 @@ import pageRoutes from "page.routes";
 function BasicLayout({ button, image, children }) {
   return (
     <PageLayout>
-      <DefaultNavbar
-        routes={pageRoutes}
-        action={{
-          type: "external",
-          route: "https://creative-tim.com/product/argon-dashboard-pro-mui",
-          label: "Buy Now",
-          ...button,
-        }}
-      />
       <ArgonBox
         display="grid"
         alignItems="center"

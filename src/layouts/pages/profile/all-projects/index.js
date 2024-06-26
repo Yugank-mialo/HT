@@ -1,8 +1,8 @@
-import { useEffect, useState,useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
-import { Card } from "@mui/material";
+import { Button, Card } from "@mui/material";
 
 // Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
@@ -12,14 +12,16 @@ import ArgonTypography from "components/ArgonTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
 import VerticalBarChart from "examples/Charts/BarCharts/VerticalBarChart";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 import PieChart from "examples/Charts/PieChart";
 
 // Project-specific components
 import Header from "layouts/pages/profile/components/Header";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { API_Url } from "utils/API";
-import { useStore } from 'globalContext/GlobalContext';
-
+import { useStore } from "globalContext/GlobalContext";
+import { useNavigate } from "react-router-dom";
 
 function AllProjects() {
   const [visitorData, setVisitorData] = useState(null);
@@ -37,6 +39,13 @@ function AllProjects() {
   const { selectedStore, token } = useStore();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10)); // Initial selected date
 
+  const navigate = useNavigate();
+
+  const authenticateTokenUI = localStorage.getItem("token") ? localStorage.getItem("token") : "";
+
+  if (authenticateTokenUI === "") {
+    navigate("/authentication/sign-in");
+  }
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -55,30 +64,28 @@ function AllProjects() {
   const handleClear = () => {
     setFromDate(null);
     setToDate(null);
-    setSubmittedDates({ fromDate: null, toDate: null }); 
+    setSubmittedDates({ fromDate: null, toDate: null });
   };
 
   const handleSubmit = () => {
     if (fromDate && toDate) {
-      setSubmittedDates({ fromDate, toDate }); 
+      setSubmittedDates({ fromDate, toDate });
     }
   };
 
   const formatDate = (date1) => {
     const date = new Date(date1);
     const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); 
-    const day = ('0' + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
     const formattedDate = `${year}-${month}-${day}`;
     return formattedDate;
   };
 
-
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataPerZone = async () => {
       try {
-
-        let url =`${API_Url}/count_per_zone?store_id=${selectedStore}`;
+        let url = `${API_Url}/count_per_zone?store_id=${selectedStore}`;
         if (submittedDates.fromDate && submittedDates.toDate) {
           const formattedFromDate = formatDate(submittedDates.fromDate);
           const formattedToDate = formatDate(submittedDates.toDate);
@@ -94,14 +101,9 @@ function AllProjects() {
         console.error("Error fetching data:", error);
       }
     };
-
-    fetchData();
-  }, [selectedStore,submittedDates]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
-        let url=`${API_Url}/hourly_footfall?store_id=${selectedStore}&date=${selectedDate}`
+        let url = `${API_Url}/hourly_footfall?store_id=${selectedStore}&date=${selectedDate}`;
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -115,14 +117,9 @@ function AllProjects() {
         console.error("Error fetching data:", error);
       }
     };
-
-    fetchData();
-  }, [selectedStore,selectedDate]);
-
-  useEffect(() => {
     const fetchDemographics = async () => {
       try {
-          let url =`${API_Url}/demographics?store_id=${selectedStore}`;
+        let url = `${API_Url}/demographics?store_id=${selectedStore}`;
         if (submittedDates.fromDate && submittedDates.toDate) {
           const formattedFromDate = formatDate(submittedDates.fromDate);
           const formattedToDate = formatDate(submittedDates.toDate);
@@ -138,15 +135,10 @@ function AllProjects() {
         console.error("Error fetching demographics data:", error);
       }
     };
-
-    fetchDemographics();
-  }, [selectedStore,submittedDates]);
-
-  useEffect(() => {
     const fetchTotalFootfall = async () => {
       try {
-        let url =`${API_Url}/total_footfall?store_id=${selectedStore}`;
-      if (submittedDates.fromDate && submittedDates.toDate) {
+        let url = `${API_Url}/total_footfall?store_id=${selectedStore}`;
+        if (submittedDates.fromDate && submittedDates.toDate) {
           const formattedFromDate = formatDate(submittedDates.fromDate);
           const formattedToDate = formatDate(submittedDates.toDate);
           url += `&from_date=${formattedFromDate}&to_date=${formattedToDate}`;
@@ -165,25 +157,55 @@ function AllProjects() {
     };
 
     fetchTotalFootfall();
-  }, [selectedStore,submittedDates]);
+    fetchDemographics();
+    fetchData();
+    fetchDataPerZone();
+  }, [selectedStore, submittedDates, selectedDate]);
 
   useMemo(() => {
     console.log("Selected Store:", selectedStore);
   }, [selectedStore]);
+
+  const clearToken = () => {
+    localStorage.removeItem("token");
+  };
+
+  const handleLogout = () => {
+    clearToken();
+    navigate("/authentication/sign-in"); // Redirect to login page or any other page
+  };
+
+  const date = new Date(2024, 5, 26); // Year, month (0-indexed), day
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const formattedDate = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <Grid container spacing={3}>
         <Grid item xs={12}>
-        <Header
+          <Header
             fromDate={fromDate}
             toDate={toDate}
             handleFromDateChange={handleFromDateChange}
             handleToDateChange={handleToDateChange}
             handleClear={handleClear}
             handleSubmit={handleSubmit}
-          />          
-                  </Grid>
+          />
+        </Grid>
         <Grid item xs={12} md={6}>
           <ArgonBox mb={6}>
             <VerticalBarChart
@@ -210,8 +232,8 @@ function AllProjects() {
           <ArgonBox mb={6}>
             {hourlyData && (
               <DefaultLineChart
-              selectedDate={selectedDate}
-        onDateChange={handleDateChange}
+                selectedDate={selectedDate}
+                onDateChange={handleDateChange}
                 title="Hourly distribution of visitors across different zones"
                 chart={{
                   labels: Array.from(Array(24).keys()).map((hour) => `${hour}:00`),
@@ -229,78 +251,136 @@ function AllProjects() {
           <ArgonBox mb={6}>
             {demographicsData && (
               <PieChart
-                title="Distribution of visitors by age group"
+                title="Distribution of male visitors by age group"
                 chart={{
                   labels: Object.keys(demographicsData.age).map((ageGroup) => ageGroup),
                   datasets: {
                     label: "Age Groups",
-                    backgroundColors: ["info", "primary", "dark", "secondary", "warning", "success", "info", "dark"],
-                    data: Object.values(demographicsData.age).map((item) => item.total),
-                  }}
-                }
+                    backgroundColors: [
+                      "info",
+                      "primary",
+                      "dark",
+                      "secondary",
+                      "warning",
+                      "success",
+                      "info",
+                      "dark",
+                    ],
+                    data: Object.values(demographicsData.age).map((item) => item.male),
+                  },
+                }}
               />
             )}
           </ArgonBox>
         </Grid>
         <Grid item xs={12} md={6}>
           <ArgonBox mb={6}>
-            <VerticalBarChart
-              title="Vertical Bar Chart"
-              chart={{
-                labels: ["16-20", "21-25", "26-30", "31-36", "36-42", "42+"],
-                datasets: [
-                  {
-                    label: "Sales by age",
-                    color: "dark",
-                    data: [15, 20, 12, 60, 20, 15],
+            {demographicsData && (
+              <PieChart
+                title="Distribution of female visitors by age group"
+                chart={{
+                  labels: Object.keys(demographicsData.age).map((ageGroup) => ageGroup),
+                  datasets: {
+                    label: "Age Groups",
+                    backgroundColors: [
+                      "info",
+                      "primary",
+                      "dark",
+                      "secondary",
+                      "warning",
+                      "success",
+                      "info",
+                      "dark",
+                    ],
+                    data: Object.values(demographicsData.age).map((item) => item.female),
                   },
-                ],
+                }}
+              />
+            )}
+          </ArgonBox>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <ArgonBox mb={6}>
+            {demographicsData && (
+              <PieChart
+                title="Distribution of total visitors by age group"
+                chart={{
+                  labels: Object.keys(demographicsData.age).map((ageGroup) => ageGroup),
+                  datasets: {
+                    label: "Age Groups",
+                    backgroundColors: [
+                      "info",
+                      "primary",
+                      "dark",
+                      "secondary",
+                      "warning",
+                      "success",
+                      "info",
+                      "dark",
+                    ],
+                    data: Object.values(demographicsData.age).map((item) => item.total),
+                  },
+                }}
+              />
+            )}
+          </ArgonBox>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <ArgonBox mb={6}>
+            <Card
+              style={{
+                minHeight: "380px",
+                padding: "1rem",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)",
               }}
-            />
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <ArgonBox mb={3}>
-            <Card style={{ minHeight: "300px" }}>
-              <ArgonTypography variant="h2" color="black" px={5} py={9}>
-                Total Footfall
-              </ArgonTypography>
-              <ArgonTypography variant="h3" color="black" px={5} py={3}>
-                Entry Count: {entryCount}
-              </ArgonTypography>
-              <ArgonTypography variant="h3" color="black" px={5} py={3}>
-                Exit Count: {exitCount}
-              </ArgonTypography>
-              <ArgonTypography variant="h3" color="black" px={5} py={3}>
-                Total Occupied: {totalOccupied}
-              </ArgonTypography>
-            </Card>
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <ArgonBox mb={3}>
-            <Card style={{ minHeight: "300px" }}>
-              <ArgonTypography variant="h2" color="black" px={5} py={9}>
-                Peak hour
-              </ArgonTypography>
-            </Card>
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <ArgonBox mb={3}>
-            <Card style={{ minHeight: "300px" }}>
-              <ArgonTypography variant="h2" color="black" px={5} py={9}>
-                Most popular zone
-              </ArgonTypography>
-            </Card>
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <ArgonBox mb={3}>
-            <Card style={{ minHeight: "300px" }}>
-              <ArgonTypography variant="h2" color="black" px={5} py={9}>
-                Least popular zone
-              </ArgonTypography>
+            >
+              <CardContent>
+                <Typography
+                  variant="h2"
+                  component="h2"
+                  gutterBottom
+                  style={{ marginBottom: "1rem", textAlign: "left", color: "black" }}
+                >
+                  Total Footfall
+                </Typography>
+                <Typography
+                  variant="h6"
+                  style={{ marginBottom: "1rem", textAlign: "left", color: "black" }}
+                >
+                  Date: {formattedDate}
+                </Typography>
+                <Typography
+                  variant="h4"
+                  component="h3"
+                  color="black"
+                  gutterBottom
+                  style={{ color: "black" }}
+                  py={1}
+                >
+                  <span style={{ fontWeight: "bold" }}>Entry Count:</span> {entryCount}
+                </Typography>
+                <Typography
+                  variant="h4"
+                  component="h3"
+                  color="black"
+                  gutterBottom
+                  style={{ color: "black" }}
+                  py={1}
+                >
+                  <span style={{ fontWeight: "bold" }}>Exit Count:</span> {exitCount}
+                </Typography>
+                <Typography
+                  variant="h4"
+                  component="h3"
+                  color="black"
+                  gutterBottom
+                  style={{ color: "black" }}
+                  py={1}
+                >
+                  <span style={{ fontWeight: "bold" }}>Total Occupied:</span> {totalOccupied}
+                </Typography>
+              </CardContent>
             </Card>
           </ArgonBox>
         </Grid>

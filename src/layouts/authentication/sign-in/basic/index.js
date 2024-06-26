@@ -1,19 +1,6 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -21,6 +8,7 @@ import { Link } from "react-router-dom";
 // @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
+import { Alert, InputLabel } from "@mui/material";
 
 // Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
@@ -34,50 +22,103 @@ import Socials from "layouts/authentication/components/Socials";
 import Separator from "layouts/authentication/components/Separator";
 
 // Images
-import github from "assets/images/logos/github.svg";
-import google from "assets/images/logos/google.svg";
+import logoCT from "assets/images/svgviewer-output.svg";
+import { API_Url } from "utils/API";
 const bgImage =
   "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-basic.jpg";
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("error");
+
+  const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(`${API_Url}/loginCheck`, {
+        username: email,
+        password: password,
+      });
+
+      if (response.status === 200 && response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        setAlertType("success");
+        setAlertMessage("Login successful!");
+        // Redirect or perform other actions here
+        navigate("/dashboard"); // example redirect after successful login
+      } else {
+        setAlertMessage("Invalid response from server.");
+      }
+    } catch (error) {
+      setAlertMessage("Login failed. Please check your credentials.");
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  };
 
   return (
     <BasicLayout image={bgImage}>
       <Card>
         <ArgonBox p={3} textAlign="center">
+          <ArgonBox component="img" src={logoCT} width="75%" p={1} mb={1} />
           <ArgonTypography variant="h5" fontWeight="medium" sx={{ my: 2 }}>
-            Sign in
+            Welcome to Harris Teeter
           </ArgonTypography>
-          <ArgonBox display="flex" justifyContent="center">
-            <ArgonButton size="small" sx={{ mr: 1 }}>
-              <ArgonBox component="img" src={github} alt="github" width="23px" height="23px" />
-              &nbsp; Github
-            </ArgonButton>
-            <ArgonButton size="small">
-              <ArgonBox component="img" src={google} alt="github" width="23px" height="23px" />
-              &nbsp; Google
-            </ArgonButton>
-          </ArgonBox>
         </ArgonBox>
         <ArgonBox px={6} pb={3} textAlign="center">
-          <ArgonTypography
-            display="block"
-            variant="button"
-            color="secondary"
-            fontWeight="regular"
-            sx={{ mb: 3 }}
-          >
-            Or sign in with credentials
-          </ArgonTypography>
           <ArgonBox component="form" role="form">
+            {alertMessage && (
+              <Alert severity={alertType} sx={{ mb: 2 }}>
+                {alertMessage}
+              </Alert>
+            )}
             <ArgonBox mb={2}>
-              <ArgonInput type="email" placeholder="Email" />
+              <InputLabel
+                shrink
+                sx={{ textAlign: "left", fontWeight: 900 }}
+                color="dark"
+                fontWeight="700"
+                htmlFor="email"
+              >
+                Username
+              </InputLabel>
+              <ArgonInput
+                id="email"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                name="email"
+                type="email"
+                placeholder="Email"
+                onKeyDown={handleKeyDown}
+              />
             </ArgonBox>
             <ArgonBox mb={2}>
-              <ArgonInput type="password" placeholder="Password" />
+              <InputLabel
+                shrink
+                sx={{ textAlign: "left", fontWeight: 900 }}
+                color="dark"
+                fontWeight="700"
+                htmlFor="Password"
+              >
+                Password
+              </InputLabel>
+              <ArgonInput
+                name="password"
+                id="Password"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                onKeyDown={handleKeyDown}
+              />
             </ArgonBox>
             <ArgonBox display="flex" alignItems="center">
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -91,20 +132,8 @@ function Basic() {
               </ArgonTypography>
             </ArgonBox>
             <ArgonBox mt={4} mb={1}>
-              <ArgonButton color="info" fullWidth>
-                Sign In
-              </ArgonButton>
-            </ArgonBox>
-            <Separator />
-            <ArgonBox mt={1} mb={3}>
-              <ArgonButton
-                component={Link}
-                to="/authentication/sign-up/basic"
-                variant="gradient"
-                color="dark"
-                fullWidth
-              >
-                Sign Up
+              <ArgonButton color="info" fullWidth onClick={handleSubmit}>
+                Login
               </ArgonButton>
             </ArgonBox>
           </ArgonBox>
