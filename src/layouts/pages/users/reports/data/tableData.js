@@ -16,7 +16,17 @@ Coded by www.creative-tim.com
 // Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonBadgeDot from "components/ArgonBadgeDot";
-import SampleImage from "./../../../../../assets/images/Sample.png"
+import SampleImage from "./../../../../../assets/images/Sample.png";
+import Subham from "./../../../../../assets/images/Subham.png";
+import Saurav from "./../../../../../assets/images/Saurav.png";
+import Santosh from "./../../../../../assets/images/Santosh.png";
+import Amit from "./../../../../../assets/images/Amit.png";
+import Kiran from "./../../../../../assets/images/Kiran.png";
+
+
+
+
+
 // Images
 const team1 ="https://images.unsplash.com/photo-1719401542081-5f007eaabfee?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90b3MtZmVlZHw4fHx8ZW58MHx8fHx8";
 const team2 = "https://images.unsplash.com/photo-1719465580670-7f2ff4a4029f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D";
@@ -73,7 +83,7 @@ const tableData = {
           id: 5
         }
       ],
-      Image_Name:Sample,
+      Image_Name:Subham,
       Cameras: "cam_2,cam_1,cam_4",
       id: 1
     },
@@ -139,7 +149,7 @@ const tableData = {
           id: 8
         }
       ],
-      Image_Name:Sample,
+      Image_Name:Saurav,
       Cameras: "cam_3,cam_2,cam_1,cam_4",
       id: 2
     },
@@ -205,7 +215,7 @@ const tableData = {
           id: 8
         }
       ],
-      Image_Name:Sample,
+      Image_Name:Santosh,
       Cameras: "cam_3,cam_2,cam_1,cam_4",
       id: 3
     },
@@ -264,7 +274,7 @@ const tableData = {
           id: 7
         }
       ],
-      Image_Name:Sample,
+      Image_Name:Kiran,
       Cameras: "cam_3,cam_2,cam_1,cam_4",
       id: 4
     },
@@ -295,7 +305,7 @@ const tableData = {
           id: 3
         }
       ],
-      Image_Name:Sample,
+      Image_Name:Amit,
       Cameras: "cam_3,cam_1",
       id: 5
     }

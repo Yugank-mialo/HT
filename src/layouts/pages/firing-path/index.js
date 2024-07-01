@@ -128,6 +128,7 @@ function FiringPath() {
                     <ArgonBox mb={6}>
                         <div className="image-container">
                             <img
+                            className="fireImg"
                                 src={imageUrl}
                                 alt="Description of your image"
                                 style={{ maxWidth: '100%', height: '80vh', width: '100%', display: 'block', objectFit: 'contain' }}

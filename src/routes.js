@@ -95,14 +95,20 @@ import Error500 from "layouts/authentication/error/500";
 // Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
 import FiringPath from "layouts/pages/firing-path";
+import ProtectedRoute from './protectedRoute/index'; // Import the ProtectedRoute component
+import LogoutWrapper from "logOutWrapper";
 
 const routes = [
+  {
+route:"/",
+component:<SignInBasic/>
+  },
   {
     type: "collapse",
     name: "Home",
     key: "dashboard",
     route: "/dashboard/home",
-    component: <Overview />,
+    component: <ProtectedRoute component={Overview} />,
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-shop" />,
     noCollapse: true,
   },
@@ -111,8 +117,8 @@ const routes = [
     name: "Dwell Zone",
     key: "dwell-zone",
     route: "/dashboard/dwell-zone",
-    component: <Teams />,
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
+    component:  <ProtectedRoute component={Teams} />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-square-pin" />,
     noCollapse: true,
   },
   {
@@ -120,8 +126,8 @@ const routes = [
     name: "Footfall Zone",
     key: "footfall-zone",
     route: "/dashboard/footfall-zone",
-    component: <AllProjects />,
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
+    component:  <ProtectedRoute component={AllProjects} />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ui-04" />,
     noCollapse: true,
   },
 
@@ -130,8 +136,8 @@ const routes = [
     name: "Track Path",
     key: "track-path",
     route: "/dashboard/track-path",
-    component: <FiringPath />,
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
+    component: <ProtectedRoute component={FiringPath} />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-user-run" />,
     noCollapse: true,
   },
   {
@@ -139,8 +145,8 @@ const routes = [
     name: "Logout",
     key: "logout",
     route: "/authentication/login",
-    component: <SignInBasic />,
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
+    component: <LogoutWrapper/>,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-button-power" />,
     noCollapse: true,
   },
   // collapse: [

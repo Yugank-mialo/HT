@@ -65,6 +65,7 @@ const customModalStyles = {
 
 function Overview() {
   const classes = useStyles();
+  const tokenValue=localStorage.getItem("token");
   const { selectedStore, token } = useStore();
   const [dashboardCards, setDashboardCards] = useState([]);
   const [modalCards, setModalCards] = useState([
@@ -188,15 +189,18 @@ function Overview() {
 
   useEffect(() => {
     const fetchUserWidgets = async () => {
-      if (token) {
+      if (tokenValue && tokenValue !=="") {
         try {
           const response = await fetch(`${API_Url}/user_widget`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'x-access-token': `${token}`,
+              'x-access-token': tokenValue, // No need for `${token}`
             },
           });
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
           const result = await response.json();
           if (result.status === 1) {
             const selectedIds = result.data;
@@ -204,15 +208,18 @@ function Overview() {
             const remaining = modalCards.filter(card => !selectedIds.includes(card.id));
             setDashboardCards(selected);
             setModalCards(remaining);
+          } else {
+            console.error('Error fetching user widgets:', result.message);
           }
         } catch (error) {
           console.error('Error fetching user widgets:', error);
         }
       }
     };
-
+  
     fetchUserWidgets();
-  }, [token !== ""]);
+  }, [tokenValue]);
+  
 
 
   useMemo(() => {
@@ -252,7 +259,7 @@ function Overview() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': `${token}`,
+          'x-access-token': tokenValue,
         },
         body: JSON.stringify(selectedIds),
       });
@@ -278,7 +285,7 @@ function Overview() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-access-token': `${token}`,
+          'x-access-token': tokenValue,
         },
         body: JSON.stringify({ id: cardToRemove.id }),
       });
@@ -298,7 +305,7 @@ function Overview() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <Grid container spacing={3} style={{ alignItems: 'stretch',marginTop:"10px" }}>
+      <Grid container spacing={3} style={{ alignItems: 'stretch',marginTop:"30px" }}>
         {dashboardCards.map((card, index) => (
           <Grid key={card.id} item xs={12} sm={6}>
             <Card style={{ height: '100%' }}>
@@ -403,7 +410,7 @@ function Overview() {
           <div style={customModalStyles.closeButton} onClick={closeModal}>
             <CloseIcon />
           </div>
-          <h2>Select Chart Cards</h2>
+          <h3>Select Chart Cards</h3>
           {modalCards.length > 0 ? (
             <Grid container spacing={3}>
               {modalCards.map(card => (

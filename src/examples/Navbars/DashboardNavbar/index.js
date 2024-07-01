@@ -193,7 +193,8 @@ function DashboardNavbar({ absolute, light, isMini,ShowOrHideTheSelectStoreInput
           <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
               <>
       {ShowOrHideTheSelectStoreInput && (
-        <Box pr={1}>
+        <Box pr={1} display="flex" alignItems="center" >
+          <ArgonTypography style={{whiteSpace:"nowrap",color:"#fff",fontWeight:700}}> Store : &nbsp;</ArgonTypography>
           <FormControl fullWidth variant="outlined">
             {/* <InputLabel id="store-select-label">Select Store</InputLabel> */}
             <Select
