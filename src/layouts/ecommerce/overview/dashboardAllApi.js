@@ -46,7 +46,7 @@ export const fetchDwellTimePerDay = async (storeId) => {
 };
 
 export const fetchPeakHoursData = async (storeId) => {
-    const url = `${API_Url}/hourly_dwell_time?store_id=${storeId}&date=2024-06-02`;
+    const url = `${API_Url}/hourly_dwell_time?store_id=${storeId}`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -77,7 +77,7 @@ export const fetchPeakHoursData = async (storeId) => {
 
 
   export const fetchFootfallHourly = async (storeId) => {
-    const url = `${API_Url}/hourly_footfall?store_id=${storeId}&date=2024-06-02`;
+    const url = `${API_Url}/hourly_footfall?store_id=${storeId}`;
     try {
       const response = await fetch(url);
       if (!response.ok) {

@@ -1,161 +1,154 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useMemo } from "react";
-
-// prop-types is a library for typechecking of props
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-
-// uuid is a library for generating unique id
 import { v4 as uuidv4 } from "uuid";
-
-// @mui material components
-import { Table as MuiTable } from "@mui/material";
+import { Table as MuiTable, TableRow, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-
-// Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonAvatar from "components/ArgonAvatar";
 import ArgonTypography from "components/ArgonTypography";
-
-// Argon Dashboard 2 PRO MUI base styles
+import Modal from "./Modal"; // Import your modal component
 import typography from "assets/theme/base/typography";
 import borders from "assets/theme/base/borders";
+import { position } from "stylis";
 
-function Table({ columns, rows }) {
+function Table({ title, columns, rows }) {
   const { size, fontWeightBold } = typography;
   const { borderWidth } = borders;
 
-  const renderColumns = columns.map(({ name, align, width }, key) => {
-    let pl;
-    let pr;
+  const [selectedRow, setSelectedRow] = useState(null); // State to track selected row
 
-    if (key === 0) {
-      pl = 3;
-      pr = 3;
-    } else if (key === columns.length - 1) {
-      pl = 3;
-      pr = 3;
-    } else {
-      pl = 1;
-      pr = 1;
+  // Function to handle row click and open modal
+  const handleRowClick = (row) => {
+    setSelectedRow(row);
+  };
+
+  const renderColumns = columns.map(({ name, align, width }, key) => {
+    // Render column headers
+    let displayName = name;
+
+    if (name === "Person_Id") {
+      displayName = "Person ID";
+    }
+    if (name === "Start_Time") {
+      displayName = "Start Time";
+    }
+    if (name === "End_Time") {
+      displayName = "End Time";
+    }
+    if (name === "Cameras") {
+      displayName = "Cameras";
     }
 
     return (
       <ArgonBox
-        key={name}
+        key={displayName}
         component="th"
         width={width || "auto"}
         pt={1.5}
         pb={1.25}
-        pl={align === "left" ? pl : 3}
-        pr={align === "right" ? pr : 3}
+        pl={align === "left" ? 3 : 1}
+        pr={align === "right" ? 3 : 1}
         textAlign={align}
         fontSize={size.xxs}
         fontWeight={fontWeightBold}
         color="secondary"
         opacity={0.7}
-        sx={({ palette: { light } }) => ({ borderBottom: `${borderWidth[1]} solid ${light.main}` })}
+        sx={({ palette: { light } }) => ({
+          borderBottom: `${borderWidth[1]} solid ${light.main}`,
+        })}
       >
-        {name.toUpperCase()}
+        {displayName.toUpperCase()}
       </ArgonBox>
     );
   });
 
   const renderRows = rows.map((row, key) => {
-    const rowKey = `row-${key}`;
-
-    const tableRow = columns.map(({ name, align }) => {
-      let template;
-
-      if (Array.isArray(row[name])) {
-        template = (
-          <ArgonBox
-            key={uuidv4()}
-            component="td"
-            p={1}
-            sx={({ palette: { light } }) => ({
-              borderBottom: row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null,
-            })}
-          >
-            <ArgonBox display="flex" alignItems="center" py={0.5} px={1}>
-              <ArgonBox mr={2}>
-                <ArgonAvatar src={row[name][0]} name={row[name][1]} variant="rounded" size="sm" />
+    // Render each row of data
+    return (
+      <TableRow key={uuidv4()} onClick={() => handleRowClick(row)} style={{ cursor: "pointer" }}>
+        {columns.map(({ name, align }) => {
+          // Render cells of each row
+          let template;
+          if (Array.isArray(row[name])) {
+            template = (
+              <ArgonBox
+                key={uuidv4()}
+                component="td"
+                p={1}
+                sx={({ palette: { light } }) => ({
+                  borderBottom: row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null,
+                })}
+              >
+                <ArgonBox display="flex" alignItems="center" py={0.5} px={1} style={{ justifyContent: 'center' }}>
+                  {/* <ArgonBox mr={2}>
+                    <ArgonAvatar src={row[name][0]} name={row[name][1]} variant="rounded" size="sm" />
+                  </ArgonBox> */}
+                  <ArgonTypography variant="button"
+                    color="secondary"
+                    fontWeight="regular"
+                    sx={{ width: "max-content" }}>
+                    {row[name][1]}
+                  </ArgonTypography>
+                </ArgonBox>
               </ArgonBox>
-              <ArgonTypography variant="button" fontWeight="medium" sx={{ width: "max-content" }}>
-                {row[name][1]}
-              </ArgonTypography>
-            </ArgonBox>
-          </ArgonBox>
-        );
-      } else {
-        template = (
-          <ArgonBox
-            key={uuidv4()}
-            component="td"
-            p={1}
-            textAlign={align}
-            verticalAlign="middle"
-            lineHeight={0.65}
-            sx={({ palette: { light } }) => ({
-              borderBottom: row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null,
-            })}
-          >
-            <ArgonTypography
-              variant="button"
-              fontWeight="regular"
-              color="secondary"
-              sx={{ display: "inline-block", width: "max-content" }}
-            >
-              {row[name]}
-            </ArgonTypography>
-          </ArgonBox>
-        );
-      }
-
-      return template;
-    });
-
-    return <TableRow key={rowKey}>{tableRow}</TableRow>;
+            );
+          } else {
+            template = (
+              <ArgonBox
+                key={uuidv4()}
+                component="td"
+                p={1}
+                textAlign={align}
+                verticalAlign="middle"
+                lineHeight={0.65}
+                sx={({ palette: { light } }) => ({
+                  borderBottom: row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null,
+                })}
+              >
+                <ArgonTypography
+                  variant="button"
+                  fontWeight="regular"
+                  color="secondary"
+                  sx={{ display: "inline-block", width: "max-content" }}
+                >
+                  {row[name]}
+                </ArgonTypography>
+              </ArgonBox>
+            );
+          }
+          return template;
+        })}
+      </TableRow>
+    );
   });
 
-  return useMemo(
-    () => (
-      <TableContainer>
-        <MuiTable>
-          <ArgonBox component="thead">
-            <TableRow>{renderColumns}</TableRow>
-          </ArgonBox>
-          <TableBody>{renderRows}</TableBody>
-        </MuiTable>
-      </TableContainer>
-    ),
-    [columns, rows]
+  return (
+    <TableContainer>
+      {title && (
+        <ArgonTypography variant="h5" fontWeight="600" mb={2} style={{ position: "relative", top: "15px", marginLeft: "3%" }}>
+          {title}
+        </ArgonTypography>
+      )}
+      <MuiTable className="tableOfDwellZone">
+        <ArgonBox component="thead">
+          <TableRow>{renderColumns}</TableRow>
+        </ArgonBox>
+        <TableBody>{renderRows}</TableBody>
+      </MuiTable>
+      {/* Modal to display detailed view */}
+      <Modal open={selectedRow !== null} onClose={() => setSelectedRow(null)} row={selectedRow} />
+    </TableContainer>
   );
 }
 
-// Setting default values for the props of Table
 Table.defaultProps = {
+  title: "",
   columns: [],
   rows: [{}],
 };
 
-// Typechecking props for the Table
 Table.propTypes = {
+  title: PropTypes.string,
   columns: PropTypes.arrayOf(PropTypes.object),
   rows: PropTypes.arrayOf(PropTypes.object),
 };

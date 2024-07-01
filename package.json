@@ -60,6 +60,7 @@
     "react-router-dom": "6.11.1",
     "react-scripts": "5.0.1",
     "react-select": "5.7.3",
+    "react-slideshow-image": "^4.3.1",
     "react-table": "7.8.0",
     "stylis": "4.2.0",
     "stylis-plugin-rtl": "2.1.1",

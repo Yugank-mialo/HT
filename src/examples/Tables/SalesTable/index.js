@@ -1,91 +1,173 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useMemo } from "react";
-
-// prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
-
-// @mui material components
-import Table from "@mui/material/Table";
+import { v4 as uuidv4 } from "uuid";
+import { Table as MuiTable } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-
-// Argon Dashboard 2 PRO MUI components
-import ArgonTypography from "components/ArgonTypography";
 import ArgonBox from "components/ArgonBox";
+import ArgonAvatar from "components/ArgonAvatar";
+import ArgonTypography from "components/ArgonTypography";
+import typography from "assets/theme/base/typography";
+import borders from "assets/theme/base/borders";
 
-// Argon Dashboard 2 PRO MUI example components
-import SalesTableCell from "examples/Tables/SalesTable/SalesTableCell";
+function SalesTable({ columns, rows, title }) {
+  const { size, fontWeightBold } = typography;
+  const { borderWidth } = borders;
 
-function SalesTable({ title, rows }) {
-  const renderTableCells = rows.map((row, key) => {
-    const tableRows = [];
-    const rowKey = `row-${key}`;
+  const renderColumns = useMemo(
+    () =>
+      columns.map(({ name, align, width }, key) => {
+        let pl, pr;
+        let displayName = name;
 
-    Object.entries(row).map(([cellTitle, cellContent]) =>
-      Array.isArray(cellContent)
-        ? tableRows.push(
-            <SalesTableCell
-              key={cellContent[1]}
-              title={cellTitle}
-              content={cellContent[1]}
-              image={cellContent[0]}
-              noBorder={key === rows.length - 1}
-            />
-          )
-        : tableRows.push(
-            <SalesTableCell
-              key={cellContent}
-              title={cellTitle}
-              content={cellContent}
-              noBorder={key === rows.length - 1}
-            />
-          )
-    );
+        if (key === 0) {
+          pl = 3;
+          pr = 3;
+        } else if (key === columns.length - 1) {
+          pl = 3;
+          pr = 3;
+        } else {
+          pl = 1;
+          pr = 1;
+        }
 
-    return <TableRow key={rowKey}>{tableRows}</TableRow>;
-  });
+        // Conditionally rename "zone" column to "Sangamesh"
+        if (name === "zone") {
+          displayName = "Zone";
+        }
+        if(name=="counts_per_zone"){
+          displayName="Counts Per Zone"
+        }
+        if(name=="hourly_flow_rate"){
+          displayName="Hourly Flow Rate"
+        }
+
+        return (
+          <ArgonBox
+            key={displayName}
+            component="th"
+            width={width || "auto"}
+            pt={1.5}
+            pb={1.25}
+            pl={align === "left" ? pl : 3}
+            pr={align === "right" ? pr : 3}
+            textAlign={align}
+            fontSize={size.xxs}
+            fontWeight={fontWeightBold}
+            color="secondary"
+            opacity={0.7}
+            sx={({ palette: { light } }) => ({
+              borderBottom: `${borderWidth[1]} solid ${light.main}`,
+            })}
+          >
+            {displayName.toUpperCase()}
+          </ArgonBox>
+        );
+      }),
+    [columns, size, fontWeightBold, borderWidth]
+  );
+
+  const renderRows = useMemo(
+    () =>
+      rows.map((row, key) => {
+        const rowKey = `row-${key}`;
+
+        const tableRow = columns.map(({ name, align }) => {
+          let template;
+
+          if (Array.isArray(row[name])) {
+            template = (
+              <ArgonBox
+                key={uuidv4()}
+                component="td"
+                p={1}
+                sx={({ palette: { light } }) => ({
+                  borderBottom: borderWidth ? `${borderWidth[1]} solid ${light.main}` : null,
+                })}
+              >
+                <ArgonBox display="flex" alignItems="center" py={0.5} px={1}>
+                  <ArgonBox mr={2}>
+                    <ArgonAvatar src={row[name][0]} name={row[name][1]} variant="rounded" size="sm" />
+                  </ArgonBox>
+                  <ArgonTypography variant="button" fontWeight="medium" sx={{ width: "max-content" }}>
+                    {row[name][1]}
+                  </ArgonTypography>
+                </ArgonBox>
+              </ArgonBox>
+            );
+          } else {
+            template = (
+              <ArgonBox
+                key={uuidv4()}
+                component="td"
+                p={1}
+                textAlign={align}
+                verticalAlign="middle"
+                lineHeight={0.65}
+                sx={({ palette: { light } }) => ({
+                  borderBottom: borderWidth ? `${borderWidth[1]} solid ${light.main}` : null,
+                })}
+              >
+                <ArgonTypography
+                  variant="button"
+                  fontWeight="regular"
+                  color="secondary"
+                  sx={{ display: "inline-block", width: "max-content" }}
+                >
+                  {row[name]}
+                </ArgonTypography>
+              </ArgonBox>
+            );
+          }
+
+          return template;
+        });
+
+        return <TableRow key={rowKey}>{tableRow}</TableRow>;
+      }),
+    [columns, rows, borderWidth]
+  );
 
   return (
-    <TableContainer sx={{ height: "100%" }}>
-      <Table>
-        <TableHead>
-          <ArgonBox component="tr" width="max-content" display="block" mb={1.5}>
-            <ArgonTypography variant="h6" component="td">
-              {title}
-            </ArgonTypography>
-          </ArgonBox>
-        </TableHead>
-        <TableBody>{useMemo(() => renderTableCells, [rows])}</TableBody>
-      </Table>
+    <TableContainer>
+      {title && (
+        <ArgonTypography variant="h5" fontWeight="600" mb={2} style={{ position: "relative", top: "15px", marginLeft: "3%" }}>
+          {title}
+        </ArgonTypography>
+      )}
+      <MuiTable className="tableOfDwellZone">
+        <ArgonBox component="thead">
+          <TableRow>{renderColumns}</TableRow>
+        </ArgonBox>
+        <TableBody>{renderRows}</TableBody>
+      </MuiTable>
     </TableContainer>
   );
 }
 
-// Setting default values for the props of SalesTable
 SalesTable.defaultProps = {
+  columns: [],
   rows: [{}],
 };
 
-// Typechecking props for the SalesTable
 SalesTable.propTypes = {
-  title: PropTypes.string.isRequired,
-  rows: PropTypes.arrayOf(PropTypes.object),
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      align: PropTypes.oneOf(["left", "center", "right"]),
+      width: PropTypes.string,
+    })
+  ),
+  rows: PropTypes.arrayOf(
+    PropTypes.shape({
+      // Adjust the shape based on your actual data structure
+      zone: PropTypes.string.isRequired,
+      counts_per_zone: PropTypes.number.isRequired,
+      hourly_flow_rate: PropTypes.number.isRequired,
+    })
+  ),
+  title: PropTypes.string,
 };
 
 export default SalesTable;

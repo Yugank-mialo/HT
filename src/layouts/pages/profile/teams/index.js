@@ -1,4 +1,4 @@
-import { useState, useEffect ,useMemo} from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 // @mui material components
@@ -29,7 +29,9 @@ import DataTable from "examples/Tables/DataTable";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useStore } from 'globalContext/GlobalContext';
 import { API_Url } from "utils/API";
-
+import DetailedStatisticsCard from "examples/Cards/StatisticsCards/DetailedStatisticsCard";
+import SalesTable from "examples/Tables/SalesTable";
+// import salesTableData from "layouts/dashboards/default/data/salesTableData";
 
 function Teams() {
   const [fromDate, setFromDate] = useState(null);
@@ -61,14 +63,14 @@ function Teams() {
 
   const handleSubmit = () => {
     if (fromDate && toDate) {
-      setSubmittedDates({ fromDate, toDate }); 
+      setSubmittedDates({ fromDate, toDate });
     }
   };
 
   const formatDate = (date1) => {
     const date = new Date(date1);
     const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); 
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     const formattedDate = `${year}-${month}-${day}`;
     return formattedDate;
@@ -111,6 +113,8 @@ function Teams() {
   const [dwellZoneTable, setDwellZoneTable] = useState({
     countsPerZone: {},
     hourlyFlowRate: {},
+    totalCount: 0,
+
   });
 
   useEffect(() => {
@@ -221,7 +225,7 @@ function Teams() {
         // });
         const response = await axios.get(url);
         const { Data } = response.data;
-        if (Data &&  Object.keys(Data).length>0) {
+        if (Data && Object.keys(Data).length > 0) {
           // Extract labels (hours of the day)
           const labels = Object.keys(Data[Object.keys(Data)[0]]).map(Number); // Assuming hours are numeric strings
 
@@ -367,6 +371,18 @@ function Teams() {
 
     fetchDwellZoneTableData();
   }, [selectedStore, submittedDates]);
+  const salesTableData = useMemo(() => {
+    return Object.keys(dwellZoneTable.countsPerZone).map(zone => ({
+      zone,
+      counts_per_zone: dwellZoneTable.countsPerZone[zone],
+      hourly_flow_rate: dwellZoneTable.hourlyFlowRate[zone],
+    }));
+  }, [dwellZoneTable]);
+  const   columnsValue= [
+    { name: "zone", align: "center" },
+    { name: "counts_per_zone", align: "center" },
+    { name: "hourly_flow_rate", align: "center" },
+  ]
 
   return (
     <>
@@ -374,21 +390,120 @@ function Teams() {
         <DashboardNavbar />
         <Grid container spacing={3}>
           <Grid item xs={12}>
-          <Header
-            fromDate={fromDate}
-            toDate={toDate}
-            handleFromDateChange={handleFromDateChange}
-            handleToDateChange={handleToDateChange}
-            handleClear={handleClear}
-            handleSubmit={handleSubmit}
-          />          </Grid>
+            <Header
+              fromDate={fromDate}
+              toDate={toDate}
+              handleFromDateChange={handleFromDateChange}
+              handleToDateChange={handleToDateChange}
+              handleClear={handleClear}
+              handleSubmit={handleSubmit}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={12} style={{ marginTop: "5px" }}>
+            <ArgonBox>
+              <Grid container spacing={3} mb={1} >
+                <Grid item xs={12} md={6} lg={4} style={{ height: "100%" }}>
+                  <DetailedStatisticsCard
+                    bgColor="white"
+                    data={topZones.fastest.map(([zone, avgDwellTime]) => ({
+                      title: zone,
+                      count: `${avgDwellTime} minutes`,
+                    }))}
+                    icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
+                    title="Top Three Fastest Zones" // Adding title here
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <DetailedStatisticsCard
+                    bgColor="white"
+                    title="Top Three Slowest Zones"
+                    data={topZones.slowest.map(([zone, avgDwellTime]) => ({
+                      title: zone,
+                      count: `${avgDwellTime} minutes`,
+                    }))}
+                    icon={{ color: "error", component: <i className="ni ni-world" /> }}
+                    percentage={{ color: "success", count: "+3%", text: "since last week" }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  {/* <DetailedStatisticsCard
+                    title="new clients"
+                    count="+3,462"
+                    icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
+                    percentage={{ color: "error", count: "-2%", text: "since last quarter" }}
+                  /> */}
+                  <DetailedStatisticsCard
+                    bgColor="white"
+                    title="Least Customer Count Zone"
+                    data={Object.entries(leastBusyZone.leastCustomerCount).map(([zone, count]) => ({
+                      title: zone,
+                      count: `${count} customers`,
+                    }))}
+                    icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  {/* <DetailedStatisticsCard
+                    title="sales"
+                    count="$103,430"
+                    icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
+                    percentage={{ color: "success", count: "+5%", text: "than last month" }}
+                  /> */}
+                  <DetailedStatisticsCard
+                    bgColor="white"
+                    title="Least Working Minute Zone"
+                    data={Object.entries(leastBusyZone.leastWorkingMinute).map(([zone, minutes]) => ({
+                      title: zone,
+                      count: `${minutes} minutes`,
+                    }))}
+                    icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  {/* <DetailedStatisticsCard
+                    title="sales"
+                    count="$103,430"
+                    icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
+                    percentage={{ color: "success", count: "+5%", text: "than last month" }}
+                  /> */}
+                  <DetailedStatisticsCard
+                    bgColor="white"
+                    title="Most Customer Count Zone"
+                    data={Object.entries(busyZone.mostCustomerCount).map(([zone, count]) => ({
+                      title: zone,
+                      count: `${count} customers`,
+                    }))}
+                    icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  {/* <DetailedStatisticsCard
+                    title="sales"
+                    count="$103,430"
+                    icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
+                    percentage={{ color: "success", count: "+5%", text: "than last month" }}
+                  /> */}
+                  <DetailedStatisticsCard
+                    bgColor="white"
+                    title="Most Working Minute Zone"
+                    data={Object.entries(busyZone.mostWorkingMinute).map(([zone, minutes]) => ({
+                      title: zone,
+                      count: `${minutes} minutes`,
+                    }))}
+                    icon={{ color: "error", component: <i className="ni ni-world" /> }}
+                  />
+                </Grid>
+              </Grid>
+            </ArgonBox>
+          </Grid>
           <Grid item xs={12} md={6}>
-            <ArgonBox mb={6}>
+            <ArgonBox mb={1}>
               <VerticalBarChart title="Average Dwell time per zone" chart={chartData} />
             </ArgonBox>
           </Grid>
           <Grid item xs={12} md={6}>
-            <ArgonBox mb={6}>
+            <ArgonBox mb={1}>
               <VerticalBarChart
                 title="Dwell Time Distribution"
                 chart={{
@@ -405,189 +520,21 @@ function Teams() {
             </ArgonBox>
           </Grid>
           <Grid item xs={12} md={6}>
-            <ArgonBox mb={6}>
+            <ArgonBox mb={1}>
               <DefaultLineChart title="Average Dwell time per day" chart={averageDwellTimePerDay} />
             </ArgonBox>
           </Grid>
           <Grid item xs={12} md={6}>
-            <ArgonBox mb={6}>
+            <ArgonBox mb={1}>
               <DefaultLineChart title=" Peak hours analysis" selectedDate={selectedDate}
-        onDateChange={handleDateChange} chart={peakHoursData} />
+                onDateChange={handleDateChange} chart={peakHoursData} />
             </ArgonBox>
           </Grid>
-          <Grid item xs={12} md={12}>
-            <ArgonBox mb={12}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h5" component="h2">
-                    Dwell Zone Table
-                  </Typography>
-                  <TableContainer component={Paper}>
-                    <Table>
-                      <TableHead></TableHead>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell align="left"></TableCell>
-                          {Object.keys(dwellZoneTable.countsPerZone).map((zone) => (
-                            <TableCell key={zone} align="center" style={{ fontWeight: "bold" }}>
-                              {zone}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                        <TableRow>
-                          <TableCell align="left" style={{ fontWeight: "bold" }}>
-                            Counts Per Zone
-                          </TableCell>
-                          {Object.values(dwellZoneTable.countsPerZone).map((count, index) => (
-                            <TableCell key={index} align="center">
-                              {count}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                        <TableRow>
-                          <TableCell align="left" style={{ fontWeight: "bold" }}>
-                            Hourly Flow Rate
-                          </TableCell>
-                          {Object.values(dwellZoneTable.hourlyFlowRate).map((rate, index) => (
-                            <TableCell key={index} align="center">
-                              {rate}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                        <TableRow>
-                          <TableCell
-                            colSpan={Object.keys(dwellZoneTable.countsPerZone).length + 1}
-                            align="center"
-                          >
-                            Total Count: {dwellZoneTable.totalCount}
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </CardContent>
-              </Card>
-            </ArgonBox>
+          {/* table of Dwell Zone Table */}
+          <Grid item xs={12}>
+            <SalesTable title="Dwell Zone Table"  columns={columnsValue} rows={salesTableData} />
           </Grid>
-
-          <Grid item xs={12} md={4}>
-            <ArgonBox mb={4}>
-              <Card style={{ minHeight: "400px" }}>
-                <CardContent>
-                  <Typography variant="h4" component="h2">
-                    Top Three Fastest and Slowest Zones
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                    style={{ marginTop: "10px" }}
-                  >
-                    Fastest Zones:
-                  </Typography>
-                  {topZones.fastest.map(([zone, avgDwellTime]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {avgDwellTime} minutes
-                    </Typography>
-                  ))}
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Slowest Zones:
-                  </Typography>
-                  {topZones.slowest.map(([zone, avgDwellTime]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {avgDwellTime} minutes
-                    </Typography>
-                  ))}
-                </CardContent>
-              </Card>
-            </ArgonBox>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <ArgonBox mb={4}>
-              <Card style={{ minHeight: "400px" }}>
-                <CardContent>
-                  <Typography variant="h4" component="h2">
-                    Least Busy Zone (in terms of time / no of customers)
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Least Customer Count Zone:
-                  </Typography>
-                  {Object.entries(leastBusyZone.leastCustomerCount).map(([zone, count]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {count} customers
-                    </Typography>
-                  ))}
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Least Working Minute Zone:
-                  </Typography>
-                  {Object.entries(leastBusyZone.leastWorkingMinute).map(([zone, minutes]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {minutes} minutes
-                    </Typography>
-                  ))}
-                </CardContent>
-              </Card>
-            </ArgonBox>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <ArgonBox mb={4}>
-              <Card style={{ minHeight: "400px" }}>
-                <CardContent>
-                  <Typography variant="h4" component="h2">
-                    Busy Zone (in terms of time / no of customers)
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Most Customer Count Zone:
-                  </Typography>
-                  {Object.entries(busyZone.mostCustomerCount).map(([zone, count]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {count} customers
-                    </Typography>
-                  ))}
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    color="black"
-                    fontWeight="bold"
-                    gutterBottom
-                  >
-                    Most Working Minute Zone:
-                  </Typography>
-                  {Object.entries(busyZone.mostWorkingMinute).map(([zone, minutes]) => (
-                    <Typography key={zone} color="textSecondary" gutterBottom>
-                      {zone}: {minutes} minutes
-                    </Typography>
-                  ))}
-                </CardContent>
-              </Card>
-            </ArgonBox>
-          </Grid>
+          {/* table of Dwell zone Table  */}
         </Grid>
       </DashboardLayout>
     </>

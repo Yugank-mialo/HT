@@ -8,8 +8,8 @@ import configs from "examples/Charts/LineCharts/DefaultLineChart/configs";
 import colors from "assets/theme/base/colors";
 
 function DefaultLineChart({ title, description, height, chart, selectedDate, onDateChange }) {
-  const chartDatasets = chart.datasets
-    ? chart.datasets.map((dataset) => ({
+  const chartDatasets =chart && chart.datasets
+    ? chart?.datasets.map((dataset) => ({
       ...dataset,
       tension: 0.4,
       borderWidth: 3,
@@ -24,7 +24,7 @@ function DefaultLineChart({ title, description, height, chart, selectedDate, onD
     }))
     : [];
 
-  const { data, options } = configs(chart.labels || [], chartDatasets);
+  const { data, options } = configs(chart?.labels || [], chartDatasets);
 
   const renderChart = (
     <ArgonBox p={2}>

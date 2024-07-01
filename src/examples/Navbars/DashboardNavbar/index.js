@@ -61,8 +61,10 @@ import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { useStore } from "globalContext/GlobalContext";
 import axios from "axios";
 import { API_Url } from "utils/API";
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box } from '@mui/system';
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini,ShowOrHideTheSelectStoreInput }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -178,7 +180,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
         >
           <Breadcrumbs
             icon="home"
-            title={route[route.length - 1]}
+            title={route[route?.length - 1]}
             route={route}
             light={transparentNavbar ? light : false}
           />
@@ -186,34 +188,44 @@ function DashboardNavbar({ absolute, light, isMini }) {
             {miniSidenav ? "menu_open" : "menu"}
           </Icon>
         </ArgonBox>
-        {isMini ? null : (
+        {isMini  ? null : (
+         
           <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <ArgonBox pr={1}>
-              <select
-                value={selectedStore}
-                onChange={handleStoreChange}
-                className="form-control bg-white w-100 p-2"
-                style={{
-                  borderRadius: '0.375rem',
-                  border: '1px solid #ced4da',
-                  height: 'auto',
-                  padding: '0.625rem 1.75rem 0.625rem 0.75rem',
-                }}
-              >
-                {data.length > 0 ? (
-                  data.map((val) => (
-                    <option key={val.store_id} value={val.store_id}>
-                      {val.store_name}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">Select Store</option>
-                )}
-              </select>
-
-            </ArgonBox>
+              <>
+      {ShowOrHideTheSelectStoreInput && (
+        <Box pr={1}>
+          <FormControl fullWidth variant="outlined">
+            {/* <InputLabel id="store-select-label">Select Store</InputLabel> */}
+            <Select
+              labelId="store-select-label"
+              value={selectedStore}
+              onChange={handleStoreChange}
+              label="Select Store"
+              className="bg-white"
+              style={{
+                borderRadius: '0.375rem',
+                border: '1px solid #ced4da',
+                height: 'auto',
+                padding: '0.625rem 1.75rem 0.625rem 0.75rem',
+              }}
+            >
+              {data?.length > 0 ? (
+                data.map((val) => (
+                  <MenuItem key={val.store_id} value={val.store_id}>
+                    {val.store_name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem value="">Select Store</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </Box>
+      )}
+    </>
+            
             <ArgonBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in/basic">
+              {/* <Link to="/authentication/sign-in/basic">
                 <IconButton sx={navbarIconButton} size="small">
                   <Icon
                     sx={({ palette: { dark, white } }) => ({
@@ -230,7 +242,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                     Sign in
                   </ArgonTypography>
                 </IconButton>
-              </Link>
+              </Link> */}
               <IconButton
                 size="small"
                 color={light && transparentNavbar ? "white" : "dark"}
@@ -272,6 +284,7 @@ DashboardNavbar.defaultProps = {
   absolute: false,
   light: true,
   isMini: false,
+  ShowOrHideTheSelectStoreInput:true
 };
 
 // Typechecking props for the DashboardNavbar
@@ -279,6 +292,7 @@ DashboardNavbar.propTypes = {
   absolute: PropTypes.bool,
   light: PropTypes.bool,
   isMini: PropTypes.bool,
+  ShowOrHideTheSelectStoreInput:PropTypes.bool
 };
 
 export default DashboardNavbar;

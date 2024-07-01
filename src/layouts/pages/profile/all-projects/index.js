@@ -1,4 +1,4 @@
-import { useEffect, useState,useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -19,6 +19,7 @@ import Header from "layouts/pages/profile/components/Header";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { API_Url } from "utils/API";
 import { useStore } from 'globalContext/GlobalContext';
+import DetailedStatisticsCardFootfall from "examples/Cards/StatisticsCards/DeatiledStatisticsCardFootfall";
 
 
 function AllProjects() {
@@ -55,19 +56,19 @@ function AllProjects() {
   const handleClear = () => {
     setFromDate(null);
     setToDate(null);
-    setSubmittedDates({ fromDate: null, toDate: null }); 
+    setSubmittedDates({ fromDate: null, toDate: null });
   };
 
   const handleSubmit = () => {
     if (fromDate && toDate) {
-      setSubmittedDates({ fromDate, toDate }); 
+      setSubmittedDates({ fromDate, toDate });
     }
   };
 
   const formatDate = (date1) => {
     const date = new Date(date1);
     const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); 
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     const formattedDate = `${year}-${month}-${day}`;
     return formattedDate;
@@ -78,7 +79,7 @@ function AllProjects() {
     const fetchData = async () => {
       try {
 
-        let url =`${API_Url}/count_per_zone?store_id=${selectedStore}`;
+        let url = `${API_Url}/count_per_zone?store_id=${selectedStore}`;
         if (submittedDates.fromDate && submittedDates.toDate) {
           const formattedFromDate = formatDate(submittedDates.fromDate);
           const formattedToDate = formatDate(submittedDates.toDate);
@@ -96,12 +97,12 @@ function AllProjects() {
     };
 
     fetchData();
-  }, [selectedStore,submittedDates]);
+  }, [selectedStore, submittedDates]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let url=`${API_Url}/hourly_footfall?store_id=${selectedStore}&date=${selectedDate}`
+        let url = `${API_Url}/hourly_footfall?store_id=${selectedStore}&date=${selectedDate}`
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -117,12 +118,12 @@ function AllProjects() {
     };
 
     fetchData();
-  }, [selectedStore,selectedDate]);
+  }, [selectedStore, selectedDate]);
 
   useEffect(() => {
     const fetchDemographics = async () => {
       try {
-          let url =`${API_Url}/demographics?store_id=${selectedStore}`;
+        let url = `${API_Url}/demographics?store_id=${selectedStore}`;
         if (submittedDates.fromDate && submittedDates.toDate) {
           const formattedFromDate = formatDate(submittedDates.fromDate);
           const formattedToDate = formatDate(submittedDates.toDate);
@@ -140,13 +141,13 @@ function AllProjects() {
     };
 
     fetchDemographics();
-  }, [selectedStore,submittedDates]);
+  }, [selectedStore, submittedDates]);
 
   useEffect(() => {
     const fetchTotalFootfall = async () => {
       try {
-        let url =`${API_Url}/total_footfall?store_id=${selectedStore}`;
-      if (submittedDates.fromDate && submittedDates.toDate) {
+        let url = `${API_Url}/total_footfall?store_id=${selectedStore}`;
+        if (submittedDates.fromDate && submittedDates.toDate) {
           const formattedFromDate = formatDate(submittedDates.fromDate);
           const formattedToDate = formatDate(submittedDates.toDate);
           url += `&from_date=${formattedFromDate}&to_date=${formattedToDate}`;
@@ -165,7 +166,7 @@ function AllProjects() {
     };
 
     fetchTotalFootfall();
-  }, [selectedStore,submittedDates]);
+  }, [selectedStore, submittedDates]);
 
   useMemo(() => {
     console.log("Selected Store:", selectedStore);
@@ -175,17 +176,64 @@ function AllProjects() {
       <DashboardNavbar />
       <Grid container spacing={3}>
         <Grid item xs={12}>
-        <Header
+          <Header
             fromDate={fromDate}
             toDate={toDate}
             handleFromDateChange={handleFromDateChange}
             handleToDateChange={handleToDateChange}
             handleClear={handleClear}
             handleSubmit={handleSubmit}
-          />          
-                  </Grid>
+          />
+        </Grid>
+        <Grid item xs={12} md={12} style={{ marginTop: "5px" }}>
+          <ArgonBox>
+            <Grid container spacing={3} mb={3}>
+              <Grid item xs={12} md={4} lg={4}>
+                <DetailedStatisticsCardFootfall
+                  title="Footfall Entry Count"
+                  count={entryCount}
+                  icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
+                />
+              </Grid>
+              <Grid item xs={12} md={4} lg={4}>
+                <DetailedStatisticsCardFootfall
+                  title="Footfall Exit Count"
+                  count={exitCount}
+                  icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
+                />
+              </Grid>
+              <Grid item xs={12} md={4} lg={4}>
+                <DetailedStatisticsCardFootfall
+                  title="Footfall Total Occupied"
+                  count={totalOccupied}
+                  icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
+                />
+              </Grid>
+            </Grid>
+          </ArgonBox>
+        </Grid>
+
+
+        {/* <Grid item xs={12} md={12} style={{ marginTop: "5px" }}>
+            <ArgonBox>
+              <Grid container spacing={3} mb={1} >
+                <Grid item xs={12} md={6} lg={4} style={{ height: "100%" }}>
+                  <DetailedStatisticsCard
+                    bgColor="white"
+                    data={topZones.fastest.map(([zone, avgDwellTime]) => ({
+                      title: zone,
+                      count: `${avgDwellTime} minutes`,
+                    }))}
+                    icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
+                    title="Top Three Fastest Zones" // Adding title here
+                  />
+                </Grid>
+                </Grid>
+                </ArgonBox>
+                </Grid> */}
+
         <Grid item xs={12} md={6}>
-          <ArgonBox mb={6}>
+          <ArgonBox mb={1}>
             <VerticalBarChart
               title="Visitor Count per zone"
               chart={{
@@ -207,11 +255,11 @@ function AllProjects() {
           </ArgonBox>
         </Grid>
         <Grid item xs={12} md={6}>
-          <ArgonBox mb={6}>
+          <ArgonBox mb={1}>
             {hourlyData && (
               <DefaultLineChart
-              selectedDate={selectedDate}
-        onDateChange={handleDateChange}
+                selectedDate={selectedDate}
+                onDateChange={handleDateChange}
                 title="Hourly distribution of visitors across different zones"
                 chart={{
                   labels: Array.from(Array(24).keys()).map((hour) => `${hour}:00`),
@@ -226,7 +274,7 @@ function AllProjects() {
           </ArgonBox>
         </Grid>
         <Grid item xs={12} md={6}>
-          <ArgonBox mb={6}>
+          <ArgonBox mb={1}>
             {demographicsData && (
               <PieChart
                 title="Distribution of visitors by age group"
@@ -236,74 +284,13 @@ function AllProjects() {
                     label: "Age Groups",
                     backgroundColors: ["info", "primary", "dark", "secondary", "warning", "success", "info", "dark"],
                     data: Object.values(demographicsData.age).map((item) => item.total),
-                  }}
+                  }
+                }
                 }
               />
             )}
           </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <ArgonBox mb={6}>
-            <VerticalBarChart
-              title="Vertical Bar Chart"
-              chart={{
-                labels: ["16-20", "21-25", "26-30", "31-36", "36-42", "42+"],
-                datasets: [
-                  {
-                    label: "Sales by age",
-                    color: "dark",
-                    data: [15, 20, 12, 60, 20, 15],
-                  },
-                ],
-              }}
-            />
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <ArgonBox mb={3}>
-            <Card style={{ minHeight: "300px" }}>
-              <ArgonTypography variant="h2" color="black" px={5} py={9}>
-                Total Footfall
-              </ArgonTypography>
-              <ArgonTypography variant="h3" color="black" px={5} py={3}>
-                Entry Count: {entryCount}
-              </ArgonTypography>
-              <ArgonTypography variant="h3" color="black" px={5} py={3}>
-                Exit Count: {exitCount}
-              </ArgonTypography>
-              <ArgonTypography variant="h3" color="black" px={5} py={3}>
-                Total Occupied: {totalOccupied}
-              </ArgonTypography>
-            </Card>
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <ArgonBox mb={3}>
-            <Card style={{ minHeight: "300px" }}>
-              <ArgonTypography variant="h2" color="black" px={5} py={9}>
-                Peak hour
-              </ArgonTypography>
-            </Card>
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <ArgonBox mb={3}>
-            <Card style={{ minHeight: "300px" }}>
-              <ArgonTypography variant="h2" color="black" px={5} py={9}>
-                Most popular zone
-              </ArgonTypography>
-            </Card>
-          </ArgonBox>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <ArgonBox mb={3}>
-            <Card style={{ minHeight: "300px" }}>
-              <ArgonTypography variant="h2" color="black" px={5} py={9}>
-                Least popular zone
-              </ArgonTypography>
-            </Card>
-          </ArgonBox>
-        </Grid>
+        </Grid> 
       </Grid>
     </DashboardLayout>
   );

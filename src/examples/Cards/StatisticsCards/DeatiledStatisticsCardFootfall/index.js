@@ -27,27 +27,20 @@ import ArgonTypography from "components/ArgonTypography";
 
 // Argon Dashboard 2 PRO MUI contexts
 import { useArgonController } from "context";
-import { whitespace } from "stylis";
 
-function DetailedStaticsCard({ bgColor, data, title, count, percentage, icon, direction }) {
+function DetailedStaticsCardFootfall({ bgColor, title, count, percentage, icon, direction }) {
   const [controller] = useArgonController();
   const { darkMode } = controller;
 
   return (
-    <Card style={{ height: "100%" }}>
+    <Card>
       <ArgonBox
         bgColor={bgColor === "white" && darkMode ? "transparent" : bgColor}
         variant={bgColor === "white" && darkMode ? "contained" : "gradient"}
       >
         <ArgonBox p={2}>
-          <ArgonBox    
-          fontSize="1.1rem"
-          fontWeight="bold"
-          >
-          {title}
-          </ArgonBox>
           <Grid container>
-            {direction === "left" ? (
+            {/* {direction === "left" ? (
               <Grid item>
                 <ArgonBox
                   variant="gradient"
@@ -76,31 +69,35 @@ function DetailedStaticsCard({ bgColor, data, title, count, percentage, icon, di
                   )}
                 </ArgonBox>
               </Grid>
-            ) : null}
-            <Grid item xs={12} display="flex" justifyContent="center" color="#8392ab">
+            ) : null} */}
+            <Grid item xs={12} >
               <ArgonBox ml={direction === "left" ? 2 : 0} lineHeight={1}>
-                {data.map(({ title, count }) => (
-                  <ArgonBox key={title} mt={2} lineHeight={1} display="flex" alignItems="center">
-                    <ArgonTypography
-                      variant="h6"
-                      color="#8392ab !important"
-                      textTransform="uppercase"
-                      style={{whiteSpace:"nowrap",color:"#8392ab"}}
-                    >
-                      {title}&nbsp;&nbsp;:&nbsp;&nbsp;{count}
-                    </ArgonTypography>
-                  </ArgonBox>
-                ))}
+                <ArgonTypography
+                  textTransform="uppercase"
+                  fontWeight="bold"
+                  fontSize="1.1rem"
+                >
+                  {title}
+                </ArgonTypography>
+                <ArgonTypography
+                
+                    variant="h6"
+                    color="#8392ab !important"
+                    textTransform="uppercase"
+                    style={{whiteSpace:"nowrap",color:"#8392ab"}}
+                >
+                  {count}
+                </ArgonTypography>
               </ArgonBox>
             </Grid>
             {/* {direction === "right" ? (
-              <Grid item xs={1}>
+              <Grid item xs={4}>
                 <ArgonBox
                   variant="gradient"
                   bgColor={bgColor === "white" ? icon.color : "white"}
                   color={bgColor === "white" ? "white" : "dark"}
-                  width="2rem"
-                  height="2rem"
+                  width="3rem"
+                  height="3rem"
                   borderRadius="section"
                   display="flex"
                   justifyContent="center"
@@ -125,14 +122,32 @@ function DetailedStaticsCard({ bgColor, data, title, count, percentage, icon, di
               </Grid>
             ) : null} */}
           </Grid>
+          {/* <ArgonTypography
+            display="flex"
+            alignItems="center"
+            variant="button"
+            fontWeight="bold"
+            color={percentage.color}
+          >
+            {percentage.count}
+            <ArgonTypography
+              variant="body2"
+              fontWeight="regular"
+              color={bgColor === "white" ? "text" : "white"}
+              ml={0.5}
+              mt={-0.125}
+            >
+              {percentage.text}
+            </ArgonTypography>
+          </ArgonTypography> */}
         </ArgonBox>
       </ArgonBox>
     </Card>
   );
 }
 
-// Setting default values for the props of DetailedStaticsCard
-DetailedStaticsCard.defaultProps = {
+// Setting default values for the props of DetailedStaticsCardFootfall
+DetailedStaticsCardFootfall.defaultProps = {
   bgColor: "white",
   percentage: {
     color: "success",
@@ -142,8 +157,8 @@ DetailedStaticsCard.defaultProps = {
   direction: "right",
 };
 
-// Typechecking props for the DetailedStaticsCard
-DetailedStaticsCard.propTypes = {
+// Typechecking props for the DetailedStaticsCardFootfall
+DetailedStaticsCardFootfall.propTypes = {
   bgColor: PropTypes.oneOf([
     "transparent",
     "white",
@@ -155,14 +170,6 @@ DetailedStaticsCard.propTypes = {
     "error",
     "dark",
   ]),
-
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    })
-  ).isRequired,
-
   title: PropTypes.string.isRequired,
   count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   percentage: PropTypes.shape({
@@ -186,4 +193,4 @@ DetailedStaticsCard.propTypes = {
   direction: PropTypes.oneOf(["right", "left"]),
 };
 
-export default DetailedStaticsCard;
+export default DetailedStaticsCardFootfall;

@@ -234,9 +234,9 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           </ArgonBox> */}
         </ArgonBox>
       </ArgonBox>
-      <Divider light={darkSidenav} />
+      {/* <Divider light={darkSidenav} /> */}
       {/* profile */}
-      <ArgonBox pt={3} pb={1} px={4} textAlign="center">
+      {/* <ArgonBox pt={3} pb={1} px={4} textAlign="center">
   <ArgonBox
     component="img"
     src={
@@ -257,10 +257,8 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     {userInfo != null ? userInfo.data.first_name : ""}{" "}
     {userInfo != null ? userInfo.data.last_name : ""}
   </ArgonTypography>
-  {/* <ArgonTypography fontSize="small" fontWeight="bold" component={NavLink} to="mailto:test@gmail.com"  color="secondary">
-      paulfroster@gmail.com
-    </ArgonTypography> */}
-</ArgonBox>
+  
+</ArgonBox> */}
 
       <Divider light={darkSidenav} />
       <List>{renderRoutes}</List>

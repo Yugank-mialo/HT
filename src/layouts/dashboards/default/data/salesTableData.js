@@ -1,44 +1,23 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
+const countsPerZone = {
+  dz_11: 128,
+  dz_12: 128,
+  dz_13: 7,
+  dz_14: 4,
+  dz_15: 4,
+};
 
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
+const hourlyFlowRate = {
+  dz_11: 12,
+  dz_12: 13,
+  dz_13: 56,
+  dz_14: 8,
+  dz_15: 23,
+};
 
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// Countries flags
-import US from "assets/images/icons/flags/US.png";
-import DE from "assets/images/icons/flags/DE.png";
-import GB from "assets/images/icons/flags/GB.png";
-import BR from "assets/images/icons/flags/BR.png";
-
-const salesTableData = [
-  {
-    country: [US, "united state"],
-    sales: 2500,
-    value: "$230,900",
-    bounce: "29.9%",
-  },
-  {
-    country: [DE, "germany"],
-    sales: "3.900",
-    value: "$440,000",
-    bounce: "40.22%",
-  },
-  {
-    country: [GB, "great britain"],
-    sales: "1.400",
-    value: "$190,700",
-    bounce: "23.44%",
-  },
-  { country: [BR, "brasil"], sales: 562, value: "$143,960", bounce: "32.14%" },
-];
+const salesTableData = Object.keys(countsPerZone).map(zone => ({
+  zone,
+  counts_per_zone: countsPerZone[zone],
+  hourly_flow_rate: hourlyFlowRate[zone],
+}));
 
 export default salesTableData;

@@ -155,6 +155,7 @@ function Overview() {
             setPeakHoursData({ labels, datasets });
           } else {
             console.error("Data is empty or undefined.");
+            setPeakHoursData({labels:[],datasets:[]})
           }
 
           // footfall zone distribution  across different zones
@@ -297,7 +298,7 @@ function Overview() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <Grid container spacing={3} style={{ alignItems: 'stretch' }}>
+      <Grid container spacing={3} style={{ alignItems: 'stretch',marginTop:"10px" }}>
         {dashboardCards.map((card, index) => (
           <Grid key={card.id} item xs={12} sm={6}>
             <Card style={{ height: '100%' }}>

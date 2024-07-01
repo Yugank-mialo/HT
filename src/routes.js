@@ -94,6 +94,7 @@ import Error500 from "layouts/authentication/error/500";
 
 // Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
+import FiringPath from "layouts/pages/firing-path";
 
 const routes = [
   {
@@ -120,6 +121,25 @@ const routes = [
     key: "footfall-zone",
     route: "/dashboard/footfall-zone",
     component: <AllProjects />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
+    noCollapse: true,
+  },
+
+  {
+    type: "collapse",
+    name: "Track Path",
+    key: "track-path",
+    route: "/dashboard/track-path",
+    component: <FiringPath />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Logout",
+    key: "logout",
+    route: "/authentication/login",
+    component: <SignInBasic />,
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ungroup" />,
     noCollapse: true,
   },

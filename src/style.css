@@ -1,3 +1,17 @@
 #root > div > div.ps__rail-x{
     display: none !important;
 }
+
+
+.css-1v6zmq-MuiAvatar-img{
+    object-fit: none !important;
+}
+
+.css-8i6qmk-MuiPaper-root-MuiDialog-paper{
+    background-color: aliceblue !important;
+}
+
+.tableOfDwellZone tr  th {
+color: black !important;
+font-weight: bold !important;
+}

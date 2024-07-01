@@ -16,12 +16,12 @@ const useStyles = makeStyles({
   },
 });
 
-function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, handleClear, handleSubmit }) {
+function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, handleClear, handleSubmit, ShowOrHideContainer }) {
   const classes = useStyles();
 
   return (
     <ArgonBox position="relative">
-      <Card
+      {ShowOrHideContainer && <Card
         sx={{
           py: 2,
           px: 2,
@@ -46,7 +46,7 @@ function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, ha
                     input={{ placeholder: "To Date" }}
                     value={toDate}
                     onChange={handleToDateChange}
-                    options={{ minDate: fromDate,maxDate:new Date() }}
+                    options={{ minDate: fromDate, maxDate: new Date() }}
                   />
                 </Grid>
                 <Grid item container xs={12} md={6} justifyContent="flex-end" spacing={2}>
@@ -65,7 +65,9 @@ function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, ha
             </ArgonBox>
           </Grid>
         </Grid>
+
       </Card>
+      }
     </ArgonBox>
   );
 }
@@ -78,6 +80,10 @@ Header.propTypes = {
   handleToDateChange: PropTypes.func.isRequired,
   handleClear: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  ShowOrHideContainer: PropTypes.bool,
+};
+Header.defaultProps = {
+  ShowOrHideContainer: true,
 };
 
 export default Header;
