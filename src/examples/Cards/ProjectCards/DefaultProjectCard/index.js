@@ -1,34 +1,15 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-router-dom components
 import { Link } from "react-router-dom";
-
-// prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
-
-// @mui material components
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Tooltip from "@mui/material/Tooltip";
-
-// Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonButton from "components/ArgonButton";
 import ArgonAvatar from "components/ArgonAvatar";
+import ArgonBadge from "components/ArgonBadge";
+import { Grid } from "@mui/material";
+import CameraView from "layouts/dashboards/smart-home/components/CameraView";
 
 function DefaultProjectCard({ image, label, title, description, action, authors }) {
   const renderAuthors = authors.map(({ image: media, name }) => (
@@ -74,8 +55,29 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
             objectPosition: "center",
           }}
         />
+
+        <ArgonBox
+          position="absolute"
+          top={0}
+          right={0}
+          p={0.25}
+          bgcolor="rgba(0, 0, 0, 0.6)"  // Background color for the title box
+          borderRadius="0 12px 0 12px" 
+          zIndex="0" // Adjust as per your design
+        >
+          <ArgonTypography variant="body2" color="white">
+            <ArgonBadge
+              variant="contained"
+              color={title === "Online" ? "success" : "error"}
+              badgeContent={title}
+              size="xs"
+              container
+            />
+          </ArgonTypography>
+        </ArgonBox>
+
       </ArgonBox>
-      <ArgonBox pt={2} px={0.5}>
+      <ArgonBox pt={2} px={0.5} >
         <ArgonTypography
           variant="button"
           fontWeight="regular"
@@ -84,42 +86,46 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
         >
           {label}
         </ArgonTypography>
-        <ArgonBox mb={1}>
+        {/* <ArgonBox mb={1}>
           {action.type === "internal" ? (
             <ArgonTypography
-              component={Link}
-              to={action.route}
               variant="h5"
               textTransform="capitalize"
             >
-              {title}
+              <ArgonBadge
+                variant="contained"
+                color={title === "Online" ? "success" : "error"}
+                badgeContent={title}
+                size="xs"
+                container
+              />
             </ArgonTypography>
           ) : (
             <ArgonTypography
               component="a"
-              href={action.route}
               target="_blank"
               rel="noreferrer"
               variant="h5"
               textTransform="capitalize"
             >
-              {title}
+              <ArgonBadge
+                variant="contained"
+                color={title === "Online" ? "success" : "error"}
+                badgeContent={title}
+                size="xs"
+                container
+              />
             </ArgonTypography>
           )}
-        </ArgonBox>
-        <ArgonBox mb={3} lineHeight={0}>
-          <ArgonTypography variant="button" fontWeight="regular" color="text">
-            {description}
-          </ArgonTypography>
-        </ArgonBox>
-        <ArgonBox display="flex" justifyContent="space-between" alignItems="center">
+        </ArgonBox> */}
+        <ArgonBox width="100%">
           {action.type === "internal" ? (
             <ArgonButton
-              component={Link}
-              to={action.route}
+              onClick={action.onClick}
               variant="outlined"
               size="small"
               color={action.color}
+              fullWidth  // Add fullWidth prop to make the button full-width
             >
               {action.label}
             </ArgonButton>
@@ -132,12 +138,14 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
               variant="outlined"
               size="small"
               color={action.color}
+              fullWidth  // Add fullWidth prop to make the button full-width
             >
               {action.label}
             </ArgonButton>
           )}
-          <ArgonBox display="flex">{renderAuthors}</ArgonBox>
+          {/* <ArgonBox display="flex">{renderAuthors}</ArgonBox> */}
         </ArgonBox>
+
       </ArgonBox>
     </Card>
   );
@@ -156,7 +164,7 @@ DefaultProjectCard.propTypes = {
   description: PropTypes.string.isRequired,
   action: PropTypes.shape({
     type: PropTypes.oneOf(["external", "internal"]),
-    route: PropTypes.string.isRequired,
+    route: PropTypes.string,
     color: PropTypes.oneOf([
       "primary",
       "secondary",
@@ -169,6 +177,7 @@ DefaultProjectCard.propTypes = {
       "white",
     ]).isRequired,
     label: PropTypes.string.isRequired,
+    onClick: PropTypes.func,
   }).isRequired,
   authors: PropTypes.arrayOf(PropTypes.object),
 };

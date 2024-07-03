@@ -93,10 +93,10 @@ function CameraView({ image, date, time, value, index }) {
 // Typechecking props for the CameraView
 CameraView.propTypes = {
   image: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  time: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  index: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  date: PropTypes.string,
+  time: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  index: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default CameraView;

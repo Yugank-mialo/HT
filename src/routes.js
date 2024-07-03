@@ -97,11 +97,16 @@ import ArgonBox from "components/ArgonBox";
 import FiringPath from "layouts/pages/firing-path";
 import ProtectedRoute from './protectedRoute/index'; // Import the ProtectedRoute component
 import LogoutWrapper from "logOutWrapper";
+import ZoneSummary from "layouts/pages/Zone-Summary";
+// import Cameras from "layouts/dashboards/smart-home/components/Cameras";
+import Cameras from "layouts/pages/settings/cameras";
+import Zones from "layouts/pages/settings/zones";
+import Threshold from "layouts/pages/settings/threshold";
 
 const routes = [
   {
-route:"/",
-component:<SignInBasic/>
+    route: "/",
+    component: <SignInBasic />
   },
   {
     type: "collapse",
@@ -117,7 +122,7 @@ component:<SignInBasic/>
     name: "Dwell Zone",
     key: "dwell-zone",
     route: "/dashboard/dwell-zone",
-    component:  <ProtectedRoute component={Teams} />,
+    component: <ProtectedRoute component={Teams} />,
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-square-pin" />,
     noCollapse: true,
   },
@@ -126,7 +131,7 @@ component:<SignInBasic/>
     name: "Footfall Zone",
     key: "footfall-zone",
     route: "/dashboard/footfall-zone",
-    component:  <ProtectedRoute component={AllProjects} />,
+    component: <ProtectedRoute component={AllProjects} />,
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ui-04" />,
     noCollapse: true,
   },
@@ -142,13 +147,48 @@ component:<SignInBasic/>
   },
   {
     type: "collapse",
+    name: "Zone Summary",
+    key: "zone-summary",
+    route: "/dashboard/zone-summary",
+    component: <ProtectedRoute component={ZoneSummary} />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-collection" />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Settings",
+    key: "settings",
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-bold-right" />,
+    collapse: [
+      {
+        name: "Cameras",
+        key: "cameras",
+        route: "/dashboard/settings/cameras",
+        component: <Cameras />,
+      },
+      {
+        name: "Zones",
+        key: "zones",
+        route: "/dashboard/settings/zones",
+        component: <Zones />,
+      },
+      {
+        name: "Threshold",
+        key: "threshold",
+        route: "/dashboard/settings/threshold",
+        component: <Threshold />,
+      }
+    ],
+  },
+  {
+    type: "collapse",
     name: "Logout",
     key: "logout",
     route: "/authentication/login",
-    component: <LogoutWrapper/>,
+    component: <LogoutWrapper />,
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-button-power" />,
     noCollapse: true,
-  },
+  }
   // collapse: [
   //   {
   //     name: "Landing",
