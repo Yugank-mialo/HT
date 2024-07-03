@@ -22,7 +22,9 @@ import Socials from "layouts/authentication/components/Socials";
 import Separator from "layouts/authentication/components/Separator";
 
 // Images
-import logoCT from "assets/images/reatialsense_logo.jpg";
+// import logoCT from "assets/images/reatialsense_logo.jpg";
+import logoCT from "assets/images/svgviewer-output.svg";
+
 import { API_Url } from "utils/API";
 const bgImage =
   "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-basic.jpg";
@@ -70,7 +72,7 @@ function Basic() {
         <ArgonBox p={3} textAlign="center">
           <ArgonBox component="img" src={logoCT} width="75%" p={1} mb={1} />
           <ArgonTypography variant="h5" fontWeight="medium" sx={{ my: 0 }}>
-            Welcome to Retailsense
+            Welcome to Harris Teeter
           </ArgonTypography>
         </ArgonBox>
         <ArgonBox px={6} pb={3} textAlign="center">

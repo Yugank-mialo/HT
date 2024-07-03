@@ -15,8 +15,12 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import routes from "routes";
 import { useArgonController, setMiniSidenav, setOpenConfigurator } from "context";
-import brand from "assets/images/reatialsense_logo.jpg";
-import brandDark from "assets/images/reatialsense_logo.jpg";
+// import brand from "assets/images/reatialsense_logo.jpg";
+// import brandDark from "assets/images/reatialsense_logo.jpg";
+
+import brand from "assets/images/svgviewer-output.svg";
+import brandDark from "assets/images/svgviewer-output.svg";
+
 import SignInBasic from "layouts/authentication/sign-in/basic";
 import "assets/css/nucleo-icons.css";
 import "assets/css/nucleo-svg.css";

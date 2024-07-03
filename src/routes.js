@@ -131,15 +131,15 @@ component:<SignInBasic/>
     noCollapse: true,
   },
 
-  {
-    type: "collapse",
-    name: "Track Path",
-    key: "track-path",
-    route: "/dashboard/track-path",
-    component: <ProtectedRoute component={FiringPath} />,
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-user-run" />,
-    noCollapse: true,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Track Path",
+  //   key: "track-path",
+  //   route: "/dashboard/track-path",
+  //   component: <ProtectedRoute component={FiringPath} />,
+  //   icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-user-run" />,
+  //   noCollapse: true,
+  // },
   {
     type: "collapse",
     name: "Logout",
