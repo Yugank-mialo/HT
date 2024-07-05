@@ -195,6 +195,13 @@ function Zones() {
     }
   };
 
+  const handleDeleteCamera = (id) => {
+    console.log(id)
+}
+const handleEditCamera = (camera) => {
+  setSelectedCamera(camera);
+  setIsModalOpen(true);
+};
   return (
     <DashboardLayout>
       <DashboardNavbar ShowOrHideTheSelectStoreInput={true} />
@@ -249,12 +256,20 @@ function Zones() {
                       title={camera.title}
                       description={camera.description}
                       label1={camera.label1}
-                      action={{
-                        type: "internal",
-                        route: "/pages/profile/profile-overview",
-                        color: "info",
-                        label: "View Project",
-                      }}
+                      action={[
+                        {
+                            type: "internal",
+                            color: "info",
+                            label: "Edit",
+                            onClick: () => handleEditCamera(camera),
+                        },
+                        {
+                            type: "internal",
+                            color: "error",
+                            label: "Delete",
+                            onClick: () => handleDeleteCamera(camera),
+                        }
+                    ]}
                       authors={camera.authors}
                       onClick={handleCardClick}
                     />

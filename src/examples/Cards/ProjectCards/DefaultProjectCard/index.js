@@ -8,8 +8,6 @@ import ArgonTypography from "components/ArgonTypography";
 import ArgonButton from "components/ArgonButton";
 import ArgonAvatar from "components/ArgonAvatar";
 import ArgonBadge from "components/ArgonBadge";
-import { Grid } from "@mui/material";
-import CameraView from "layouts/dashboards/smart-home/components/CameraView";
 
 function DefaultProjectCard({ image, label, title, description, action, authors }) {
   const renderAuthors = authors.map(({ image: media, name }) => (
@@ -23,7 +21,6 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
           cursor: "pointer",
           position: "relative",
           ml: -1.25,
-
           "&:hover, &:focus": {
             zIndex: "10",
           },
@@ -61,8 +58,8 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
           top={0}
           right={0}
           p={0.25}
-          bgcolor="rgba(0, 0, 0, 0.6)"  // Background color for the title box
-          borderRadius="0 12px 0 12px" 
+          bgcolor="rgba(0, 0, 0, 0.6)" // Background color for the title box
+          borderRadius="0 12px 0 12px"
           zIndex="0" // Adjust as per your design
         >
           <ArgonTypography variant="body2" color="white">
@@ -75,8 +72,8 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
             />
           </ArgonTypography>
         </ArgonBox>
-
       </ArgonBox>
+
       <ArgonBox pt={2} px={0.5} >
         <ArgonTypography
           variant="button"
@@ -86,66 +83,24 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
         >
           {label}
         </ArgonTypography>
-        {/* <ArgonBox mb={1}>
-          {action.type === "internal" ? (
-            <ArgonTypography
-              variant="h5"
-              textTransform="capitalize"
-            >
-              <ArgonBadge
-                variant="contained"
-                color={title === "Online" ? "success" : "error"}
-                badgeContent={title}
-                size="xs"
-                container
-              />
-            </ArgonTypography>
-          ) : (
-            <ArgonTypography
-              component="a"
-              target="_blank"
-              rel="noreferrer"
-              variant="h5"
-              textTransform="capitalize"
-            >
-              <ArgonBadge
-                variant="contained"
-                color={title === "Online" ? "success" : "error"}
-                badgeContent={title}
-                size="xs"
-                container
-              />
-            </ArgonTypography>
-          )}
-        </ArgonBox> */}
-        <ArgonBox width="100%">
-          {action.type === "internal" ? (
+        <ArgonBox pt={2} px={0.5} display="flex" gap="1rem">
+          {action.map((button, index) => (
             <ArgonButton
-              onClick={action.onClick}
+              key={index}
+              onClick={button.onClick}
               variant="outlined"
               size="small"
-              color={action.color}
-              fullWidth  // Add fullWidth prop to make the button full-width
-            >
-              {action.label}
+              color={button.color}
+              fullWidth // Add fullWidth prop to make the button full-width
+              sx={{
+                backgroundColor: button.color === "info" ? "info" : "white", // Apply background color based on button.color
+              }}          >
+              {button.label}
             </ArgonButton>
-          ) : (
-            <ArgonButton
-              component="a"
-              href={action.route}
-              target="_blank"
-              rel="noreferrer"
-              variant="outlined"
-              size="small"
-              color={action.color}
-              fullWidth  // Add fullWidth prop to make the button full-width
-            >
-              {action.label}
-            </ArgonButton>
-          )}
-          {/* <ArgonBox display="flex">{renderAuthors}</ArgonBox> */}
+          ))}
         </ArgonBox>
-
+        {/* Optional: Displaying authors */}
+        {/* <ArgonBox display="flex">{renderAuthors}</ArgonBox> */}
       </ArgonBox>
     </Card>
   );
@@ -162,24 +117,31 @@ DefaultProjectCard.propTypes = {
   label: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  action: PropTypes.shape({
-    type: PropTypes.oneOf(["external", "internal"]),
-    route: PropTypes.string,
-    color: PropTypes.oneOf([
-      "primary",
-      "secondary",
-      "info",
-      "success",
-      "warning",
-      "error",
-      "light",
-      "dark",
-      "white",
-    ]).isRequired,
-    label: PropTypes.string.isRequired,
-    onClick: PropTypes.func,
-  }).isRequired,
-  authors: PropTypes.arrayOf(PropTypes.object),
+  action: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.oneOf(["internal", "external"]).isRequired,
+      route: PropTypes.string,
+      color: PropTypes.oneOf([
+        "primary",
+        "secondary",
+        "info",
+        "success",
+        "warning",
+        "error",
+        "light",
+        "dark",
+        "white",
+      ]).isRequired,
+      label: PropTypes.string.isRequired,
+      onClick: PropTypes.func.isRequired,
+    })
+  ).isRequired,
+  authors: PropTypes.arrayOf(
+    PropTypes.shape({
+      image: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
 };
 
 export default DefaultProjectCard;

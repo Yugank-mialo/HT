@@ -91,6 +91,10 @@ function Cameras() {
         setIsModalOpen(true);
     };
 
+    const handleDeleteCamera = (id) => {
+        console.log(id)
+    }
+
     const handleAddCamera = () => {
         setSelectedCamera(null);
         setIsModalOpen(true);
@@ -149,14 +153,23 @@ function Cameras() {
                                                 label={camera.label}
                                                 title={camera.title}
                                                 description={camera.description}
-                                                action={{
-                                                    type: "internal",
-                                                    color: "info",
-                                                    label: "Edit",
-                                                    onClick: () => handleEditCamera(camera),
-                                                }}
+                                                action={[
+                                                    {
+                                                        type: "internal",
+                                                        color: "info",
+                                                        label: "Edit",
+                                                        onClick: () => handleEditCamera(camera),
+                                                    },
+                                                    {
+                                                        type: "internal",
+                                                        color: "error",
+                                                        label: "Delete",
+                                                        onClick: () => handleDeleteCamera(camera),
+                                                    }
+                                                ]}
                                                 authors={camera.authors}
                                             />
+
                                         </Grid>
                                     ))}
                                     <Grid
@@ -181,7 +194,7 @@ function Cameras() {
             </Grid>
 
             <Dialog open={isModalOpen} onClose={handleModalClose} maxWidth="lg" fullWidth={true}>
-                <DialogTitle sx={{padding:"16px 24px 0px !important"}}>
+                <DialogTitle sx={{ padding: "16px 24px 0px !important" }}>
                     {selectedCamera ? "Edit Camera" : "Add New Camera"}
                     <IconButton
                         aria-label="close"
@@ -205,8 +218,8 @@ function Cameras() {
                         {({ errors, touched }) => (
                             <Form>
                                 <ArgonBox p={2}>
-                                    <ArgonBox mt={2} width="100%" sx={{display:"flex"}}>
-                                        <FormLabel sx={{width:"15%",fontSize:"0.75rem",fontWeight:"700"}}>Name</FormLabel>
+                                    <ArgonBox mt={2} width="100%" sx={{ display: "flex" }}>
+                                        <FormLabel sx={{ width: "15%", fontSize: "0.75rem", fontWeight: "700" }}>Name</FormLabel>
                                         <Field
                                             as={TextField}
                                             name="name"
@@ -216,8 +229,8 @@ function Cameras() {
                                             helperText={touched.name && errors.name}
                                         />
                                     </ArgonBox>
-                                    <ArgonBox mt={2} width="100%" sx={{display:"flex"}}>
-                                        <FormLabel sx={{width:"15%",fontSize:"0.75rem",fontWeight:"700"}}>RTSP URL</FormLabel>
+                                    <ArgonBox mt={2} width="100%" sx={{ display: "flex" }}>
+                                        <FormLabel sx={{ width: "15%", fontSize: "0.75rem", fontWeight: "700" }}>RTSP URL</FormLabel>
                                         <Field
                                             as={TextField}
                                             name="url"
@@ -225,6 +238,17 @@ function Cameras() {
                                             fullWidth
                                             error={touched.url && Boolean(errors.url)}
                                             helperText={touched.url && errors.url}
+                                        />
+                                    </ArgonBox>
+                                    <ArgonBox mt={2} width="100%">
+                                        <img
+                                            src={homeDecor1}
+                                            alt="Selected"
+                                            style={{
+                                                maxWidth: "100%",
+                                                maxHeight: "100%",
+                                                objectFit: "cover",
+                                            }}
                                         />
                                     </ArgonBox>
                                 </ArgonBox>

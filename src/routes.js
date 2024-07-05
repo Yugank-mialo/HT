@@ -102,6 +102,7 @@ import ZoneSummary from "layouts/pages/Zone-Summary";
 import Cameras from "layouts/pages/settings/cameras";
 import Zones from "layouts/pages/settings/zones";
 import Threshold from "layouts/pages/settings/threshold";
+import ZoneMapping from "layouts/pages/settings/ZoneMapping";
 
 const routes = [
   {
@@ -171,6 +172,12 @@ const routes = [
         key: "zones",
         route: "/dashboard/settings/zones",
         component:<ProtectedRoute component={Zones} />
+      },
+      {
+        name: "Mapping",
+        key: "mapping",
+        route: "/dashboard/settings/mapping",
+        component:<ProtectedRoute component={ZoneMapping} />
       },
       {
         name: "Threshold",

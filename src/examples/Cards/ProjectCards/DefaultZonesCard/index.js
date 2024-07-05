@@ -14,16 +14,17 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
+import ArgonButton from "components/ArgonButton"; // Import your ArgonButton component
 
 function DefaultZonesCard({ image, label, title, description, action, authors, label1 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [zoneName,setZoneName]=useState(null);
+  const [zoneName, setZoneName] = useState(null);
 
-  const openModal = (image,label1) => {
+  const openModal = (image, label1) => {
     setSelectedImage(image);
     setIsModalOpen(true);
-    setZoneName(label1)
+    setZoneName(label1);
   };
 
   const closeModal = () => {
@@ -55,7 +56,7 @@ function DefaultZonesCard({ image, label, title, description, action, authors, l
             objectPosition: "center",
             cursor: "pointer",
           }}
-          onClick={() => openModal(image,label1)}
+          onClick={() => openModal(image, label1)}
         />
       </ArgonBox>
       <ArgonBox sx={{ textAlign: "center", padding: "2px" }}>
@@ -64,8 +65,26 @@ function DefaultZonesCard({ image, label, title, description, action, authors, l
         </ArgonTypography>
       </ArgonBox>
 
+      {/* Edit and Delete Buttons */}
+      <ArgonBox pt={2} px={0.5} display="flex" gap="1rem">
+        {action.map((button, index) => (
+          <ArgonButton
+          key={index}
+          variant="outlined"
+          size="small"
+          color={button.color}
+          fullWidth // Add fullWidth prop to make the button full-width
+          sx={{
+            backgroundColor: button.color == "info" ? "info":"white", // Apply background color based on button.color
+          }}          >
+          {button.label}
+        </ArgonButton>
+          
+        ))}
+      </ArgonBox>
+
       {/* Modal */}
-      <Dialog open={isModalOpen} onClose={closeModal} maxWidth="md" >
+      <Dialog open={isModalOpen} onClose={closeModal} maxWidth="md">
         <DialogTitle>
           <Grid container justifyContent="space-between" alignItems="center">
             <Typography variant="h6" component="div">{zoneName}</Typography>
@@ -75,7 +94,7 @@ function DefaultZonesCard({ image, label, title, description, action, authors, l
           </Grid>
         </DialogTitle>
         <DialogContent>
-        <img
+          <img
             src={selectedImage}
             alt={title}
             style={{
@@ -84,7 +103,8 @@ function DefaultZonesCard({ image, label, title, description, action, authors, l
               margin: "auto",
               display: "block",
             }}
-          />        </DialogContent>
+          />
+        </DialogContent>
       </Dialog>
     </Card>
   );
@@ -102,22 +122,25 @@ DefaultZonesCard.propTypes = {
   title: PropTypes.string.isRequired,
   label1: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  action: PropTypes.shape({
-    type: PropTypes.oneOf(["external", "internal"]),
-    route: PropTypes.string.isRequired,
-    color: PropTypes.oneOf([
-      "primary",
-      "secondary",
-      "info",
-      "success",
-      "warning",
-      "error",
-      "light",
-      "dark",
-      "white",
-    ]).isRequired,
-    label: PropTypes.string.isRequired,
-  }).isRequired,
+  action: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.oneOf(["internal", "external"]).isRequired,
+      route: PropTypes.string,
+      color: PropTypes.oneOf([
+        "primary",
+        "secondary",
+        "info",
+        "success",
+        "warning",
+        "error",
+        "light",
+        "dark",
+        "white",
+      ]).isRequired,
+      label: PropTypes.string.isRequired,
+      onClick: PropTypes.func.isRequired, // Add onClick validation for each action
+    })
+  ).isRequired,
   authors: PropTypes.arrayOf(
     PropTypes.shape({
       image: PropTypes.string.isRequired,

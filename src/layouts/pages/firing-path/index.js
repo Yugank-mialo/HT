@@ -63,6 +63,12 @@ const tableData = {
             Start_Time: "14/6/2024 5:59 PM",
             End_Time: "14/6/2024 6:05 PM",
             Person_Id: 5,
+            Cameras: "cam_3,cam_2"
+        },
+        {
+            Start_Time: "14/6/2024 5:59 PM",
+            End_Time: "14/6/2024 6:05 PM",
+            Person_Id: 6,
             Cameras: "cam_3,cam_1"
         },
 
@@ -185,12 +191,12 @@ function FiringPath() {
                 </Grid> */}
                 <Grid item xs={12} md={12}>
                     <Card>
-                        <ArgonBox p={3} lineHeight={1}>
+                        <ArgonBox pt={2} pr={2} pb={0} pl={2} lineHeight={1}>
                             <ArgonTypography variant="h5" fontWeight="medium">
                                 Track Path Table         
                                    </ArgonTypography>
                         </ArgonBox>
-                        <DataTable table={tableData} />
+                        <DataTable table={tableData} canSearch />
                     </Card>
                 </Grid>
             </Grid>

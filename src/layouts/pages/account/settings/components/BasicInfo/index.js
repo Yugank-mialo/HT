@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
 
 // @mui core components
@@ -23,10 +8,6 @@ import Grid from "@mui/material/Grid";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonSelect from "components/ArgonSelect";
-import ArgonTagInput from "components/ArgonTagInput";
-
-// Settings page components
-import FormField from "layouts/pages/account/components/FormField";
 
 // Data
 import selectData from "layouts/pages/account/settings/components/BasicInfo/data/selectData";
@@ -37,120 +18,51 @@ function BasicInfo() {
   return (
     <Card id="basic-info" sx={{ overflow: "visible" }}>
       <ArgonBox p={3}>
-        <ArgonTypography variant="h5">Basic Info</ArgonTypography>
+        <ArgonTypography variant="h5">Zone mapping</ArgonTypography>
       </ArgonBox>
       <ArgonBox component="form" pb={3} px={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <FormField label="first name" placeholder="Alec" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormField label="last name" placeholder="Thompson" />
-          </Grid>
-          <Grid item xs={12}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={4}>
-                <ArgonBox
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="flex-end"
-                  height="100%"
-                >
-                  <ArgonBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
-                    <ArgonTypography
-                      component="label"
-                      variant="caption"
-                      fontWeight="bold"
-                      textTransform="capitalize"
-                    >
-                      I&apos;m
-                    </ArgonTypography>
-                  </ArgonBox>
-                  <ArgonSelect placeholder="Male" options={selectData.gender} />
-                </ArgonBox>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} sm={5}>
-                    <ArgonBox
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="flex-end"
-                      height="100%"
-                    >
-                      <ArgonBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
-                        <ArgonTypography
-                          component="label"
-                          variant="caption"
-                          fontWeight="bold"
-                          textTransform="capitalize"
-                        >
-                          birth date
-                        </ArgonTypography>
-                      </ArgonBox>
-                      <ArgonSelect placeholder="February" options={selectData.birthDate} />
-                    </ArgonBox>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <ArgonBox
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="flex-end"
-                      height="100%"
-                    >
-                      <ArgonSelect placeholder={1} options={selectData.days} />
-                    </ArgonBox>
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <ArgonBox
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="flex-end"
-                      height="100%"
-                    >
-                      <ArgonSelect placeholder={2021} options={selectData.years} />
-                    </ArgonBox>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormField
-              label="email"
-              placeholder="example@email.com"
-              inputProps={{ type: "email" }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormField
-              label="confirmation email"
-              placeholder="example@email.com"
-              inputProps={{ type: "email" }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormField label="your location" placeholder="Sydney, A" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormField
-              label="phone number"
-              placeholder="+40 735 631 620"
-              inputProps={{ type: "number" }}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormField label="language" placeholder="English" />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <ArgonBox display="flex" flexDirection="column" justifyContent="flex-end" height="100%">
-              <ArgonTagInput
-                tags={skills}
-                placeholder=" "
-                onChange={(newSkill) => setSkills(newSkill)}
-                removeOnBackspace
-              />
+        <Grid container spacing={3} style={{ minHeight: "30vh" }}>
+          <Grid item xs={12} sm={12}>
+            <ArgonBox display="flex" flexDirection="column" height="100%">
+              <ArgonTypography
+                component="label"
+                variant="caption"
+                fontWeight="bold"
+                textTransform="capitalize"
+                mb={1}
+              >
+                I&apos;m
+              </ArgonTypography>
+              <ArgonSelect fullWidth placeholder="Male" options={selectData.gender} />
             </ArgonBox>
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <ArgonBox display="flex" flexDirection="column" height="100%">
+              <ArgonTypography
+                component="label"
+                variant="caption"
+                fontWeight="bold"
+                textTransform="capitalize"
+                mb={1}
+              >
+                Birth Date
+              </ArgonTypography>
+              <ArgonSelect
+                    defaultValue={[
+                      { value: "choice 1", label: "Choice 1" },
+                      { value: "label two", label: "label two" },
+                    ]}
+                    options={[
+                      { value: "choice 1", label: "Choice 1" },
+                      { value: "choice 2", label: "Choice 2" },
+                      { value: "choice 3", label: "Choice 3" },
+                      { value: "choice 4", label: "Choice 4" },
+                      { value: "label one", label: "Label One", isDisabled: true },
+                      { value: "label two", label: "Tabel Two" },
+                      { value: "label three", label: "Label Three" },
+                    ]}
+                    isMulti
+                  />            </ArgonBox>
           </Grid>
         </Grid>
       </ArgonBox>

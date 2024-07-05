@@ -15,29 +15,61 @@ Coded by www.creative-tim.com
 
 import { useMemo, useEffect, useState } from "react";
 
-// prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// react-table components
 import { useTable, usePagination, useGlobalFilter, useAsyncDebounce, useSortBy } from "react-table";
 
-// @mui material components
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Icon from "@mui/material/Icon";
 
-// Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonSelect from "components/ArgonSelect";
 import ArgonInput from "components/ArgonInput";
 import ArgonPagination from "components/ArgonPagination";
 
-// Argon Dashboard 2 PRO MUI example components
 import DataTableHeadCell from "examples/Tables/DataTable/DataTableHeadCell";
 import DataTableBodyCell from "examples/Tables/DataTable/DataTableBodyCell";
+
+import Modal from "./Modal";
+import Amit1 from "assets/images/individual_persons/Amit/cam1_1.png"
+import Amit2 from "assets/images/individual_persons/Amit/cam3_1.png"
+import Amit3 from "assets/images/individual_persons/Amit/cam3_2.png"
+const details = {
+  Image_Name:Amit1,
+detailsOfPerson:[
+
+  {
+    Start_Time: "2024-06-28T17:17:26.043688",
+    End_Time: "2024-06-28T17:17:52.066551",
+    Person_Id: 21,
+    Cameras: "cam_1",
+    id: 1,
+    Image: Amit1,
+  },
+  {
+    Start_Time: "2024-06-28T17:17:52.769339",
+    End_Time: "2024-06-28T17:18:13.294541",
+    Person_Id: 21,
+    Cameras: "cam_3",
+    id: 2,
+    Image: Amit2,
+  },
+  {
+    Start_Time: "2024-06-28T17:20:21.409043",
+    End_Time: "2024-06-28T17:20:37.852931",
+    Person_Id: 21,
+    Cameras: "cam_3",
+    id: 3,
+    Image: Amit3,
+  },
+]
+}
+
+
 
 function DataTable({
   entriesPerPage,
@@ -78,6 +110,15 @@ function DataTable({
     state: { pageIndex, pageSize, globalFilter },
   } = tableInstance;
 
+
+  // filter data
+  const [selectedRow, setSelectedRow] = useState(null); // State to track selected row
+  const handleRowClick = (row) => {
+    // setSelectedRow(row);
+    setSelectedRow(details);
+  };
+
+
   // Set the default value for the entries per page when component mounts
   useEffect(() => setPageSize(defaultValue || 10), [defaultValue]);
 
@@ -108,6 +149,7 @@ function DataTable({
 
   // Search input value state
   const [search, setSearch] = useState(globalFilter);
+
 
   // Search input state handle
   const onSearchChange = useAsyncDebounce((value) => {
@@ -198,7 +240,7 @@ function DataTable({
           {page.map((row, key) => {
             prepareRow(row);
             return (
-              <TableRow key={key} {...row.getRowProps()}>
+              <TableRow key={key} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
                 {row.cells.map((cell, index) => (
                   <DataTableBodyCell
                     key={index}
@@ -258,6 +300,7 @@ function DataTable({
           </ArgonPagination>
         )}
       </ArgonBox>
+      <Modal open={selectedRow !== null} onClose={() => setSelectedRow(null)} row={selectedRow} />
     </TableContainer>
   );
 }
