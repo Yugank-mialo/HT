@@ -52,15 +52,6 @@ function DataTable({
   const entries = entriesPerPage.entries ? entriesPerPage.entries : [5, 10, 15, 20, 25];
   const columns = useMemo(() => table.columns, [table]);
   const data = useMemo(() => table.rows, [table]);
-  const zoneList = [
-    { value: "dz_11", label: "dz_11" },
-    { value: "dz_12", label: "dz_12" },
-    { value: "dz_13", label: "dz_13" },
-    { value: "dz_14", label: "dz_14" },
-    { value: "dz_15", label: "dz_15" }
-  ];
-  const zoneDefaultValue = zoneList[0];
-
 
   const tableInstance = useTable(
     { columns, data, initialState: { pageIndex: 0 } },
@@ -154,59 +145,37 @@ function DataTable({
 
   return (
     <TableContainer sx={{ boxShadow: "none" }}>
-    <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={1}>
-  {/* Zone Dropdown */}
-  <ArgonBox width="50%" display="flex" alignItems="center">
-    <ArgonTypography variant="caption" color="secondary">
-      &nbsp;&nbsp;Zone&nbsp;&nbsp;
-    </ArgonTypography>
-    <ArgonBox width="50%"> {/* Adjust width as needed */}
-      <ArgonSelect
-        defaultValue={{ value: zoneDefaultValue?.value, label: zoneDefaultValue?.label }}
-        options={zoneList.map((value) => ({ value: value.value, label: value.label }))}
-        size="small"
-      />
-    </ArgonBox>
-  </ArgonBox>
-
-  {/* Search and Age Entry */}
-  <ArgonBox width="50%" display="flex" justifyContent="end" alignItems="center" p={1}>
-    {/* Entries per Page Dropdown */}
-    {entriesPerPage && (
-      <ArgonBox display="flex" alignItems="center">
-        <ArgonBox width="30%"> {/* Adjust width as needed */}
-          <ArgonSelect
-            defaultValue={{ value: defaultValue, label: defaultValue }}
-            options={entries.map((entry) => ({ value: entry, label: entry }))}
-            onChange={setEntriesPerPage}
-            size="small"
-          />
+      {entriesPerPage || canSearch ? (
+        <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+          {entriesPerPage && (
+            <ArgonBox display="flex" alignItems="center">
+              <ArgonBox width="25%">
+                <ArgonSelect
+                  defaultValue={{ value: defaultValue, label: defaultValue }}
+                  options={entries.map((entry) => ({ value: entry, label: entry }))}
+                  onChange={setEntriesPerPage}
+                  size="small"
+                />
+              </ArgonBox>
+              <ArgonTypography variant="caption" color="secondary">
+                &nbsp;&nbsp;entries per page
+              </ArgonTypography>
+            </ArgonBox>
+          )}
+          {canSearch && (
+            <ArgonBox width="12rem" ml="auto">
+              <ArgonInput
+                placeholder="Search..."
+                value={search}
+                onChange={({ currentTarget }) => {
+                  setSearch(search);
+                  onSearchChange(currentTarget.value);
+                }}
+              />
+            </ArgonBox>
+          )}
         </ArgonBox>
-        <ArgonTypography variant="caption" color="secondary">
-          &nbsp;&nbsp;entries per page
-        </ArgonTypography>
-      </ArgonBox>
-    )}
-
-    {/* Search Input */}
-    {canSearch && (
-      <ArgonBox width="70%"> {/* Adjust width as needed */}
-        <ArgonInput
-          placeholder="Search..."
-          value={search}
-          onChange={({ currentTarget }) => {
-            setSearch(currentTarget.value);  // Fix: Set setSearch with currentTarget.value
-            onSearchChange(currentTarget.value);
-          }}
-        />
-      </ArgonBox>
-    )}
-
-    {/* Age Entry (if applicable) */}
-    {/* Insert your Age Entry component here if needed */}
-  </ArgonBox>
-</ArgonBox>
-
+      ) : null}
       <Table {...getTableProps()}>
         <ArgonBox component="thead">
           {headerGroups.map((headerGroup, key) => (
@@ -237,21 +206,7 @@ function DataTable({
                     align={cell.column.align ? cell.column.align : "left"}
                     {...cell.getCellProps()}
                   >
-                    {cell.column.Header === "Image" ? (
-                      <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <div style={{ maxWidth: "100px", maxHeight: "100px", overflow: "hidden" }} >
-                          <img
-                            src={cell.value}
-                            alt="entry_image"
-                            style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      cell.render("Cell")
-                    )}
-
-
+                    {cell.render("Cell")}
                   </DataTableBodyCell>
                 ))}
               </TableRow>

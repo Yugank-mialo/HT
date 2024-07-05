@@ -145,7 +145,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
                 icon={icon}
                 active={key === collapseName}
                 noCollapse={noCollapse}
-              />
+              />  
             </Link>
           );
         } else if (noCollapse && route) {
@@ -217,49 +217,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             <Icon sx={{ fontWeight: "bold" }}>close</Icon>
           </ArgonTypography>
         </ArgonBox>
-        <ArgonBox component={NavLink} to="/" display="flex" alignItems="center">
+        <ArgonBox  display="flex" alignItems="center">
           {brand && <ArgonBox component="img" src={brand} alt="HT Logo" width="100%" mr={0.25} />}
-          {/* <ArgonBox
-            width={!brandName && "100%"}
-            sx={(theme) => sidenavLogoLabel(theme, { miniSidenav })}
-          >
-            <ArgonTypography
-              component="h6"
-              variant="button"
-              fontWeight="medium"
-              color={darkSidenav ? "white" : "dark"}
-            >
-              {brandName}
-            </ArgonTypography>
-          </ArgonBox> */}
         </ArgonBox>
       </ArgonBox>
-      {/* <Divider light={darkSidenav} /> */}
-      {/* profile */}
-      {/* <ArgonBox pt={3} pb={1} px={4} textAlign="center">
-  <ArgonBox
-    component="img"
-    src={
-      userInfo != null && userInfo.data.img_path != null
-        ? API_Url + "/img/" + userInfo.data.img_path
-        : userProfile
-    }
-    alt="toggle-icon"
-    style={{
-      maxWidth: "100%",
-      height: "auto",
-      padding: "4px",
-      borderRadius: "50%",
-      border: "2px solid #9d2136",
-    }}
-  />
-  <ArgonTypography mb={0} sx={{ color: "#155da9" }} fontWeight="bold" variant="h6">
-    {userInfo != null ? userInfo.data.first_name : ""}{" "}
-    {userInfo != null ? userInfo.data.last_name : ""}
-  </ArgonTypography>
-  
-</ArgonBox> */}
-
       <Divider light={darkSidenav} />
       <List>{renderRoutes}</List>
 

@@ -64,7 +64,7 @@ import { API_Url } from "utils/API";
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/system';
 
-function DashboardNavbar({ absolute, light, isMini,ShowOrHideTheSelectStoreInput }) {
+function DashboardNavbar({ absolute, light, isMini, ShowOrHideTheSelectStoreInput }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -114,6 +114,7 @@ function DashboardNavbar({ absolute, light, isMini,ShowOrHideTheSelectStoreInput
         setSelectedStore(response.data.data[0].store_id);
       } catch (error) {
         console.log(error); // Log any errors that occur during the API request
+
       }
     };
 
@@ -178,53 +179,56 @@ function DashboardNavbar({ absolute, light, isMini,ShowOrHideTheSelectStoreInput
           mb={{ xs: 1, md: 0 }}
           sx={(theme) => navbarRow(theme, { isMini })}
         >
+          <Icon fontSize="medium" sx={navbarDesktopMenu} onClick={handleMiniSidenav}>
+            {miniSidenav ? "menu_open" : "menu"}
+          </Icon>
+          <ArgonBox sx={{ marginLeft: "1rem !important" }}>
           <Breadcrumbs
             icon="home"
             title={route[route?.length - 1]}
             route={route}
             light={transparentNavbar ? light : false}
           />
-          <Icon fontSize="medium" sx={navbarDesktopMenu} onClick={handleMiniSidenav}>
-            {miniSidenav ? "menu_open" : "menu"}
-          </Icon>
+</ArgonBox>
+
         </ArgonBox>
-        {isMini  ? null : (
-         
+        {isMini ? null : (
+
           <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
-              <>
-      {ShowOrHideTheSelectStoreInput && (
-        <Box pr={1} display="flex" alignItems="center" >
-          <ArgonTypography style={{whiteSpace:"nowrap",color:"#fff",fontWeight:700}}> Store : &nbsp;</ArgonTypography>
-          <FormControl fullWidth variant="outlined">
-            {/* <InputLabel id="store-select-label">Select Store</InputLabel> */}
-            <Select
-              labelId="store-select-label"
-              value={selectedStore}
-              onChange={handleStoreChange}
-              label="Select Store"
-              className="bg-white"
-              style={{
-                borderRadius: '0.375rem',
-                border: '1px solid #ced4da',
-                height: 'auto',
-                padding: '0.625rem 1.75rem 0.625rem 0.75rem',
-              }}
-            >
-              {data?.length > 0 ? (
-                data.map((val) => (
-                  <MenuItem key={val.store_id} value={val.store_id}>
-                    {val.store_name}
-                  </MenuItem>
-                ))
-              ) : (
-                <MenuItem value="">Select Store</MenuItem>
+            <>
+              {ShowOrHideTheSelectStoreInput && (
+                <Box pr={1} display="flex" alignItems="center" >
+                  <ArgonTypography style={{ whiteSpace: "nowrap", color: "#fff", fontWeight: 700 }}> Store : &nbsp;</ArgonTypography>
+                  <FormControl fullWidth variant="outlined">
+                    {/* <InputLabel id="store-select-label">Select Store</InputLabel> */}
+                    <Select
+                      labelId="store-select-label"
+                      value={selectedStore}
+                      onChange={handleStoreChange}
+                      label="Select Store"
+                      className="bg-white"
+                      style={{
+                        borderRadius: '0.375rem',
+                        border: '1px solid #ced4da',
+                        height: 'auto',
+                        padding: '0.625rem 1.75rem 0.625rem 0.75rem',
+                      }}
+                    >
+                      {data?.length > 0 ? (
+                        data.map((val) => (
+                          <MenuItem key={val.store_id} value={val.store_id}>
+                            {val.store_name}
+                          </MenuItem>
+                        ))
+                      ) : (
+                        <MenuItem value="">Select Store</MenuItem>
+                      )}
+                    </Select>
+                  </FormControl>
+                </Box>
               )}
-            </Select>
-          </FormControl>
-        </Box>
-      )}
-    </>
-            
+            </>
+
             <ArgonBox color={light ? "white" : "inherit"}>
               {/* <Link to="/authentication/sign-in/basic">
                 <IconButton sx={navbarIconButton} size="small">
@@ -285,7 +289,7 @@ DashboardNavbar.defaultProps = {
   absolute: false,
   light: true,
   isMini: false,
-  ShowOrHideTheSelectStoreInput:true
+  ShowOrHideTheSelectStoreInput: true
 };
 
 // Typechecking props for the DashboardNavbar
@@ -293,7 +297,8 @@ DashboardNavbar.propTypes = {
   absolute: PropTypes.bool,
   light: PropTypes.bool,
   isMini: PropTypes.bool,
-  ShowOrHideTheSelectStoreInput:PropTypes.bool
+  ShowOrHideTheSelectStoreInput: PropTypes.bool,
+  
 };
 
 export default DashboardNavbar;

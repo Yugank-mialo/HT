@@ -1,64 +1,45 @@
-/**
-=========================================================
-* Argon Dashboard 2 PRO MUI - v3.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-pro-mui
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-router-dom components
-import { Link } from "react-router-dom";
-
-// prop-types is a library for typechecking of props
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import {
+  Card,
+  CardMedia,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
+  Typography,
+  Grid,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
-// @mui material components
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import Tooltip from "@mui/material/Tooltip";
-
-// Argon Dashboard 2 PRO MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
-import ArgonButton from "components/ArgonButton";
-import ArgonAvatar from "components/ArgonAvatar";
 
-function DefaultZonesCard({ image, label, title, description, action, authors }) {
-  const renderAuthors = authors.map(({ image: media, name }) => (
-    <Tooltip key={name} title={name} placement="bottom">
-      <ArgonAvatar
-        src={media}
-        alt={name}
-        size="xs"
-        sx={({ borders: { borderWidth }, palette: { white } }) => ({
-          border: `${borderWidth[2]} solid ${white.main}`,
-          cursor: "pointer",
-          position: "relative",
-          ml: -1.25,
+function DefaultZonesCard({ image, label, title, description, action, authors, label1 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [zoneName,setZoneName]=useState(null);
 
-          "&:hover, &:focus": {
-            zIndex: "10",
-          },
-        })}
-      />
-    </Tooltip>
-  ));
+  const openModal = (image,label1) => {
+    setSelectedImage(image);
+    setIsModalOpen(true);
+    setZoneName(label1)
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+    setIsModalOpen(false);
+  };
 
   return (
     <Card
       sx={{
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "transparent",
+        backgroundColor: "aliceblue",
         boxShadow: "none",
         overflow: "visible",
+        padding: "10px",
       }}
     >
       <ArgonBox position="relative" width="100.25%" shadow="md" borderRadius="xl">
@@ -72,73 +53,39 @@ function DefaultZonesCard({ image, label, title, description, action, authors })
             boxShadow: ({ boxShadows: { md } }) => md,
             objectFit: "cover",
             objectPosition: "center",
+            cursor: "pointer",
           }}
+          onClick={() => openModal(image,label1)}
         />
       </ArgonBox>
-      <ArgonBox pt={2} px={0.5}>
-        <ArgonTypography
-          variant="button"
-          fontWeight="regular"
-          textTransform="capitalize"
-          textGradient
-        >
-          {label}
+      <ArgonBox sx={{ textAlign: "center", padding: "2px" }}>
+        <ArgonTypography variant="button" fontWeight="regular" textTransform="capitalize" textGradient>
+          Zone Name&nbsp;:&nbsp;&nbsp; {label1}
         </ArgonTypography>
-        <ArgonBox mb={1}>
-          {action.type === "internal" ? (
-            <ArgonTypography
-              component={Link}
-              to={action.route}
-              variant="h5"
-              textTransform="capitalize"
-            >
-              {title}
-            </ArgonTypography>
-          ) : (
-            <ArgonTypography
-              component="a"
-              href={action.route}
-              target="_blank"
-              rel="noreferrer"
-              variant="h5"
-              textTransform="capitalize"
-            >
-              {title}
-            </ArgonTypography>
-          )}
-        </ArgonBox>
-        <ArgonBox mb={3} lineHeight={0}>
-          <ArgonTypography variant="button" fontWeight="regular" color="text">
-            {description}
-          </ArgonTypography>
-        </ArgonBox>
-        <ArgonBox display="flex" justifyContent="space-between" alignItems="center">
-          {action.type === "internal" ? (
-            <ArgonButton
-              component={Link}
-              to={action.route}
-              variant="outlined"
-              size="small"
-              color={action.color}
-            >
-              {action.label}
-            </ArgonButton>
-          ) : (
-            <ArgonButton
-              component="a"
-              href={action.route}
-              target="_blank"
-              rel="noreferrer"
-              variant="outlined"
-              size="small"
-              color={action.color}
-            >
-              {action.label}
-            </ArgonButton>
-          )}
-          <ArgonBox display="flex">{renderAuthors}</ArgonBox>
-        </ArgonBox>
       </ArgonBox>
+
+      {/* Modal */}
+      <Dialog open={isModalOpen} onClose={closeModal} maxWidth="md" >
+        <DialogTitle>
+          <Grid container justifyContent="space-between" alignItems="center">
+            <Typography variant="h6" component="div">{zoneName}</Typography>
+            <IconButton onClick={closeModal} aria-label="close">
+              <CloseIcon />
+            </IconButton>
+          </Grid>
+        </DialogTitle>
+        <DialogContent>
+        <img
+            src={selectedImage}
+            alt={title}
+            style={{
+              maxWidth: "100%",
+              objectFit: "contain",
+              margin: "auto",
+              display: "block",
+            }}
+          />        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
@@ -153,6 +100,7 @@ DefaultZonesCard.propTypes = {
   image: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  label1: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   action: PropTypes.shape({
     type: PropTypes.oneOf(["external", "internal"]),
@@ -170,7 +118,12 @@ DefaultZonesCard.propTypes = {
     ]).isRequired,
     label: PropTypes.string.isRequired,
   }).isRequired,
-  authors: PropTypes.arrayOf(PropTypes.object),
+  authors: PropTypes.arrayOf(
+    PropTypes.shape({
+      image: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
 };
 
 export default DefaultZonesCard;

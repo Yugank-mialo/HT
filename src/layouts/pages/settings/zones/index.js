@@ -1,180 +1,363 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
-import { Card } from "@mui/material";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ArgonSelect from "components/ArgonSelect";
 import DefaultZonesCard from "examples/Cards/ProjectCards/DefaultZonesCard";
-import homeDecor1 from "assets/images/home-decor-1.jpg";
-import homeDecor2 from "assets/images/home-decor-2.jpg";
-import homeDecor3 from "assets/images/home-decor-3.jpg";
+import PlaceholderCard from "examples/Cards/PlaceholderCard";
+import { Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, FormLabel, IconButton } from "@mui/material";
+import { Close as CloseIcon } from "@mui/icons-material";
+import { Formik, Form, Field } from 'formik';
+import ArgonButton from "components/ArgonButton";
+
+import * as Yup from 'yup';
+
+import homeDecor1 from "assets/images/settingImages/Reception.png";
+import homeDecor2 from "assets/images/settingImages/HallWay.png";
+import homeDecor3 from "assets/images/settingImages/LabArea.png";
 import team1 from "assets/images/team-1.jpg";
 import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
+import FormField from "layouts/pages/account/components/FormField";
+
 const initialCameraData = [
-    {
-        image: homeDecor1,
-        label: "Camera 1",
-        title: "Online",
-        url: "http://www.google.com",
-        description: "As Uber works through a huge amount of internal management turmoil.",
-        authors: [
-            { image: team1, name: "Elena Morison" },
-            { image: team2, name: "Ryan Milly" },
-            { image: team3, name: "Nick Daniel" },
-            { image: team4, name: "Peterson" },
-        ],
-    },
-    {
-        image: homeDecor2,
-        label: "Camera 2",
-        title: "Offline",
-        url: "http://www.google.com",
-        description: "Music is something that every person has his or her own specific opinion about.",
-        authors: [
-            { image: team3, name: "Nick Daniel" },
-            { image: team4, name: "Peterson" },
-            { image: team1, name: "Elena Morison" },
-            { image: team2, name: "Ryan Milly" },
-        ],
-    },
-    {
-        image: homeDecor3,
-        label: "Camera 3",
-        title: "Online",
-        url: "http://www.google.com",
-        description: "Different people have different taste, and various types of music.",
-        authors: [
-            { image: team4, name: "Peterson" },
-            { image: team3, name: "Nick Daniel" },
-            { image: team2, name: "Ryan Milly" },
-            { image: team1, name: "Elena Morison" },
-        ],
-    },
+  {
+    image: homeDecor1,
+    label: "Reception",
+    label1: "Zone 1",
+    title: "Online",
+    description:
+      "As Uber works through a huge amount of internal management turmoil.",
+    authors: [
+      { image: team1, name: "Elena Morison" },
+      { image: team2, name: "Ryan Milly" },
+      { image: team3, name: "Nick Daniel" },
+      { image: team4, name: "Peterson" },
+    ],
+  },
+  {
+    image: homeDecor2,
+    label: "Hallway",
+    title: "Offline",
+    label1: "Zone 2",
+    description:
+      "Music is something that every person has his or her own specific opinion about.",
+    authors: [
+      { image: team3, name: "Nick Daniel" },
+      { image: team4, name: "Peterson" },
+      { image: team1, name: "Elena Morison" },
+      { image: team2, name: "Ryan Milly" },
+    ],
+  },
+  {
+    image: homeDecor2,
+    label: "Hallway",
+    title: "Offline",
+    label1: "Zone 1",
+    description:
+      "Music is something that every person has his or her own specific opinion about.",
+    authors: [
+      { image: team3, name: "Nick Daniel" },
+      { image: team4, name: "Peterson" },
+      { image: team1, name: "Elena Morison" },
+      { image: team2, name: "Ryan Milly" },
+    ],
+  },
+  {
+    image: homeDecor3,
+    label: "LabArea",
+    title: "Online",
+    label1: "Zone 3",
+    description:
+      "Different people have different taste, and various types of music.",
+    authors: [
+      { image: team4, name: "Peterson" },
+      { image: team3, name: "Nick Daniel" },
+      { image: team2, name: "Ryan Milly" },
+      { image: team1, name: "Elena Morison" },
+    ],
+  },
+  {
+    image: homeDecor3,
+    label: "LabArea",
+    title: "Online",
+    label1: "Zone 2",
+    description:
+      "Different people have different taste, and various types of music.",
+    authors: [
+      { image: team4, name: "Peterson" },
+      { image: team3, name: "Nick Daniel" },
+      { image: team2, name: "Ryan Milly" },
+      { image: team1, name: "Elena Morison" },
+    ],
+  },
+  {
+    image: homeDecor3,
+    label: "LabArea",
+    title: "Online",
+    label1: "Zone 1",
+    description:
+      "Different people have different taste, and various types of music.",
+    authors: [
+      { image: team4, name: "Peterson" },
+      { image: team3, name: "Nick Daniel" },
+      { image: team2, name: "Ryan Milly" },
+      { image: team1, name: "Elena Morison" },
+    ],
+  },
 ];
-const monthOptions = [
-    {value:"",label:"Select Camera"},
-    { value: "1", label: "Camear 1" },
-    { value: "2", label: "camera 2" },
-    { value: "3", label: "camera 3" }
-  ];
+
+const cameraOption = [
+  { value: "", label: "Select camera" },
+  { value: "1", label: "Reception" },
+  { value: "2", label: "Hallway" },
+  { value: "3", label: "LabArea" },
+];
+
+const zoneTypeOption = [
+  { value: "", label: "Select zone type" },
+  { value: "1", label: "Dwell zone" },
+  { value: "2", label: "Footfall zone" },
+  { value: "3", label: "Product-instruction zone" },
+];
+
+// Validation schema using Yup
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Zone Name is required"),
+  // Add more validation rules as needed
+});
 
 function Zones() {
-  const [selectedMonth, setSelectedMonth] = useState(""); // State for selected month
-  const [cameraData, setCameraData] = useState(initialCameraData);
+  const [selectedCamera, setSelectedCamera] = useState("");
+  const [filteredCameraData, setFilteredCameraData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [zoneName, setZoneName] = useState("");
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
-    // Fetch data or perform initialization
-  }, []);
+    filterCameraData(selectedCamera);
+  }, [selectedCamera]);
 
-  const handleMonthChange = (selectedOption) => {
-    setSelectedMonth(selectedOption.value);
-    // Handle month change logic if needed
+  const handleCameraChange = (selectedOption) => {
+    setSelectedCamera(selectedOption.label);
+  };
+  const handleZoneTypeChange = (zonetypevalue) => {
+    console.log(zonetypevalue)
+  }
+
+  const filterCameraData = (cameraValue) => {
+    if (cameraValue === "") {
+      setFilteredCameraData([]); // If no camera selected, clear filtered data
+    } else {
+      const filteredData = initialCameraData.filter(
+        (camera) => camera.label === cameraValue
+      );
+      setFilteredCameraData(filteredData);
+    }
   };
 
-  // Options for months
-  const handleEditCamera = (camera) => {
-    setSelectedCamera(camera);
+  const handleCardClick = () => {
     setIsModalOpen(true);
-};
+    setImagePreview(null)
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleAddZone = (values) => {
+    console.log("Zone Name:", values.name);
+    console.log("Static Image URL:", values.image);
+
+    // Add logic here to update your data or perform API calls.
+    setZoneName(values.name);
+
+    // For demonstration, setting the static image URL as the image value
+    setImagePreview(values.image);
+
+    setIsModalOpen(false);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImageFile(file);
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar ShowOrHideTheSelectStoreInput={true} />
-      <Grid container spacing={3} my={14}>
+      <Grid
+        container
+        spacing={3}
+        my={8}
+        sx={{
+          backgroundColor: "#fff",
+          width: "initial !important",
+          marginLeft: "initial !important",
+          borderRadius: "15px"
+        }}
+      >
         <Grid item xs={12} md={12} lg={12}>
-          <ArgonBox mb={3}>
-          <Grid sx={{backgroundColor:"#fff"}}>
-
-          <ArgonBox pt={2} px={2} >
-                <ArgonBox >
-                  <ArgonTypography variant="h6" fontWeight="medium">
-                    Camera Listing
-                  </ArgonTypography>
-                </ArgonBox>
-              </ArgonBox>
-            <ArgonBox p={2}>
-                <ArgonSelect
-                  placeholder="Select Month"
-                  options={monthOptions}
-                  value={monthOptions.find((option) => option.value === selectedMonth)}
-                  onChange={handleMonthChange}
-                />
-              </ArgonBox>
-
-
-              {/* modal */}
-
-              <ArgonBox p={2}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6} xl={3}>
-                <DefaultZonesCard
-                  image={homeDecor1}
-                  label="project #2"
-                  title="modern"
-                  description="As Uber works through a huge amount of internal management turmoil."
-                  action={{
-                    type: "internal",
-                    route: "/pages/profile/profile-overview",
-                    color: "info",
-                    label: "View Project",
-                  }}
-                  authors={[
-                    { image: team1, name: "Elena Morison" },
-                    { image: team2, name: "Ryan Milly" },
-                    { image: team3, name: "Nick Daniel" },
-                    { image: team4, name: "Peterson" },
-                  ]}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <DefaultZonesCard
-                  image={homeDecor2}
-                  label="project #1"
-                  title="scandinavian"
-                  description="Music is something that every person has his or her own specific opinion about."
-                  action={{
-                    type: "internal",
-                    route: "/pages/profile/profile-overview",
-                    color: "info",
-                    label: "View Project",
-                  }}
-                  authors={[
-                    { image: team3, name: "Nick Daniel" },
-                    { image: team4, name: "Peterson" },
-                    { image: team1, name: "Elena Morison" },
-                    { image: team2, name: "Ryan Milly" },
-                  ]}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <DefaultZonesCard
-                  image={homeDecor3}
-                  label="project #3"
-                  title="minimalist"
-                  description="Different people have different taste, and various types of music."
-                  action={{
-                    type: "internal",
-                    route: "/pages/profile/profile-overview",
-                    color: "info",
-                    label: "View Project",
-                  }}
-                  authors={[
-                    { image: team4, name: "Peterson" },
-                    { image: team3, name: "Nick Daniel" },
-                    { image: team2, name: "Ryan Milly" },
-                    { image: team1, name: "Elena Morison" },
-                  ]}
-                />
-              </Grid>
-            </Grid>
+          <ArgonBox mb={1}>
+            <ArgonBox mb={0.5}>
+              <ArgonTypography variant="h5" fontWeight="medium">
+                Zone listing
+              </ArgonTypography>
+            </ArgonBox>
+            <ArgonBox p={2} sx={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <ArgonTypography variant="h6" fontWeight="medium">
+                Camera &nbsp;&nbsp;
+              </ArgonTypography>
+              <ArgonSelect
+                placeholder="Select camera"
+                options={cameraOption}
+                value={cameraOption.find(
+                  (option) => option.value === selectedCamera
+                )}
+                onChange={handleCameraChange}
+              />
+            </ArgonBox>
           </ArgonBox>
-              </Grid>
+        </Grid>
+        <Grid item xs={12} md={12} lg={12}>
+          <ArgonBox p={2}>
+            <Grid container spacing={3}>
+              {filteredCameraData.length === 0 ? (
+                <Grid item xs={12}>
+                  <ArgonTypography variant="body1" sx={{ textAlign: "center" }}>
+                    No camera option selected.
+                  </ArgonTypography>
+                </Grid>
+              ) : (
+                filteredCameraData.map((camera, index) => (
+                  <Grid item key={index} xs={12} md={6} xl={3}>
+                    <DefaultZonesCard
+                      image={camera.image}
+                      label={camera.label}
+                      title={camera.title}
+                      description={camera.description}
+                      label1={camera.label1}
+                      action={{
+                        type: "internal",
+                        route: "/pages/profile/profile-overview",
+                        color: "info",
+                        label: "View Project",
+                      }}
+                      authors={camera.authors}
+                      onClick={handleCardClick}
+                    />
+                  </Grid>
+                ))
+              )}
+
+              {/* Placeholder for adding new zones */}
+              {(selectedCamera && filteredCameraData.length !== 0) && (
+                <Grid item xs={12} md={6} xl={3} sx={{ cursor: "pointer" }} onClick={handleCardClick}>
+                  <PlaceholderCard
+                    title={{ variant: "h5", text: "Add New Zone" }}
+                    outlined
+                  />
+                </Grid>
+              )}
+            </Grid>
           </ArgonBox>
         </Grid>
       </Grid>
+
+      {/* Modal for adding new zone */}
+      <Dialog open={isModalOpen} onClose={handleModalClose} maxWidth="md" fullWidth={true}>
+        <DialogTitle>
+          Add New Zone
+          <IconButton
+            aria-label="close"
+            onClick={handleModalClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Formik
+            initialValues={{ name: "", image: null }}
+            validationSchema={validationSchema}
+            onSubmit={handleAddZone}
+          >
+            {({ setFieldValue, errors, touched }) => (
+              <Form>
+                <ArgonBox>
+                  <ArgonBox p={0} sx={{ position: "relative", display: "flex", alignItems: "center" }} width="100%">
+                    <ArgonBox>
+                      <ArgonTypography variant="h6" fontWeight="medium" style={{
+                        fontSize: "0.80rem", fontWeight: "700", display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "100%",
+                      }}>
+                        Zone Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      </ArgonTypography>
+                    </ArgonBox>
+                    <ArgonSelect
+                      className="custom-select-container"
+                      placeholder="Select zone type"
+                      options={zoneTypeOption}
+                      onChange={handleZoneTypeChange}
+                    />
+                  </ArgonBox>
+                  <ArgonBox mt={2} width="100%">
+                    <FormField
+                      as={TextField}
+                      name="name"
+                      variant="outlined"
+                      label="Zone name"
+                      placeholder="Enter zone name here"
+                      fullWidth
+                      error={touched.name && Boolean(errors.name)}
+                      helperText={touched.name && errors.name}
+                    />
+                  </ArgonBox>
+
+                  <ArgonBox mt={2} width="100%">
+                    <img
+                      src={filteredCameraData[0].image}
+                      alt="Selected"
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </ArgonBox>
+                </ArgonBox>
+                <DialogActions>
+                  <ArgonButton onClick={handleModalClose} color="secondary">
+                    Cancel
+                  </ArgonButton>
+                  <ArgonButton type="submit" color="info">
+                    Add
+                  </ArgonButton>
+                </DialogActions>
+              </Form>
+            )}
+          </Formik>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }

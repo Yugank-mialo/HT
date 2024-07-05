@@ -32,6 +32,8 @@ import { API_Url } from "utils/API";
 import DetailedStatisticsCard from "examples/Cards/StatisticsCards/DetailedStatisticsCard";
 import SalesTable from "examples/Tables/SalesTable";
 // import salesTableData from "layouts/dashboards/default/data/salesTableData";
+import dataTableData from "layouts/applications/data-tables/data/dataTableData";
+
 
 function Teams() {
   const [fromDate, setFromDate] = useState(null);
@@ -378,7 +380,7 @@ function Teams() {
       hourly_flow_rate: dwellZoneTable.hourlyFlowRate[zone],
     }));
   }, [dwellZoneTable]);
-  const   columnsValue= [
+  const columnsValue = [
     { name: "zone", align: "center" },
     { name: "counts_per_zone", align: "center" },
     { name: "hourly_flow_rate", align: "center" },
@@ -397,6 +399,7 @@ function Teams() {
               handleToDateChange={handleToDateChange}
               handleClear={handleClear}
               handleSubmit={handleSubmit}
+              showOrHideSelectZoneType={true}
             />
           </Grid>
 
@@ -499,7 +502,7 @@ function Teams() {
           </Grid>
           <Grid item xs={12} md={6}>
             <ArgonBox mb={1}>
-              <VerticalBarChart title="Average Dwell time per zone" chart={chartData} />
+              <VerticalBarChart title="Average Dwell Time Per Zone" chart={chartData} />
             </ArgonBox>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -521,19 +524,28 @@ function Teams() {
           </Grid>
           <Grid item xs={12} md={6}>
             <ArgonBox mb={1}>
-              <DefaultLineChart title="Average Dwell time per day" chart={averageDwellTimePerDay} />
+              <DefaultLineChart title="Average Dwell Time Per Day" chart={averageDwellTimePerDay} />
             </ArgonBox>
           </Grid>
           <Grid item xs={12} md={6}>
             <ArgonBox mb={1}>
-              <DefaultLineChart title=" Peak hours analysis" selectedDate={selectedDate}
+              <DefaultLineChart title=" Peak Hours Analysis" selectedDate={selectedDate}
                 onDateChange={handleDateChange} chart={peakHoursData} />
             </ArgonBox>
           </Grid>
           {/* table of Dwell Zone Table */}
           <Grid item xs={12}>
-            <SalesTable title="Dwell Zone Table"  columns={columnsValue} rows={salesTableData} />
+            <SalesTable title="Dwell Zone Table" columns={columnsValue} rows={salesTableData} />
           </Grid>
+          <Grid item xs={12}>
+          <Card>
+          <ArgonBox p={3}>
+            <ArgonTypography variant="h5" fontWeight="medium" sx={{paddingBottom:"0px !important"}}>
+            Logs
+            </ArgonTypography>
+          </ArgonBox>
+          <DataTable table={dataTableData} canSearch />
+        </Card>          </Grid>
           {/* table of Dwell zone Table  */}
         </Grid>
       </DashboardLayout>

@@ -26,9 +26,9 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
 import PlaceholderCard from "examples/Cards/PlaceholderCard";
 
-import homeDecor1 from "assets/images/home-decor-1.jpg";
-import homeDecor2 from "assets/images/home-decor-2.jpg";
-import homeDecor3 from "assets/images/home-decor-3.jpg";
+import homeDecor1 from "assets/images/settingImages/Reception.png";
+import homeDecor2 from "assets/images/settingImages/HallWay.png";
+import homeDecor3 from "assets/images/settingImages/LabArea.png";
 import team1 from "assets/images/team-1.jpg";
 import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
@@ -42,7 +42,7 @@ const validationSchema = Yup.object().shape({
 const initialCameraData = [
     {
         image: homeDecor1,
-        label: "Camera 1",
+        label: "Reception",
         title: "Online",
         url: "http://www.google.com",
         description: "As Uber works through a huge amount of internal management turmoil.",
@@ -55,7 +55,7 @@ const initialCameraData = [
     },
     {
         image: homeDecor2,
-        label: "Camera 2",
+        label: "Hallway",
         title: "Offline",
         url: "http://www.google.com",
         description: "Music is something that every person has his or her own specific opinion about.",
@@ -68,7 +68,7 @@ const initialCameraData = [
     },
     {
         image: homeDecor3,
-        label: "Camera 3",
+        label: "Lab area",
         title: "Online",
         url: "http://www.google.com",
         description: "Different people have different taste, and various types of music.",
@@ -129,7 +129,7 @@ function Cameras() {
     return (
         <DashboardLayout>
             <DashboardNavbar ShowOrHideTheSelectStoreInput={true} />
-            <Grid container spacing={3} my={14}>
+            <Grid container spacing={3} my={6}>
                 <Grid item xs={12} md={12} lg={12}>
                     <ArgonBox mb={3}>
                         <Card>
@@ -180,8 +180,8 @@ function Cameras() {
                 </Grid>
             </Grid>
 
-            <Dialog open={isModalOpen} onClose={handleModalClose}>
-                <DialogTitle>
+            <Dialog open={isModalOpen} onClose={handleModalClose} maxWidth="lg" fullWidth={true}>
+                <DialogTitle sx={{padding:"16px 24px 0px !important"}}>
                     {selectedCamera ? "Edit Camera" : "Add New Camera"}
                     <IconButton
                         aria-label="close"
@@ -205,8 +205,8 @@ function Cameras() {
                         {({ errors, touched }) => (
                             <Form>
                                 <ArgonBox p={2}>
-                                    <ArgonBox mt={2} width="100%">
-                                        <FormLabel>Name</FormLabel>
+                                    <ArgonBox mt={2} width="100%" sx={{display:"flex"}}>
+                                        <FormLabel sx={{width:"15%",fontSize:"0.75rem",fontWeight:"700"}}>Name</FormLabel>
                                         <Field
                                             as={TextField}
                                             name="name"
@@ -216,8 +216,8 @@ function Cameras() {
                                             helperText={touched.name && errors.name}
                                         />
                                     </ArgonBox>
-                                    <ArgonBox mt={2} width="100%">
-                                        <FormLabel>URL</FormLabel>
+                                    <ArgonBox mt={2} width="100%" sx={{display:"flex"}}>
+                                        <FormLabel sx={{width:"15%",fontSize:"0.75rem",fontWeight:"700"}}>RTSP URL</FormLabel>
                                         <Field
                                             as={TextField}
                                             name="url"

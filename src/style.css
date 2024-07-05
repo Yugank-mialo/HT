@@ -15,3 +15,12 @@
 color: black !important;
 font-weight: bold !important;
 }
+
+.selectZoneTypes > svg{
+    display: block !important;
+}
+.custom-select-container {
+    width: 100% !important;
+    
+  }
+  

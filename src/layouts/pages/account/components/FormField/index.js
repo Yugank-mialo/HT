@@ -23,8 +23,8 @@ import ArgonInput from "components/ArgonInput";
 
 function FormField({ label, ...rest }) {
   return (
-    <ArgonBox display="flex" flexDirection="column" justifyContent="flex-end" height="100%">
-      <ArgonBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
+    <ArgonBox display="flex"  justifyContent="space-between" alignItems="center" height="100%">
+      <ArgonBox mb={1} ml={0.5} lineHeight={0} display="inline-block" whiteSpace="nowrap" mr={2}>
         <ArgonTypography
           component="label"
           variant="caption"

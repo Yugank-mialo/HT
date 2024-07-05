@@ -145,38 +145,38 @@ const routes = [
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-user-run" />,
     noCollapse: true,
   },
-  {
-    type: "collapse",
-    name: "Zone Summary",
-    key: "zone-summary",
-    route: "/dashboard/zone-summary",
-    component: <ProtectedRoute component={ZoneSummary} />,
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-collection" />,
-    noCollapse: true,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Zone Summary",
+  //   key: "zone-summary",
+  //   route: "/dashboard/zone-summary",
+  //   component: <ProtectedRoute component={ZoneSummary} />,
+  //   icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-collection" />,
+  //   noCollapse: true,
+  // },
   {
     type: "collapse",
     name: "Settings",
     key: "settings",
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-bold-right" />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-settings" />,
     collapse: [
       {
         name: "Cameras",
         key: "cameras",
         route: "/dashboard/settings/cameras",
-        component: <Cameras />,
+        component:<ProtectedRoute component={Cameras} />
       },
       {
         name: "Zones",
         key: "zones",
         route: "/dashboard/settings/zones",
-        component: <Zones />,
+        component:<ProtectedRoute component={Zones} />
       },
       {
         name: "Threshold",
         key: "threshold",
         route: "/dashboard/settings/threshold",
-        component: <Threshold />,
+        component:<ProtectedRoute component={Threshold} />
       }
     ],
   },

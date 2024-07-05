@@ -54,7 +54,7 @@ function DashboardLayout({ bgColor, children, ...rest }) {
     >
       <ArgonBox
         bgColor={"rgb(17, 205, 239)"}
-        height= { (pathname.includes('/dashboard/home')) ? "140px":  pathname.includes('/dashboard/track-path') ? "140px": "190px"}
+        height= { (pathname.includes('/dashboard/home')) ? "140px":  ( pathname.includes('/dashboard/settings/cameras') || pathname.includes('/dashboard/settings/zones') || pathname.includes('dashboard/settings/threshold') )? "140px": "190px"}
         width="100vw"
         position="absolute"
         top={0}
