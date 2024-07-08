@@ -23,9 +23,11 @@ import { ArgonControllerProvider } from "context";
 
 // react-perfect-scrollbar component
 import PerfectScrollbar from "react-perfect-scrollbar";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // react-perfect-scrollbar styles
 import "react-perfect-scrollbar/dist/css/styles.css";
+
 import "./style.css"
 import { StoreProvider } from "globalContext/GlobalContext";
 const container = document.getElementById("root");
@@ -34,6 +36,7 @@ const root = createRoot(container);
 root.render(
   <StoreProvider>
   <BrowserRouter>
+  <ToastContainer />
     <ArgonControllerProvider>
       <PerfectScrollbar>
         <App />

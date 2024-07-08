@@ -22,6 +22,7 @@ import { useStore } from 'globalContext/GlobalContext';
 import Table from "examples/Tables/Table";
 import tableData from "layouts/pages/users/reports/data/tableData";
 import ImageUrl from "./../../../assets/images/heatmap_overlay.png"
+import { toast } from "react-toastify";
 
 
 function ZoneSummary() {
@@ -59,6 +60,13 @@ function ZoneSummary() {
     };
 
     const handleSubmit = () => {
+        if (!fromDate || !toDate) {
+            toast.error("Both from date and to date should be selected", {
+              autoClose: 1000, // duration in milliseconds
+            });
+            return; // Early return if either date is null
+          }
+      
         if (fromDate && toDate) {
             setSubmittedDates({ fromDate, toDate });
         }

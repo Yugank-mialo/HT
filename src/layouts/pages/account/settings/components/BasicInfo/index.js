@@ -8,10 +8,15 @@ import Grid from "@mui/material/Grid";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonSelect from "components/ArgonSelect";
+import ArgonButton from "components/ArgonButton";
+
 
 // Data
 import selectData from "layouts/pages/account/settings/components/BasicInfo/data/selectData";
-
+ const ZonesList= [
+  { value: "Zone1", label: "Zone1" },
+  { value: "Zone2", label: "Zone2" },
+];
 function BasicInfo() {
   const [skills, setSkills] = useState(["react", "angular"]);
 
@@ -21,7 +26,7 @@ function BasicInfo() {
         <ArgonTypography variant="h5">Zone mapping</ArgonTypography>
       </ArgonBox>
       <ArgonBox component="form" pb={3} px={3}>
-        <Grid container spacing={3} style={{ minHeight: "30vh" }}>
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={12}>
             <ArgonBox display="flex" flexDirection="column" height="100%">
               <ArgonTypography
@@ -31,9 +36,9 @@ function BasicInfo() {
                 textTransform="capitalize"
                 mb={1}
               >
-                I&apos;m
+              Zone
               </ArgonTypography>
-              <ArgonSelect fullWidth placeholder="Male" options={selectData.gender} />
+              <ArgonSelect fullWidth placeholder="Select zone" options={ZonesList} defaultValue={ZonesList[0]} />
             </ArgonBox>
           </Grid>
           <Grid item xs={12} sm={12}>
@@ -45,26 +50,33 @@ function BasicInfo() {
                 textTransform="capitalize"
                 mb={1}
               >
-                Birth Date
+                Camera
               </ArgonTypography>
               <ArgonSelect
-                    defaultValue={[
-                      { value: "choice 1", label: "Choice 1" },
-                      { value: "label two", label: "label two" },
-                    ]}
-                    options={[
-                      { value: "choice 1", label: "Choice 1" },
-                      { value: "choice 2", label: "Choice 2" },
-                      { value: "choice 3", label: "Choice 3" },
-                      { value: "choice 4", label: "Choice 4" },
-                      { value: "label one", label: "Label One", isDisabled: true },
-                      { value: "label two", label: "Tabel Two" },
-                      { value: "label three", label: "Label Three" },
-                    ]}
-                    isMulti
-                  />            </ArgonBox>
+                defaultValue={[
+                  { value: "Camera 1", label: "Camera 1" },
+                  { value: "Camera 2", label: "Camera 2" },
+                ]}
+                options={[
+                  { value: "Camera 1", label: "Camera 1" },
+                  { value: "Camera 2", label: "Camera 2" },
+                  { value: "Camera 3", label: "Camera 3" },
+                  { value: "Camera 4", label: "Camera 4" },
+                  { value: "Camera 5", label: "Camera 5" },
+                  { value: "Camera 6", label: "Camera 6" },
+                ]}
+                isMulti
+              />
+            </ArgonBox>
           </Grid>
         </Grid>
+        <ArgonBox display="flex" justifyContent="flex-end" mt={3}>
+                  <ArgonBox mr={1} mt={2}>
+                  </ArgonBox>
+                  <ArgonButton variant="gradient" color="info">
+                    Add
+                  </ArgonButton>
+                </ArgonBox>
       </ArgonBox>
     </Card>
   );

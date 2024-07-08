@@ -33,6 +33,7 @@ import DetailedStatisticsCard from "examples/Cards/StatisticsCards/DetailedStati
 import SalesTable from "examples/Tables/SalesTable";
 // import salesTableData from "layouts/dashboards/default/data/salesTableData";
 import dataTableData from "layouts/applications/data-tables/data/dataTableData";
+import { toast } from "react-toastify";
 
 
 function Teams() {
@@ -64,6 +65,13 @@ function Teams() {
   };
 
   const handleSubmit = () => {
+    if (!fromDate || !toDate) {
+      toast.error("Both from date and to date should be selected", {
+        autoClose: 1000, // duration in milliseconds
+      });
+      return; // Early return if either date is null
+    }
+
     if (fromDate && toDate) {
       setSubmittedDates({ fromDate, toDate });
     }

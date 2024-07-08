@@ -62,6 +62,7 @@
     "react-select": "5.7.3",
     "react-slideshow-image": "^4.3.1",
     "react-table": "7.8.0",
+    "react-toastify": "^10.0.5",
     "stylis": "4.2.0",
     "stylis-plugin-rtl": "2.1.1",
     "sweetalert2": "11.7.5",

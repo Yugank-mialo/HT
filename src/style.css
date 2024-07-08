@@ -21,6 +21,8 @@ font-weight: bold !important;
 }
 .custom-select-container {
     width: 100% !important;
-    
+  }
+  .scrollbar-container{
+    min-height: 100vh !important;
   }
   

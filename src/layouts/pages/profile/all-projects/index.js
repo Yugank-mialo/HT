@@ -20,6 +20,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { API_Url } from "utils/API";
 import { useStore } from 'globalContext/GlobalContext';
 import DetailedStatisticsCardFootfall from "examples/Cards/StatisticsCards/DeatiledStatisticsCardFootfall";
+import { toast } from "react-toastify";
 
 
 function AllProjects() {
@@ -60,6 +61,13 @@ function AllProjects() {
   };
 
   const handleSubmit = () => {
+    if (!fromDate || !toDate) {
+      toast.error("Both from date and to date should be selected", {
+        autoClose: 1000, // duration in milliseconds
+      });
+      return; // Early return if either date is null
+    }
+
     if (fromDate && toDate) {
       setSubmittedDates({ fromDate, toDate });
     }

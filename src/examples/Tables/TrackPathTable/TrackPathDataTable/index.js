@@ -38,6 +38,8 @@ import Modal from "./Modal";
 import Amit1 from "assets/images/individual_persons/Amit/cam1_1.png"
 import Amit2 from "assets/images/individual_persons/Amit/cam3_1.png"
 import Amit3 from "assets/images/individual_persons/Amit/cam3_2.png"
+import { API_Url } from "utils/API";
+import { TableCell } from "@mui/material";
 const details = {
   Image_Name:Amit1,
 detailsOfPerson:[
@@ -74,6 +76,8 @@ detailsOfPerson:[
 function DataTable({
   entriesPerPage,
   canSearch,
+  fromDate,
+  toDate,
   showTotalEntries,
   table,
   pagination,
@@ -82,8 +86,8 @@ function DataTable({
 }) {
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries ? entriesPerPage.entries : [5, 10, 15, 20, 25];
-  const columns = useMemo(() => table.columns, [table]);
-  const data = useMemo(() => table.rows, [table]);
+  const columns = useMemo(() => table?.columns, [table]);
+  const data = useMemo(() => table?.rows, [table]);
 
   const tableInstance = useTable(
     { columns, data, initialState: { pageIndex: 0 } },
@@ -112,10 +116,39 @@ function DataTable({
 
 
   // filter data
-  const [selectedRow, setSelectedRow] = useState(null); // State to track selected row
+  const [selectedRow, setSelectedRow] = useState(null); 
+  
+    const fetchData = async (id) => {
+        try {
+            let url = `${API_Url}/reid_person_logs?person_id=${id}`;
+            if (fromDate && toDate) {
+              url += `&from_date=${fromDate}&to_date=${toDate}`;
+          }
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            if(data.message =="Unsuccessful" || data.status ==0 ){
+              setSelectedRow(null)
+            }else{
+  // setVisitorData(data.data);
+            // patching data
+            setSelectedRow(data)
+            }
+          
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+  
+  // State to track selected row
   const handleRowClick = (row) => {
     // setSelectedRow(row);
-    setSelectedRow(details);
+    // setSelectedRow(details);
+    fetchData(row.original.Person_Id);
   };
 
 
@@ -237,24 +270,33 @@ function DataTable({
           ))}
         </ArgonBox>
         <TableBody {...getTableBodyProps()}>
-          {page.map((row, key) => {
-            prepareRow(row);
-            return (
-              <TableRow key={key} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
-                {row.cells.map((cell, index) => (
-                  <DataTableBodyCell
-                    key={index}
-                    noBorder={noEndBorder && rows.length - 1 === key}
-                    align={cell.column.align ? cell.column.align : "left"}
-                    {...cell.getCellProps()}
-                  >
-                    {cell.render("Cell")}
-                  </DataTableBodyCell>
-                ))}
-              </TableRow>
-            );
-          })}
-        </TableBody>
+  {page.length > 0 ? (
+    page.map((row, key) => {
+      prepareRow(row);
+      return (
+        <TableRow key={key} {...row.getRowProps()} onClick={() => handleRowClick(row)}>
+          {row.cells.map((cell, index) => (
+            <DataTableBodyCell
+              key={index}
+              noBorder={noEndBorder && rows.length - 1 === key}
+              align={cell.column.align ? cell.column.align : 'left'}
+              {...cell.getCellProps()}
+            >
+              {cell.render('Cell')}
+            </DataTableBodyCell>
+          ))}
+        </TableRow>
+      );
+    })
+  ) : (
+    <TableRow>
+      <TableCell colSpan={12} style={{ textAlign: 'center', padding: '20px' }}>
+        No Data Found
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
+
       </Table>
 
       <ArgonBox
@@ -325,6 +367,8 @@ DataTable.propTypes = {
     PropTypes.bool,
   ]),
   canSearch: PropTypes.bool,
+  fromDate:PropTypes.any,
+  toDate:PropTypes.any,
   showTotalEntries: PropTypes.bool,
   table: PropTypes.objectOf(PropTypes.array).isRequired,
   pagination: PropTypes.shape({

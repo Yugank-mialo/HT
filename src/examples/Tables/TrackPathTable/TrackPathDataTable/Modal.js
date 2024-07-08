@@ -4,6 +4,8 @@ import ArgonAvatar from "components/ArgonAvatar";
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { API_Url } from "utils/API";
+import ImageUrlValue from "./../../../../assets/images/settingImages/placeholderImage.png";
 
 const Modal = ({ open, onClose, row }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -48,7 +50,12 @@ const Modal = ({ open, onClose, row }) => {
         <DialogContent style={{ backgroundColor: "aliceblue !important" }}>
           <Grid container spacing={2} display="flex" flexDirection="column" justifyContent="center">
             <Grid item xs={12} md={12} style={{ display: 'flex', justifyContent: 'center', width: "100%" }}>
-              <ArgonAvatar src={row.Image_Name}  variant="rounded" style={{ width: '90%', height: '100%', objectFit: 'cover' }} />
+              <img
+                className="fireImg"
+                src={row.Image_Name ? `${API_Url}/img/${row.Image_Name}` : ImageUrlValue}
+                alt="Description of your image"
+                style={{ maxWidth: '100%', height: 'auto', width: '100%', display: 'block', objectFit: 'contain' }}
+              />
             </Grid>
 
             <Grid item xs={12} md={12}>
@@ -64,13 +71,14 @@ const Modal = ({ open, onClose, row }) => {
                     </TableRow>
                     {row.detailsOfPerson.map((rowData) => (
                       <TableRow key={rowData.id}>
-                        <TableCell>{rowData.Person_Id}</TableCell>
-                        <TableCell>{convertDateFormat(rowData.Start_Time)}</TableCell>
-                        <TableCell>{convertDateFormat(rowData.End_Time)}</TableCell>
-                        <TableCell>{rowData.Cameras}</TableCell>
+                        <TableCell>{rowData.track_id}</TableCell>
+                        <TableCell>{convertDateFormat(rowData.start_time)}</TableCell>
+                        <TableCell>{convertDateFormat(rowData.end_time)}</TableCell>
+                        <TableCell>{rowData.camera}</TableCell>
                         <TableCell >
                           {/* <Icon className="ni ni-image"></Icon> */}
-                          <img src={rowData.Image} alt="Person Image"  onClick={() => handleImageClick(rowData.Image)} style={{maxWidth:"100px",maxHeight:"100px",cursor:"pointer"}}/>
+                          <img src={rowData.image ? `${API_Url}/img/${rowData.image}` : ImageUrlValue}
+                            alt="Person Image" onClick={ rowData.image ? () => handleImageClick(rowData.image) : null} style={{ maxWidth: "100px", maxHeight: "100px", cursor: "pointer" }} />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -89,7 +97,7 @@ const Modal = ({ open, onClose, row }) => {
           </IconButton>
         </DialogTitle>
         <DialogContent style={{ textAlign: 'center' }}>
-          {selectedImage && <img src={selectedImage} alt="Selected" style={{ maxWidth: '100%', maxHeight: '80vh' }} />}
+          {selectedImage && <img src={`${API_Url}/img/${selectedImage}`} alt="Selected" style={{ maxWidth: '100%', maxHeight: '80vh' }} />}
         </DialogContent>
       </Dialog>
     </>
