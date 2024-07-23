@@ -301,8 +301,8 @@ function Teams() {
 
         if (data) {
           setLeastBusyZone({
-            leastCustomerCount: data.least_customer_count,
-            leastWorkingMinute: data.least_working_minute,
+            leastCustomerCount: data.least_customer_count || {},
+            leastWorkingMinute: data.least_working_minute || {}
           });
         } else {
           console.error("Data is empty or undefined.");
@@ -331,8 +331,8 @@ function Teams() {
 
         if (data) {
           setBusyZone({
-            mostCustomerCount: data.most_customer_count,
-            mostWorkingMinute: data.most_working_minute,
+            mostCustomerCount: data.most_customer_count || {},
+            mostWorkingMinute: data.most_working_minute || {}
           });
         } else {
           console.error("Data is empty or undefined.");
@@ -360,9 +360,9 @@ function Teams() {
         const { counts_per_zone, hourly_flow_rate, total_count } = response.data;
 
         setDwellZoneTable({
-          countsPerZone: counts_per_zone,
-          hourlyFlowRate: hourly_flow_rate,
-          totalCount: total_count,
+          countsPerZone: counts_per_zone || {},
+        hourlyFlowRate: hourly_flow_rate || {},
+        totalCount: total_count || 0,
         });
       } catch (error) {
         console.error("Error fetching dwell zone table data:", error);
