@@ -372,12 +372,17 @@ function Teams() {
     fetchDwellZoneTableData();
   }, [selectedStore, submittedDates]);
   const salesTableData = useMemo(() => {
+    if (!dwellZoneTable.countsPerZone || !dwellZoneTable.hourlyFlowRate) {
+      return [];
+    }
+  
     return Object.keys(dwellZoneTable.countsPerZone).map(zone => ({
       zone,
       counts_per_zone: dwellZoneTable.countsPerZone[zone],
       hourly_flow_rate: dwellZoneTable.hourlyFlowRate[zone],
     }));
   }, [dwellZoneTable]);
+  
   const   columnsValue= [
     { name: "zone", align: "center" },
     { name: "counts_per_zone", align: "center" },
