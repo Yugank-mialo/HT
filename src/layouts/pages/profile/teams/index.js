@@ -302,7 +302,7 @@ function Teams() {
         if (data) {
           setLeastBusyZone({
             leastCustomerCount: data.least_customer_count || {},
-            leastWorkingMinute: data.least_working_minute || {}
+            leastWorkingMinute: data.least_working_seconds || {}
           });
         } else {
           console.error("Data is empty or undefined.");
@@ -413,7 +413,7 @@ function Teams() {
                     bgColor="white"
                     data={topZones.fastest.map(([zone, avgDwellTime]) => ({
                       title: zone,
-                      count: `${avgDwellTime} minutes`,
+                      count: `${avgDwellTime} seconds`,
                     }))}
                     icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
                     title="Top Three Fastest Zones" // Adding title here
@@ -425,7 +425,7 @@ function Teams() {
                     title="Top Three Slowest Zones"
                     data={topZones.slowest.map(([zone, avgDwellTime]) => ({
                       title: zone,
-                      count: `${avgDwellTime} minutes`,
+                      count: `${avgDwellTime} seconds`,
                     }))}
                     icon={{ color: "error", component: <i className="ni ni-world" /> }}
                     percentage={{ color: "success", count: "+3%", text: "since last week" }}
@@ -457,10 +457,10 @@ function Teams() {
                   /> */}
                   <DetailedStatisticsCard
                     bgColor="white"
-                    title="Least Working Minute Zone"
+                    title="Least Working  Zone"
                     data={Object.entries(leastBusyZone.leastWorkingMinute).map(([zone, minutes]) => ({
                       title: zone,
-                      count: `${minutes} minutes`,
+                      count: `${minutes !== undefined && minutes !== null ? minutes : 0} seconds`,
                     }))}
                     icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
                   />
@@ -491,10 +491,10 @@ function Teams() {
                   /> */}
                   <DetailedStatisticsCard
                     bgColor="white"
-                    title="Most Working Minute Zone"
+                    title="Most Working  Zone"
                     data={Object.entries(busyZone.mostWorkingMinute).map(([zone, minutes]) => ({
                       title: zone,
-                      count: `${minutes} minutes`,
+                      count: `${minutes} seconds`,
                     }))}
                     icon={{ color: "error", component: <i className="ni ni-world" /> }}
                   />
