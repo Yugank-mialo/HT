@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, handleClear, handleSubmit, ShowOrHideContainer }) {
+function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, handleClear, handleSubmit, ShowOrHideContainer,isItReportSection }) {
   const classes = useStyles();
 
   return (
@@ -57,7 +57,7 @@ function Header({ fromDate, toDate, handleFromDateChange, handleToDateChange, ha
                   </Grid>
                   <Grid item>
                     <Button variant="contained" color="white" className={classes.removeButton} onClick={handleSubmit}>
-                      Submit
+                      {isItReportSection ? "Download Report" : "Submit"}
                     </Button>
                   </Grid>
                 </Grid>
@@ -81,9 +81,11 @@ Header.propTypes = {
   handleClear: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   ShowOrHideContainer: PropTypes.bool,
+  isItReportSection:PropTypes.bool
 };
 Header.defaultProps = {
   ShowOrHideContainer: true,
+  isItReportSection:false
 };
 
 export default Header;

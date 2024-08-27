@@ -97,6 +97,7 @@ import ArgonBox from "components/ArgonBox";
 import FiringPath from "layouts/pages/firing-path";
 import ProtectedRoute from './protectedRoute/index'; // Import the ProtectedRoute component
 import LogoutWrapper from "logOutWrapper";
+import Report from "layouts/pages/report";
 
 const routes = [
   {
@@ -128,6 +129,15 @@ component:<SignInBasic/>
     route: "/dashboard/footfall-zone",
     component:  <ProtectedRoute component={AllProjects} />,
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-ui-04" />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Report",
+    key: "report",
+    route: "/dashboard/report",
+    component:  <ProtectedRoute component={Report} />,
+    icon: <ArgonBox component="i" color="primary" fontSize="16px" className="ni ni-cloud-download-95" />,
     noCollapse: true,
   },
 

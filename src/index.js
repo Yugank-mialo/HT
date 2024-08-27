@@ -30,9 +30,12 @@ import "./style.css"
 import { StoreProvider } from "globalContext/GlobalContext";
 const container = document.getElementById("root");
 const root = createRoot(container);
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 root.render(
   <StoreProvider>
+  <ToastContainer />
     <HashRouter>
       <ArgonControllerProvider>
         <PerfectScrollbar>

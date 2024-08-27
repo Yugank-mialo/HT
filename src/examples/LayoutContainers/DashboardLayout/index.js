@@ -54,13 +54,20 @@ function DashboardLayout({ bgColor, children, ...rest }) {
     >
       <ArgonBox
         bgColor={"rgb(17, 205, 239)"}
-        height= { (pathname.includes('/dashboard/home')) ? "140px":  pathname.includes('/dashboard/track-path') ? "140px": "190px"}
         width="100vw"
         position="absolute"
         top={0}
         left={0}
-        sx={darkMode && { bgColor: ({ palette: { background } }) => background.default }}
-        {...rest}
+        sx={{
+          height: pathname.includes('/dashboard/home') || pathname.includes('/dashboard/track-path') ? "140px" : pathname.includes('/dashboard/report') ? "100px":"190px",
+          ...(darkMode && { bgColor: ({ palette: { background } }) => background.default }),
+          '@media (max-width: 768px)': {
+            height: pathname.includes('/dashboard/home') || pathname.includes('/dashboard/track-path') || pathname.includes('/dashboard/report') ? "120px" : "160px",
+          },
+          '@media (max-width: 480px)': {
+            height: pathname.includes('/dashboard/home') || pathname.includes('/dashboard/track-path') || pathname.includes('/dashboard/report') ? "190px" : "140px",
+          },
+        }}        {...rest}
       />
       {children}
     </ArgonBox>
